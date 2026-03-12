@@ -1089,6 +1089,189 @@
   width:100%;
 }
 
+    .checkout-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.42);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1100;
+  padding:24px;
+}
+
+.checkout-modal.show{
+  display:flex;
+}
+
+.checkout-box{
+  width:min(1080px, 100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border:1px solid rgba(23,23,23,.08);
+  box-shadow:0 30px 80px rgba(0,0,0,.18);
+}
+
+.checkout-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px 24px;
+  border-bottom:1px solid rgba(23,23,23,.08);
+}
+
+.checkout-header h3{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:34px;
+  font-weight:500;
+}
+
+.checkout-close{
+  border:none;
+  background:transparent;
+  font-size:30px;
+  cursor:pointer;
+  line-height:1;
+}
+
+.checkout-content{
+  display:grid;
+  grid-template-columns:.95fr 1.05fr;
+  gap:0;
+}
+
+.checkout-summary{
+  padding:24px;
+  border-right:1px solid rgba(23,23,23,.08);
+  background:#faf8f4;
+}
+
+.checkout-summary h4,
+.checkout-form-wrap h4{
+  margin:0 0 18px;
+  font-size:24px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+}
+
+.checkout-items{
+  display:grid;
+  gap:12px;
+}
+
+.checkout-item{
+  border:1px solid rgba(23,23,23,.08);
+  background:#fff;
+  padding:14px;
+  display:grid;
+  grid-template-columns:58px 1fr;
+  gap:12px;
+  align-items:start;
+}
+
+.checkout-item img{
+  width:58px;
+  height:72px;
+  object-fit:cover;
+  border:1px solid rgba(23,23,23,.08);
+}
+
+.checkout-item h5{
+  margin:0 0 6px;
+  font-size:15px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+}
+
+.checkout-item p{
+  margin:0;
+  font-size:13px;
+  color:rgba(23,23,23,.65);
+  line-height:1.5;
+}
+
+.checkout-total{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid rgba(23,23,23,.08);
+  font-size:18px;
+}
+
+.checkout-form-wrap{
+  padding:24px;
+}
+
+.checkout-form{
+  display:grid;
+  gap:16px;
+}
+
+.checkout-field{
+  display:grid;
+  gap:8px;
+}
+
+.checkout-field label{
+  font-size:13px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:rgba(23,23,23,.66);
+}
+
+.checkout-field input,
+.checkout-field textarea{
+  width:100%;
+  border:1px solid rgba(23,23,23,.12);
+  padding:14px 14px;
+  font-size:14px;
+  background:#fff;
+  outline:none;
+}
+
+.checkout-field input:focus,
+.checkout-field textarea:focus{
+  border-color:rgba(159,29,36,.35);
+  box-shadow:0 0 0 3px rgba(159,29,36,.08);
+}
+
+.checkout-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:4px;
+}
+
+@media (max-width: 780px){
+  .checkout-modal{
+    padding:0;
+  }
+
+  .checkout-box{
+    width:100%;
+    height:100dvh;
+    max-height:100dvh;
+    border:none;
+  }
+
+  .checkout-content{
+    grid-template-columns:1fr;
+  }
+
+  .checkout-summary{
+    border-right:none;
+    border-bottom:1px solid rgba(23,23,23,.08);
+  }
+
+  .checkout-buttons{
+    grid-template-columns:1fr;
+  }
+}
+    
 @media (max-width: 780px){
   .cart-toggle{
     width:100%;
@@ -1352,6 +1535,64 @@
 <body>
   <div class="app">
     <aside class="cart-drawer" id="cartDrawer">
+
+<section class="checkout-modal" id="checkoutModal">
+  <div class="checkout-box">
+    <div class="checkout-header">
+      <h3>Finalizar pedido</h3>
+      <button type="button" class="checkout-close" id="checkoutClose">×</button>
+    </div>
+
+    <div class="checkout-content">
+      <div class="checkout-summary">
+        <h4>Resumen del pedido</h4>
+        <div id="checkoutItems" class="checkout-items"></div>
+
+        <div class="checkout-total">
+          <span>Total</span>
+          <strong id="checkoutTotal">$0</strong>
+        </div>
+      </div>
+
+      <div class="checkout-form-wrap">
+        <h4>Datos del cliente</h4>
+
+        <form id="checkoutForm" class="checkout-form">
+          <div class="checkout-field">
+            <label for="customerName">Nombre completo</label>
+            <input type="text" id="customerName" required>
+          </div>
+
+          <div class="checkout-field">
+            <label for="customerPhone">WhatsApp</label>
+            <input type="text" id="customerPhone" required>
+          </div>
+
+          <div class="checkout-field">
+            <label for="customerCity">Ciudad</label>
+            <input type="text" id="customerCity" required>
+          </div>
+
+          <div class="checkout-field">
+            <label for="customerAddress">Dirección</label>
+            <input type="text" id="customerAddress" required>
+          </div>
+
+          <div class="checkout-field">
+            <label for="customerNotes">Notas adicionales</label>
+            <textarea id="customerNotes" rows="4" placeholder="Ejemplo: conjunto, torre, horario de entrega, etc."></textarea>
+          </div>
+
+          <div class="checkout-buttons">
+            <button type="button" class="btn" id="checkoutCancel">Cancelar</button>
+            <button type="submit" class="btn primary">Enviar pedido</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+      
   <div class="cart-header">
     <h3>Tu carrito</h3>
     <button class="cart-close" id="cartClose" type="button">×</button>
@@ -2476,7 +2717,10 @@ if (clearCartBtn) {
 }
 
 if (checkoutWhatsAppBtn) {
-  checkoutWhatsAppBtn.addEventListener('click', sendCartToWhatsApp);
+  checkoutWhatsAppBtn.addEventListener('click', () => {
+    closeCart();
+    openCheckout();
+  });
 }
 
 addToCartButtons.forEach(button => {
@@ -2508,6 +2752,7 @@ updateCartUI();
 </body>
 
 </html>
+
 
 
 
