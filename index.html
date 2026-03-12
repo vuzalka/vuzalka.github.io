@@ -1680,13 +1680,39 @@
     let currentIndex = 0;
 
     function goToPanel(index){
-      currentIndex = index;
-      track.style.transform = `translateX(-${index * 100}vw)`;
+  currentIndex = index;
+  track.style.transform = `translateX(-${index * 100}vw)`;
 
-      navButtons.forEach((btn, i) => {
-        btn.classList.toggle('active', i === index);
-      });
-    }
+  navButtons.forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
+  });
+
+  const panels = document.querySelectorAll('.panel');
+  const activePanel = panels[index];
+
+  if (activePanel) {
+    activePanel.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+
+  const viewport = document.querySelector('.viewport');
+  if (viewport) {
+    viewport.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+}
 
     navButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -1827,6 +1853,7 @@ if (searchInput && categoryFilter && sortFilter && productsGrid) {
 </body>
 
 </html>
+
 
 
 
