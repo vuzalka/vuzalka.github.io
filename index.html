@@ -2976,18 +2976,18 @@ if (checkoutForm) {
   message += `Notas: ${customerNotes}\n`;
 }
 
-    message += `%0APedido:%0A`;
+    message += `\nPedido:\n`;
 
-    cart.forEach(item => {
-      const subtotal = item.price * item.quantity;
-      total += subtotal;
-      message += `- ${item.name} x${item.quantity} · ${formatPrice(subtotal)}%0A`;
-    });
+cart.forEach(item => {
+  const subtotal = item.price * item.quantity;
+  total += subtotal;
 
-    message += `%0ATotal: ${formatPrice(total)}%0A%0AQuiero continuar con mi compra.`;
-
-    const url = `https://wa.me/573026451420?text=${message}`;
-    window.open(url, '_blank');
+  message += `- ${item.name} x${item.quantity} · ${formatPrice(item.price)} c/u · Subtotal: ${formatPrice(subtotal)}\n`;
+});
+    message += `\nTotal: ${formatPrice(total)}\n\n`;
+message += `Quiero continuar con mi compra.`;
+    const url = `https://wa.me/573026451420?text=${encodeURIComponent(message)}`;
+window.open(url, '_blank');
   });
 }
 
@@ -3014,6 +3014,7 @@ updateCartUI();
 </body>
 
 </html>
+
 
 
 
