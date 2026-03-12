@@ -1785,6 +1785,9 @@ if (searchInput && categoryFilter && sortFilter && productsGrid) {
       if (e.key === 'ArrowRight' && currentIndex < 3) goToPanel(currentIndex + 1);
       if (e.key === 'ArrowLeft' && currentIndex > 0) goToPanel(currentIndex - 1);
     });
+    window.addEventListener('load', () => {
+  goToPanel(0);
+});
   </script>
   <footer class="lux-footer">
   <div class="footer-top">
@@ -1853,6 +1856,7 @@ if (searchInput && categoryFilter && sortFilter && productsGrid) {
 </body>
 
 </html>
+
 
 
 
