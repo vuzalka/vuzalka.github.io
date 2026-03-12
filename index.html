@@ -1060,7 +1060,27 @@ h1{
     </select>
   </div>
 </div>
+<div class="catalog-toolbar">
+  <div class="catalog-search">
+    <input type="text" id="searchInput" placeholder="Buscar perfume por nombre">
+  </div>
 
+  <div class="catalog-filters">
+    <select id="categoryFilter">
+      <option value="all">Todas las categorías</option>
+      <option value="masculino">Masculino</option>
+      <option value="unisex">Unisex</option>
+    </select>
+
+    <select id="sortFilter">
+      <option value="default">Ordenar por</option>
+      <option value="az">Nombre A-Z</option>
+      <option value="za">Nombre Z-A</option>
+      <option value="price-low">Precio menor a mayor</option>
+      <option value="price-high">Precio mayor a menor</option>
+    </select>
+  </div>
+</div>
             <div class="products-grid">
               <article class="product-card" data-name="AFNAN 9PM" data-category="masculino" data-price="220000">
                 <div class="product-photo"><img src="assets/afnan-9pm.png" alt="AFNAN 9PM"></div>
@@ -1338,6 +1358,7 @@ h1{
 </body>
 
 </html>
+
 
 
 
