@@ -1348,7 +1348,53 @@ h1{
         goToPanel(Number(btn.dataset.index));
       });
     });
+const searchInput = document.getElementById('searchInput');
+const categoryFilter = document.getElementById('categoryFilter');
+const sortFilter = document.getElementById('sortFilter');
+const productsGrid = document.querySelector('.products-grid');
 
+if (searchInput && categoryFilter && sortFilter && productsGrid) {
+  const originalCards = Array.from(productsGrid.querySelectorAll('.product-card'));
+
+  function filterAndSortProducts() {
+    const searchValue = searchInput.value.toLowerCase().trim();
+    const categoryValue = categoryFilter.value;
+    const sortValue = sortFilter.value;
+
+    let filteredCards = originalCards.filter(card => {
+      const name = (card.dataset.name || '').toLowerCase();
+      const category = (card.dataset.category || '').toLowerCase();
+
+      const matchesSearch = name.includes(searchValue);
+      const matchesCategory = categoryValue === 'all' || category === categoryValue;
+
+      return matchesSearch && matchesCategory;
+    });
+
+    if (sortValue === 'az') {
+      filteredCards.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name, 'es'));
+    }
+
+    if (sortValue === 'za') {
+      filteredCards.sort((a, b) => b.dataset.name.localeCompare(a.dataset.name, 'es'));
+    }
+
+    if (sortValue === 'price-low') {
+      filteredCards.sort((a, b) => Number(a.dataset.price) - Number(b.dataset.price));
+    }
+
+    if (sortValue === 'price-high') {
+      filteredCards.sort((a, b) => Number(b.dataset.price) - Number(a.dataset.price));
+    }
+
+    productsGrid.innerHTML = '';
+    filteredCards.forEach(card => productsGrid.appendChild(card));
+  }
+
+  searchInput.addEventListener('input', filterAndSortProducts);
+  categoryFilter.addEventListener('change', filterAndSortProducts);
+  sortFilter.addEventListener('change', filterAndSortProducts);
+}
     document.addEventListener('keydown', (e) => {
       if (window.innerWidth <= 780) return;
       if (e.key === 'ArrowRight' && currentIndex < 3) goToPanel(currentIndex + 1);
@@ -1358,6 +1404,7 @@ h1{
 </body>
 
 </html>
+
 
 
 
