@@ -491,6 +491,26 @@
   line-height:1.75;
   font-size:14px;
 }
+    .benefit-link{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+
+.benefit-link .benefit-card{
+  transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+
+.benefit-link:hover .benefit-card{
+  transform:translateY(-6px);
+  box-shadow:0 24px 60px rgba(0,0,0,.18);
+  border-color:rgba(159,29,36,.30);
+}
+
+.benefit-link:focus-visible{
+  outline:2px solid rgba(159,29,36,.5);
+  outline-offset:4px;
+}
 .benefit-bg-1{
   background-image:url("assets/benefit-1.jpg");
 }
@@ -1383,6 +1403,7 @@ if (searchInput && categoryFilter && sortFilter && productsGrid) {
 </body>
 
 </html>
+
 
 
 
