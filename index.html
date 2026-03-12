@@ -2966,11 +2966,12 @@ if (checkoutForm) {
     const customerNotes = document.getElementById('customerNotes').value.trim();
 
     let total = 0;
-    let message = `Hola, quiero finalizar este pedido en VUZALKA:%0A%0A`;
-    message += `Nombre: ${customerName}%0A`;
-    message += `WhatsApp: ${customerPhone}%0A`;
-    message += `Ciudad: ${customerCity}%0A`;
-    message += `Dirección: ${customerAddress}%0A`;
+    let message = `Hola, quiero finalizar este pedido en VUZALKA:\n\n`;
+    message += `Nombre: ${customerName}\n`;
+  message += `WhatsApp: ${customerPhone}\n`;
+  message += `Ciudad: ${customerCity}\n`;
+  message += `Dirección: ${customerAddress}\n`;
+
 
     if (customerNotes) {
   message += `Notas: ${customerNotes}\n`;
@@ -3014,6 +3015,7 @@ updateCartUI();
 </body>
 
 </html>
+
 
 
 
