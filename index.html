@@ -2719,125 +2719,6 @@ if (searchInput && categoryFilter && sortFilter && productsGrid) {
       if (e.key === 'ArrowLeft' && currentIndex > 0) goToPanel(currentIndex - 1);
     });
 
-    const checkoutModal = document.getElementById('checkoutModal');
-const checkoutClose = document.getElementById('checkoutClose');
-const checkoutCancel = document.getElementById('checkoutCancel');
-const checkoutItems = document.getElementById('checkoutItems');
-const checkoutTotal = document.getElementById('checkoutTotal');
-const checkoutForm = document.getElementById('checkoutForm');
-
-function renderCheckout() {
-  checkoutItems.innerHTML = '';
-
-  if (cart.length === 0) {
-    checkoutItems.innerHTML = '<p class="cart-empty">No hay productos en el pedido.</p>';
-    checkoutTotal.textContent = '$0';
-    return;
-  }
-
-  let total = 0;
-
-  cart.forEach(item => {
-    total += item.price * item.quantity;
-
-    const row = document.createElement('div');
-    row.className = 'checkout-item';
-
-    row.innerHTML = `
-      <img src="${item.image}" alt="${item.name}">
-      <div>
-        <h5>${item.name}</h5>
-        <p>${item.size}</p>
-        <p>Cantidad: ${item.quantity}</p>
-        <p><strong>${formatPrice(item.price * item.quantity)}</strong></p>
-      </div>
-    `;
-
-    checkoutItems.appendChild(row);
-  });
-
-  checkoutTotal.textContent = formatPrice(total);
-}
-
-function openCheckout() {
-  if (cart.length === 0) {
-    alert('Tu carrito está vacío.');
-    return;
-  }
-
-  renderCheckout();
-  checkoutModal.classList.add('show');
-}
-
-function closeCheckout() {
-  checkoutModal.classList.remove('show');
-}
-
-if (checkoutWhatsAppBtn) {
-  checkoutWhatsAppBtn.addEventListener('click', () => {
-    closeCart();
-    openCheckout();
-  });
-}
-
-if (checkoutClose) {
-  checkoutClose.addEventListener('click', closeCheckout);
-}
-
-if (checkoutCancel) {
-  checkoutCancel.addEventListener('click', closeCheckout);
-}
-
-if (checkoutModal) {
-  checkoutModal.addEventListener('click', (e) => {
-    if (e.target === checkoutModal) closeCheckout();
-  });
-}
-
-if (checkoutForm) {
-  checkoutForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    if (cart.length === 0) {
-      alert('Tu carrito está vacío.');
-      return;
-    }
-
-    const customerName = document.getElementById('customerName').value.trim();
-    const customerPhone = document.getElementById('customerPhone').value.trim();
-    const customerCity = document.getElementById('customerCity').value.trim();
-    const customerAddress = document.getElementById('customerAddress').value.trim();
-    const customerNotes = document.getElementById('customerNotes').value.trim();
-
-    let total = 0;
-    let message = `Hola, quiero finalizar este pedido en VUZALKA:%0A%0A`;
-    message += `Nombre: ${customerName}%0A`;
-    message += `WhatsApp: ${customerPhone}%0A`;
-    message += `Ciudad: ${customerCity}%0A`;
-    message += `Dirección: ${customerAddress}%0A`;
-
-    if (customerNotes) {
-      message += `Notas: ${customerNotes}%0A`;
-    }
-
-    message += `%0APedido:%0A`;
-
-    cart.forEach(item => {
-      const subtotal = item.price * item.quantity;
-      total += subtotal;
-      message += `- ${item.name} x${item.quantity} · ${formatPrice(subtotal)}%0A`;
-    });
-
-    message += `%0ATotal: ${formatPrice(total)}%0A%0AQuiero continuar con mi compra.`;
-
-    const url = `https://wa.me/573026451420?text=${message}`;
-    window.open(url, '_blank');
-  });
-}
-    
-    window.addEventListener('load', () => {
-  goToPanel(0);
-});
     const cartToggle = document.getElementById('cartToggle');
 const cartClose = document.getElementById('cartClose');
 const cartDrawer = document.getElementById('cartDrawer');
@@ -2848,6 +2729,13 @@ const cartTotal = document.getElementById('cartTotal');
 const clearCartBtn = document.getElementById('clearCart');
 const checkoutWhatsAppBtn = document.getElementById('checkoutWhatsApp');
 const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+const checkoutModal = document.getElementById('checkoutModal');
+const checkoutClose = document.getElementById('checkoutClose');
+const checkoutCancel = document.getElementById('checkoutCancel');
+const checkoutItems = document.getElementById('checkoutItems');
+const checkoutTotal = document.getElementById('checkoutTotal');
+const checkoutForm = document.getElementById('checkoutForm');
 
 let cart = [];
 
@@ -2960,27 +2848,51 @@ function clearCart() {
   updateCartUI();
 }
 
-function sendCartToWhatsApp() {
+function renderCheckout() {
+  checkoutItems.innerHTML = '';
+
+  if (cart.length === 0) {
+    checkoutItems.innerHTML = '<p class="cart-empty">No hay productos en el pedido.</p>';
+    checkoutTotal.textContent = '$0';
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price * item.quantity;
+
+    const row = document.createElement('div');
+    row.className = 'checkout-item';
+
+    row.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <div>
+        <h5>${item.name}</h5>
+        <p>${item.size}</p>
+        <p>Cantidad: ${item.quantity}</p>
+        <p><strong>${formatPrice(item.price * item.quantity)}</strong></p>
+      </div>
+    `;
+
+    checkoutItems.appendChild(row);
+  });
+
+  checkoutTotal.textContent = formatPrice(total);
+}
+
+function openCheckout() {
   if (cart.length === 0) {
     alert('Tu carrito está vacío.');
     return;
   }
 
-  let message = 'Hola, quiero realizar este pedido en VUZALKA:%0A%0A';
+  renderCheckout();
+  checkoutModal.classList.add('show');
+}
 
-  let total = 0;
-
-  cart.forEach(item => {
-    const subtotal = item.price * item.quantity;
-    total += subtotal;
-
-    message += `- ${item.name} x${item.quantity} · ${formatPrice(subtotal)}%0A`;
-  });
-
-  message += `%0ATotal: ${formatPrice(total)}%0A%0AQuiero continuar con mi compra.`;
-
-  const url = `https://wa.me/573026451420?text=${message}`;
-  window.open(url, '_blank');
+function closeCheckout() {
+  checkoutModal.classList.remove('show');
 }
 
 if (cartToggle) cartToggle.addEventListener('click', openCart);
@@ -2995,6 +2907,20 @@ if (checkoutWhatsAppBtn) {
   checkoutWhatsAppBtn.addEventListener('click', () => {
     closeCart();
     openCheckout();
+  });
+}
+
+if (checkoutClose) {
+  checkoutClose.addEventListener('click', closeCheckout);
+}
+
+if (checkoutCancel) {
+  checkoutCancel.addEventListener('click', closeCheckout);
+}
+
+if (checkoutModal) {
+  checkoutModal.addEventListener('click', (e) => {
+    if (e.target === checkoutModal) closeCheckout();
   });
 }
 
@@ -3020,6 +2946,63 @@ cartItemsContainer.addEventListener('click', (e) => {
   if (action === 'remove') removeFromCart(index);
 });
 
+if (checkoutForm) {
+  checkoutForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if (cart.length === 0) {
+      alert('Tu carrito está vacío.');
+      return;
+    }
+
+    const customerName = document.getElementById('customerName').value.trim();
+    const customerPhone = document.getElementById('customerPhone').value.trim();
+    const customerCity = document.getElementById('customerCity').value.trim();
+    const customerAddress = document.getElementById('customerAddress').value.trim();
+    const customerNotes = document.getElementById('customerNotes').value.trim();
+
+    let total = 0;
+    let message = `Hola, quiero finalizar este pedido en VUZALKA:%0A%0A`;
+    message += `Nombre: ${customerName}%0A`;
+    message += `WhatsApp: ${customerPhone}%0A`;
+    message += `Ciudad: ${customerCity}%0A`;
+    message += `Dirección: ${customerAddress}%0A`;
+
+    if (customerNotes) {
+      message += `Notas: ${customerNotes}%0A`;
+    }
+
+    message += `%0APedido:%0A`;
+
+    cart.forEach(item => {
+      const subtotal = item.price * item.quantity;
+      total += subtotal;
+      message += `- ${item.name} x${item.quantity} · ${formatPrice(subtotal)}%0A`;
+    });
+
+    message += `%0ATotal: ${formatPrice(total)}%0A%0AQuiero continuar con mi compra.`;
+
+    const url = `https://wa.me/573026451420?text=${message}`;
+    window.open(url, '_blank');
+  });
+}
+
+loadCart();
+updateCartUI();
+
+window.addEventListener('load', () => {
+  goToPanel(0);
+});
+
+cartItemsContainer.addEventListener('click', (e) => {
+  const action = e.target.dataset.action;
+  const index = Number(e.target.dataset.index);
+
+  if (action === 'increase') changeQuantity(index, 1);
+  if (action === 'decrease') changeQuantity(index, -1);
+  if (action === 'remove') removeFromCart(index);
+});
+
 loadCart();
 updateCartUI();
   </script>
@@ -3027,6 +3010,7 @@ updateCartUI();
 </body>
 
 </html>
+
 
 
 
