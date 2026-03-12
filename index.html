@@ -1768,7 +1768,7 @@
 
           <div class="checkout-buttons">
             <button type="button" class="btn" id="checkoutCancel">Cancelar</button>
-            <button type="submit" class="btn primary">Enviar pedido</button>
+            <button type="submit" class="btn primary">Confirmar pedido</button>
           </div>
         </form>
       </div>
@@ -1976,7 +1976,9 @@
   <div class="catalog-search">
     <input type="text" id="searchInput" placeholder="Buscar perfume por nombre">
   </div>
-
+<div style="margin-top:24px; display:flex; justify-content:center;">
+  <button class="btn primary" id="openCartFromCatalog" type="button">Ver carrito y finalizar pedido</button>
+</div>
   <div class="catalog-filters">
     <select id="categoryFilter">
       <option value="all">Todas las categorías</option>
@@ -2720,6 +2722,7 @@ if (searchInput && categoryFilter && sortFilter && productsGrid) {
     });
 
     const cartToggle = document.getElementById('cartToggle');
+const openCartFromCatalog = document.getElementById('openCartFromCatalog');
 const cartClose = document.getElementById('cartClose');
 const cartDrawer = document.getElementById('cartDrawer');
 const cartBackdrop = document.getElementById('cartBackdrop');
@@ -2896,6 +2899,7 @@ function closeCheckout() {
 }
 
 if (cartToggle) cartToggle.addEventListener('click', openCart);
+if (openCartFromCatalog) openCartFromCatalog.addEventListener('click', openCart);
 if (cartClose) cartClose.addEventListener('click', closeCart);
 if (cartBackdrop) cartBackdrop.addEventListener('click', closeCart);
 
@@ -3010,6 +3014,7 @@ updateCartUI();
 </body>
 
 </html>
+
 
 
 
