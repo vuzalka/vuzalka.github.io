@@ -3153,14 +3153,6 @@ window.addEventListener('load', () => {
   goToPanel(0);
 });
 
-cartItemsContainer.addEventListener('click', (e) => {
-  const action = e.target.dataset.action;
-  const index = Number(e.target.dataset.index);
-
-  if (action === 'increase') changeQuantity(index, 1);
-  if (action === 'decrease') changeQuantity(index, -1);
-  if (action === 'remove') removeFromCart(index);
-});
 
 loadCart();
 updateCartUI();
@@ -3169,6 +3161,7 @@ updateCartUI();
 </body>
 
 </html>
+
 
 
 
