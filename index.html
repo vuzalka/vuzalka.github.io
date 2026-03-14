@@ -1424,162 +1424,6 @@
   margin-top:4px;
 }
 
-.checkout-modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.42);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1100;
-  padding:24px;
-}
-
-.checkout-modal.show{
-  display:flex;
-}
-
-.checkout-box{
-  width:min(1080px, 100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border:1px solid rgba(23,23,23,.08);
-  box-shadow:0 30px 80px rgba(0,0,0,.18);
-}
-
-.checkout-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:20px 24px;
-  border-bottom:1px solid rgba(23,23,23,.08);
-}
-
-.checkout-header h3{
-  margin:0;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:34px;
-  font-weight:500;
-}
-
-.checkout-close{
-  border:none;
-  background:transparent;
-  font-size:30px;
-  cursor:pointer;
-  line-height:1;
-}
-
-.checkout-content{
-  display:grid;
-  grid-template-columns:.95fr 1.05fr;
-  gap:0;
-}
-
-.checkout-summary{
-  padding:24px;
-  border-right:1px solid rgba(23,23,23,.08);
-  background:#faf8f4;
-}
-
-.checkout-summary h4,
-.checkout-form-wrap h4{
-  margin:0 0 18px;
-  font-size:24px;
-  font-family:Georgia,"Times New Roman",serif;
-  font-weight:500;
-}
-
-.checkout-items{
-  display:grid;
-  gap:12px;
-}
-
-.checkout-item{
-  border:1px solid rgba(23,23,23,.08);
-  background:#fff;
-  padding:14px;
-  display:grid;
-  grid-template-columns:58px 1fr;
-  gap:12px;
-  align-items:start;
-}
-
-.checkout-item img{
-  width:58px;
-  height:72px;
-  object-fit:cover;
-  border:1px solid rgba(23,23,23,.08);
-}
-
-.checkout-item h5{
-  margin:0 0 6px;
-  font-size:15px;
-  font-family:Georgia,"Times New Roman",serif;
-  font-weight:500;
-}
-
-.checkout-item p{
-  margin:0;
-  font-size:13px;
-  color:rgba(23,23,23,.65);
-  line-height:1.5;
-}
-
-.checkout-total{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:20px;
-  padding-top:18px;
-  border-top:1px solid rgba(23,23,23,.08);
-  font-size:18px;
-}
-
-.checkout-form-wrap{
-  padding:24px;
-}
-
-.checkout-form{
-  display:grid;
-  gap:16px;
-}
-
-.checkout-field{
-  display:grid;
-  gap:8px;
-}
-
-.checkout-field label{
-  font-size:13px;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  color:rgba(23,23,23,.66);
-}
-
-.checkout-field input,
-.checkout-field textarea{
-  width:100%;
-  border:1px solid rgba(23,23,23,.12);
-  padding:14px 14px;
-  font-size:14px;
-  background:#fff;
-  outline:none;
-}
-
-.checkout-field input:focus,
-.checkout-field textarea:focus{
-  border-color:rgba(159,29,36,.35);
-  box-shadow:0 0 0 3px rgba(159,29,36,.08);
-}
-
-.checkout-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:4px;
-}
     
 @media (max-width: 780px){
   .checkout-modal{
@@ -1792,11 +1636,6 @@
   grid-template-columns:repeat(2, minmax(0, 1fr));
   gap:12px;
 }
-.products-grid{
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0, 1fr));
-  gap:12px;
-}
 .product-card{
   padding:10px;
 }
@@ -1905,18 +1744,6 @@
   .info-card h3{
     font-size:24px;
   }
-.product-card{
-  padding:10px;
-}
-
-.product-photo{
-  aspect-ratio: 4 / 4.6;
-}
-
-.product-card h3{
-  font-size:16px;
-  line-height:1.1;
-}
 
 .meta{
   font-size:10px;
@@ -1928,24 +1755,9 @@
   padding:5px 7px;
 }
 
-.vibe{
-  font-size:9px;
-  margin-top:10px;
-}
-
-.product-stock{
-  margin-top:10px;
-  padding-top:10px;
-  gap:8px;
-}
-
 .stock-status,
 .stock-amount{
   font-size:10px;
-}
-
-.product-actions{
-  margin-top:12px;
 }
 
 .add-to-cart{
@@ -2025,26 +1837,12 @@
   .meta{
     font-size:10px;
   }
-
-  .price{
-    font-size:10px;
-    padding:5px 7px;
-  }
+}
 
   .vibe{
     font-size:9px;
   }
 
-  .stock-status,
-  .stock-amount{
-    font-size:10px;
-  }
-
-  .add-to-cart{
-    font-size:9px;
-    min-height:38px;
-    padding:8px 6px;
-  }
 }
     .admin-product-row{
   border:1px solid rgba(23,23,23,.08);
@@ -3177,7 +2975,6 @@ const cartCount = document.getElementById('cartCount');
 const cartTotal = document.getElementById('cartTotal');
 const clearCartBtn = document.getElementById('clearCart');
 const checkoutWhatsAppBtn = document.getElementById('checkoutWhatsApp');
-const addToCartButtons = document.querySelectorAll('.add-to-cart');
 
 const checkoutModal = document.getElementById('checkoutModal');
 const checkoutClose = document.getElementById('checkoutClose');
@@ -3397,12 +3194,12 @@ function updateCartUI() {
   cartItemsContainer.innerHTML = '';
 
   if (cart.length === 0) {
-    cartItemsContainer.innerHTML = '<p class="cart-empty">Tu carrito está vacío.</p>';
-    cartCount.textContent = '0';
-    cartTotal.textContent = '$0';
-    saveCart(); // importante
-    return;
-  }
+  cartItemsContainer.innerHTML = '<p class="cart-empty">Tu carrito está vacío.</p>';
+  cartCount.textContent = '0';
+  cartTotal.textContent = '$0';
+  saveCart();
+  return;
+}
 
   let totalItems = 0;
   let totalPrice = 0;
@@ -3550,19 +3347,6 @@ if (checkoutModal) {
     if (e.target === checkoutModal) closeCheckout();
   });
 }
-
-addToCartButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const product = {
-      name: button.dataset.name,
-      price: Number(button.dataset.price),
-      image: button.dataset.image,
-      size: button.dataset.size
-    };
-
-    addToCart(product);
-  });
-});
 
 cartItemsContainer.addEventListener('click', (e) => {
   const action = e.target.dataset.action;
@@ -3774,7 +3558,8 @@ async function createNewProduct(e){
   const size = newProductSize.value.trim();
   const description = newProductDescription.value.trim();
   const image = newProductImage.value.trim();
-
+  const newProductDescription = document.getElementById('newProductDescription');
+  
   if (!name || !price || stock < 0 || !category || !size || !description || !image) {
     adminStatus.textContent = 'Completa todos los campos del nuevo producto.';
     return;
