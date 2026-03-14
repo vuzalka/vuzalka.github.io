@@ -2973,9 +2973,60 @@
       </div>
 
       <div class="admin-field">
-        <label for="newProductSize">Presentación</label>
-        <input type="text" id="newProductSize" placeholder="Ej: FM EDP SPR · 100ML" required>
-      </div>
+  <label for="presentationAudience">Público</label>
+  <select id="presentationAudience" required>
+    <option value="">Selecciona</option>
+    <option value="FM">FM</option>
+    <option value="FW">FW</option>
+    <option value="Unisex">Unisex</option>
+  </select>
+</div>
+
+<div class="admin-field">
+  <label for="presentationConcentration">Concentración</label>
+  <select id="presentationConcentration" required>
+    <option value="">Selecciona</option>
+    <option value="EDT">EDT</option>
+    <option value="EDP">EDP</option>
+    <option value="Parfum">Parfum</option>
+    <option value="Extrait">Extrait</option>
+    <option value="Elixir">Elixir</option>
+    <option value="Cologne">Cologne</option>
+  </select>
+</div>
+
+<div class="admin-field">
+  <label for="presentationFormat">Formato</label>
+  <select id="presentationFormat" required>
+    <option value="">Selecciona</option>
+    <option value="SPR">SPR</option>
+    <option value="NS">NS</option>
+    <option value="VAP">VAP</option>
+    <option value="Recargable">Recargable</option>
+    <option value="Tester">Tester</option>
+  </select>
+</div>
+
+<div class="admin-field">
+  <label for="presentationSize">Tamaño</label>
+  <select id="presentationSize" required>
+    <option value="">Selecciona</option>
+    <option value="30ML">30ML</option>
+    <option value="50ML">50ML</option>
+    <option value="75ML">75ML</option>
+    <option value="90ML">90ML</option>
+    <option value="100ML">100ML</option>
+    <option value="105ML">105ML</option>
+    <option value="125ML">125ML</option>
+    <option value="150ML">150ML</option>
+    <option value="200ML">200ML</option>
+  </select>
+</div>
+
+<div class="admin-field">
+  <label for="newProductSize">Presentación generada</label>
+  <input type="text" id="newProductSize" placeholder="Se genera automáticamente" readonly required>
+</div>
 
       <div class="admin-field">
   <label for="newProductImage">Ruta automática de imagen</label>
@@ -3582,10 +3633,12 @@ const newProductName = document.getElementById('newProductName');
 const newProductPrice = document.getElementById('newProductPrice');
 const newProductStock = document.getElementById('newProductStock');
 const newProductCategory = document.getElementById('newProductCategory');
+const presentationAudience = document.getElementById('presentationAudience');
+const presentationConcentration = document.getElementById('presentationConcentration');
+const presentationFormat = document.getElementById('presentationFormat');
+const presentationSize = document.getElementById('presentationSize');
 const newProductSize = document.getElementById('newProductSize');
 const newProductImage = document.getElementById('newProductImage');
-const newProductDescription = document.getElementById('newProductDescription');
-const createProductBtn = document.getElementById('createProductBtn');
 
 function slugifyProductName(name) {
   return name
@@ -3612,9 +3665,45 @@ function updateAutoImagePath() {
   const slug = slugifyProductName(name);
   newProductImage.value = `assets/${slug}.png`;
 }
+function updateGeneratedPresentation() {
+  if (
+    !presentationAudience ||
+    !presentationConcentration ||
+    !presentationFormat ||
+    !presentationSize ||
+    !newProductSize
+  ) return;
 
+  const audience = presentationAudience.value;
+  const concentration = presentationConcentration.value;
+  const format = presentationFormat.value;
+  const size = presentationSize.value;
+
+  if (!audience || !concentration || !format || !size) {
+    newProductSize.value = '';
+    return;
+  }
+
+  newProductSize.value = `${audience} ${concentration} ${format} · ${size}`;
+}
 if (newProductName) {
   newProductName.addEventListener('input', updateAutoImagePath);
+}
+
+if (presentationAudience) {
+  presentationAudience.addEventListener('change', updateGeneratedPresentation);
+}
+
+if (presentationConcentration) {
+  presentationConcentration.addEventListener('change', updateGeneratedPresentation);
+}
+
+if (presentationFormat) {
+  presentationFormat.addEventListener('change', updateGeneratedPresentation);
+}
+
+if (presentationSize) {
+  presentationSize.addEventListener('change', updateGeneratedPresentation);
 }
     
 function openAdminModal(){
@@ -3711,6 +3800,7 @@ async function createNewProduct(e){
     adminStatus.textContent = `Producto "${name}" creado correctamente.`;
 
     adminCreateProductForm.reset();
+    newProductSize.value = '';
     await loadProductsFromFirestore();
   } catch (error) {
     console.error(error);
