@@ -345,13 +345,102 @@
   color:rgba(243,238,230,.82);
 }
     .hero-card{
-      background:var(--panel);
-      border:1px solid rgba(23,23,23,.08);
-      box-shadow:var(--shadow);
-      padding:18px;
-      height:100%;
-    }
+  background:var(--panel);
+  border:1px solid rgba(23,23,23,.08);
+  box-shadow:var(--shadow);
+  padding:18px;
+  height:100%;
+  position:relative;
+}
+.hero-slider{
+  position:relative;
+  min-height:100%;
+}
 
+.hero-slide{
+  display:none;
+  animation:fadeLuxury .7s ease;
+}
+
+.hero-slide.active{
+  display:block;
+}
+
+@keyframes fadeLuxury{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.hero-slider-card .hero-image{
+  background:linear-gradient(180deg,#151515 0%, #090909 100%);
+}
+
+.hero-slider-card .hero-copy{
+  background:linear-gradient(180deg, #121212 0%, #0b0b0b 100%);
+}
+
+.hero-copy-bottom{
+  padding-top:18px;
+  border-top:1px solid rgba(244,240,234,.15);
+  font-size:14px;
+  color:rgba(244,240,234,.66);
+}
+
+.hero-slider-controls{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:14px;
+  padding-top:14px;
+}
+
+.hero-slider-btn{
+  width:42px;
+  height:42px;
+  border:1px solid rgba(23,23,23,.12);
+  background:#111;
+  color:#f4f0ea;
+  font-size:24px;
+  line-height:1;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.hero-slider-btn:hover{
+  background:#9f1d24;
+  border-color:#9f1d24;
+  color:#fff;
+}
+
+.hero-slider-dots{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex:1;
+}
+
+.hero-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:none;
+  background:rgba(23,23,23,.22);
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.hero-dot.active{
+  background:#9f1d24;
+  transform:scale(1.12);
+}
     .hero-inner{
   display:grid;
   grid-template-columns:.95fr 1.05fr;
@@ -2252,7 +2341,9 @@
       </div>
     </div>
   </div>
-    <div class="hero-card">
+    <div class="hero-card hero-slider-card">
+  <div class="hero-slider" id="heroSlider">
+    <div class="hero-slide active">
       <div class="hero-inner">
         <div class="hero-image">
           <img src="assets/afnan-9pm.png" alt="AFNAN 9PM" loading="lazy">
@@ -2263,12 +2354,56 @@
             <h2>Signature</h2>
             <p>Una línea inspirada en la fuerza tranquila, el lujo contemporáneo y el detalle preciso.</p>
           </div>
-          <div style="padding-top:18px;border-top:1px solid rgba(244,240,234,.15);font-size:14px;color:rgba(244,240,234,.66)">
+          <div class="hero-copy-bottom">
             Masculinidad elegante con un matiz sensual.
           </div>
         </div>
       </div>
     </div>
+
+    <div class="hero-slide">
+      <div class="hero-inner">
+        <div class="hero-image">
+          <img src="assets/lattafa-khamrah.png" alt="Lattafa Khamrah" loading="lazy">
+        </div>
+        <div class="hero-copy">
+          <div>
+            <small>Novedad</small>
+            <h2>Khamrah</h2>
+            <p>Una fragancia envolvente y opulenta que destaca por su carácter cálido, especiado y adictivo.</p>
+          </div>
+          <div class="hero-copy-bottom">
+            Ideal para noches especiales y ocasiones memorables.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-slide">
+      <div class="hero-inner">
+        <div class="hero-image">
+          <img src="assets/club-de-nuit-intense.png" alt="Club de Nuit Intense" loading="lazy">
+        </div>
+        <div class="hero-copy">
+          <div>
+            <small>Aviso</small>
+            <h2>Stock limitado</h2>
+            <p>Algunas referencias premium cuentan con pocas unidades disponibles. Consulta antes de finalizar tu pedido.</p>
+          </div>
+          <div class="hero-copy-bottom">
+            Atención directa por WhatsApp para confirmar disponibilidad.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-slider-controls">
+      <button type="button" class="hero-slider-btn" id="heroPrev">‹</button>
+      <div class="hero-slider-dots" id="heroDots"></div>
+      <button type="button" class="hero-slider-btn" id="heroNext">›</button>
+    </div>
+  </div>
+</div>
   </div>
 
   <div class="home-benefits">
@@ -2934,10 +3069,19 @@ const db = firebase.firestore();
     const track = document.getElementById('track');
     const navButtons = document.querySelectorAll('.nav-btn');
     const gotoButtons = document.querySelectorAll('.go-to');
+    
     let currentIndex = 0;
     const siteHeader = document.querySelector('.site-header');
     const logoHome = document.getElementById('logoHome');
 
+    const heroSlider = document.getElementById('heroSlider');
+const heroPrev = document.getElementById('heroPrev');
+const heroNext = document.getElementById('heroNext');
+const heroDotsContainer = document.getElementById('heroDots');
+let heroSlides = [];
+let heroCurrent = 0;
+let heroInterval = null;
+    
     const panelHashes = ['inicio', 'perfumes', 'quienes-somos', 'contacto'];
 
 function getHashFromIndex(index) {
@@ -3898,6 +4042,98 @@ function bindPanelScrollForMobileHeader() {
     panel.addEventListener('scroll', handleMobileHeaderScroll, { passive: true });
   });
 }
+
+function renderHeroDots() {
+  if (!heroDotsContainer || !heroSlides.length) return;
+
+  heroDotsContainer.innerHTML = '';
+
+  heroSlides.forEach((_, index) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = `hero-dot ${index === heroCurrent ? 'active' : ''}`;
+    dot.setAttribute('aria-label', `Ir al slide ${index + 1}`);
+
+    dot.addEventListener('click', () => {
+      showHeroSlide(index);
+      restartHeroAutoplay();
+    });
+
+    heroDotsContainer.appendChild(dot);
+  });
+}
+
+function showHeroSlide(index) {
+  if (!heroSlides.length) return;
+
+  heroSlides.forEach((slide, i) => {
+    slide.classList.toggle('active', i === index);
+  });
+
+  heroCurrent = index;
+  renderHeroDots();
+}
+
+function nextHeroSlide() {
+  if (!heroSlides.length) return;
+  const nextIndex = (heroCurrent + 1) % heroSlides.length;
+  showHeroSlide(nextIndex);
+}
+
+function prevHeroSlide() {
+  if (!heroSlides.length) return;
+  const prevIndex = (heroCurrent - 1 + heroSlides.length) % heroSlides.length;
+  showHeroSlide(prevIndex);
+}
+
+function startHeroAutoplay() {
+  if (!heroSlides.length) return;
+
+  stopHeroAutoplay();
+  heroInterval = setInterval(() => {
+    nextHeroSlide();
+  }, 5000);
+}
+
+function stopHeroAutoplay() {
+  if (heroInterval) {
+    clearInterval(heroInterval);
+    heroInterval = null;
+  }
+}
+
+function restartHeroAutoplay() {
+  startHeroAutoplay();
+}
+
+function initHeroSlider() {
+  if (!heroSlider) return;
+
+  heroSlides = Array.from(heroSlider.querySelectorAll('.hero-slide'));
+
+  if (!heroSlides.length) return;
+
+  showHeroSlide(0);
+  renderHeroDots();
+  startHeroAutoplay();
+
+  if (heroNext) {
+    heroNext.addEventListener('click', () => {
+      nextHeroSlide();
+      restartHeroAutoplay();
+    });
+  }
+
+  if (heroPrev) {
+    heroPrev.addEventListener('click', () => {
+      prevHeroSlide();
+      restartHeroAutoplay();
+    });
+  }
+
+  heroSlider.addEventListener('mouseenter', stopHeroAutoplay);
+  heroSlider.addEventListener('mouseleave', startHeroAutoplay);
+}
     
 auth.onAuthStateChanged((user) => {
   updateAdminUI(user);
@@ -3912,6 +4148,7 @@ window.addEventListener('load', async () => {
   goToPanel(initialIndex, false);
 
   bindPanelScrollForMobileHeader();
+  initHeroSlider();
   await loadProductsFromFirestore();
 });
 window.addEventListener('resize', () => {
