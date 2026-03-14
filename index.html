@@ -287,15 +287,15 @@
 .stat{
   position:relative;
   overflow:hidden;
-  padding:24px 26px;
-  min-height:128px;
-  border:1px solid rgba(255,255,255,.22);
-  background:linear-gradient(180deg, rgba(255,255,255,.72) 0%, rgba(255,255,255,.58) 100%);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  padding:26px 28px;
+  min-height:140px;
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(18,18,18,.72) 0%, rgba(10,10,10,.82) 100%);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
   box-shadow:
-    0 10px 30px rgba(0,0,0,.12),
-    inset 0 1px 0 rgba(255,255,255,.18);
+    0 18px 40px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.06);
   transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
@@ -306,44 +306,44 @@
   left:0;
   width:100%;
   height:1px;
-  background:linear-gradient(90deg, rgba(255,255,255,.65), rgba(255,255,255,0));
+  background:linear-gradient(90deg, rgba(243,238,230,.24), rgba(243,238,230,0));
 }
 
 .stat::after{
   content:"";
   position:absolute;
-  left:26px;
-  bottom:20px;
-  width:44px;
+  left:28px;
+  bottom:22px;
+  width:54px;
   height:1px;
-  background:rgba(159,29,36,.45);
+  background:rgba(217,177,111,.42);
 }
 
 .stat:hover{
-  transform:translateY(-4px);
+  transform:translateY(-6px);
   box-shadow:
-    0 16px 38px rgba(0,0,0,.16),
-    inset 0 1px 0 rgba(255,255,255,.18);
-  border-color:rgba(255,255,255,.34);
+    0 24px 54px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  border-color:rgba(217,177,111,.30);
 }
 
 .stat strong{
   display:block;
-  margin-bottom:10px;
-  font-size:30px;
+  margin-bottom:12px;
+  font-size:34px;
   line-height:1;
-  font-family:Georgia,"Times New Roman",serif;
-  font-weight:500;
-  color:#171717;
+  font-family:"Cormorant Garamond", serif;
+  font-weight:600;
+  color:#f3eee6;
   letter-spacing:-0.02em;
 }
 
 .stat{
+  font-family:"Inter", sans-serif;
   font-size:15px;
-  line-height:1.6;
-  color:rgba(23,23,23,.82);
+  line-height:1.7;
+  color:rgba(243,238,230,.82);
 }
-
     .hero-card{
       background:var(--panel);
       border:1px solid rgba(23,23,23,.08);
