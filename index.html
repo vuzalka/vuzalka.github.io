@@ -2161,7 +2161,7 @@
 </section>
 <div class="cart-backdrop" id="cartBackdrop"></div>
     <header class="site-header">
-      <img src="assets/logo.png" alt="VUZALKA" class="brandlogo" />
+      <img src="assets/logo.png" alt="VUZALKA" class="brandlogo" id="logoHome" style="cursor:pointer;" />
 
       <nav class="main-nav">
   <button class="nav-btn active" data-index="0">Inicio</button>
@@ -2894,6 +2894,7 @@ const db = firebase.firestore();
     const gotoButtons = document.querySelectorAll('.go-to');
     let currentIndex = 0;
     const siteHeader = document.querySelector('.site-header');
+    const logoHome = document.getElementById('logoHome');
 
     const panelHashes = ['inicio', 'perfumes', 'quienes-somos', 'contacto'];
 
@@ -2979,6 +2980,11 @@ function updateMobileHeaderHeight() {
         goToPanel(Number(btn.dataset.index));
       });
     });
+    if (logoHome) {
+  logoHome.addEventListener('click', () => {
+    goToPanel(0);
+  });
+}
     document.querySelectorAll('.go-to[role="button"]').forEach((el) => {
   el.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
