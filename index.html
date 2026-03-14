@@ -2382,20 +2382,7 @@
     </select>
   </div>
 </div>
-            <div class="products-grid" id="productsGrid">
-              <article class="product-card" data-name="AFNAN 9PM" data-category="masculino" data-price="220000">
-                <div class="product-photo">
-  <img src="assets/afnan-9pm.png" alt="AFNAN 9PM">
-  <div class="product-info-overlay">
-    <h4>Perfil olfativo</h4>
-    <p>Fragancia intensa, dulce y nocturna, con gran proyección y una presencia envolvente.</p>
-    <ul>
-      <li><strong>Familia:</strong> oriental avainillada</li>
-      <li><strong>Notas:</strong> vainilla, ámbar, manzana, haba tonka</li>
-      <li><strong>Uso ideal:</strong> noche, salidas, clima fresco</li>
-    </ul>
-  </div>
-</div>
+            <div class="products-grid" id="productsGrid"></div>
                 <div class="product-head">
                   <div>
                     <h3>AFNAN 9PM</h3>
@@ -3061,19 +3048,71 @@
       </div>
 
       <div id="adminPanelBox" class="admin-panel" style="display:none;">
-        <div class="admin-actions">
-          <button class="btn" id="reloadProductsBtn" type="button">Recargar productos</button>
-          <button class="btn wine" id="adminLogoutBtnInside" type="button">Cerrar sesión</button>
-        </div>
+  <div class="admin-actions">
+    <button class="btn" id="reloadProductsBtn" type="button">Recargar productos</button>
+    <button class="btn wine" id="adminLogoutBtnInside" type="button">Cerrar sesión</button>
+  </div>
 
-        <div id="adminProducts" class="admin-products"></div>
+  <form id="adminCreateProductForm" class="admin-product-card">
+    <div class="admin-product-top">
+      <div class="admin-product-title">Agregar nuevo producto</div>
+      <div class="admin-status">Completa los datos y guárdalo en Firebase</div>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-field">
+        <label for="newProductName">Nombre</label>
+        <input type="text" id="newProductName" placeholder="Ej: LATTAFA ASAD" required>
       </div>
+
+      <div class="admin-field">
+        <label for="newProductPrice">Precio</label>
+        <input type="number" id="newProductPrice" placeholder="Ej: 210000" required>
+      </div>
+
+      <div class="admin-field">
+        <label for="newProductStock">Cantidad</label>
+        <input type="number" id="newProductStock" placeholder="Ej: 8" required>
+      </div>
+
+      <div class="admin-field">
+        <label for="newProductCategory">Categoría</label>
+        <select id="newProductCategory" required>
+          <option value="masculino">Masculino</option>
+          <option value="unisex">Unisex</option>
+        </select>
+      </div>
+
+      <div class="admin-field">
+        <label for="newProductSize">Presentación</label>
+        <input type="text" id="newProductSize" placeholder="Ej: FM EDP SPR · 100ML" required>
+      </div>
+
+      <div class="admin-field">
+        <label for="newProductImage">Imagen</label>
+        <input type="file" id="newProductImage" accept="image/*" required>
+      </div>
+    </div>
+
+    <div class="admin-field">
+      <label for="newProductDescription">Descripción</label>
+      <input type="text" id="newProductDescription" placeholder="Ej: Fragancia intensa, elegante y duradera." required>
+    </div>
+
+    <div class="admin-actions">
+      <button class="btn primary" type="submit" id="createProductBtn">Guardar producto</button>
+    </div>
+  </form>
+
+  <div id="adminProducts" class="admin-products"></div>
+</div>
     </div>
   </div>
 </section>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 
 <script>
   const firebaseConfig = {
@@ -3088,7 +3127,8 @@
   firebase.initializeApp(firebaseConfig);
 
   const auth = firebase.auth();
-  const db = firebase.firestore();
+const db = firebase.firestore();
+const storage = firebase.storage();
 </script>
   <script>
     const track = document.getElementById('track');
@@ -3627,6 +3667,16 @@ const adminPanelBox = document.getElementById('adminPanelBox');
 const adminProducts = document.getElementById('adminProducts');
 const reloadProductsBtn = document.getElementById('reloadProductsBtn');
 
+const adminCreateProductForm = document.getElementById('adminCreateProductForm');
+const newProductName = document.getElementById('newProductName');
+const newProductPrice = document.getElementById('newProductPrice');
+const newProductStock = document.getElementById('newProductStock');
+const newProductCategory = document.getElementById('newProductCategory');
+const newProductSize = document.getElementById('newProductSize');
+const newProductImage = document.getElementById('newProductImage');
+const newProductDescription = document.getElementById('newProductDescription');
+const createProductBtn = document.getElementById('createProductBtn');
+
 function openAdminModal(){
   adminModal.classList.add('show');
 }
@@ -3679,7 +3729,68 @@ async function adminLogout(){
     console.error(error);
   }
 }
+async function uploadProductImage(file){
+  const safeName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+  const storageRef = storage.ref().child(`products/${safeName}`);
 
+  await storageRef.put(file);
+  const downloadURL = await storageRef.getDownloadURL();
+
+  return downloadURL;
+}
+
+async function createNewProduct(e){
+  e.preventDefault();
+
+  if (!isAdmin) {
+    adminStatus.textContent = 'No tienes permisos para crear productos.';
+    return;
+  }
+
+  const name = newProductName.value.trim();
+  const price = Number(newProductPrice.value);
+  const stock = Number(newProductStock.value);
+  const category = newProductCategory.value;
+  const size = newProductSize.value.trim();
+  const description = newProductDescription.value.trim();
+  const imageFile = newProductImage.files[0];
+
+  if (!name || !price || stock < 0 || !category || !size || !description || !imageFile) {
+    adminStatus.textContent = 'Completa todos los campos del nuevo producto.';
+    return;
+  }
+
+  try {
+    createProductBtn.disabled = true;
+    createProductBtn.textContent = 'Guardando...';
+    adminStatus.textContent = 'Subiendo imagen y creando producto...';
+
+    const imageUrl = await uploadProductImage(imageFile);
+
+    await db.collection('products').add({
+      name,
+      price,
+      stock,
+      category,
+      size,
+      description,
+      image: imageUrl,
+      active: true,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    adminStatus.textContent = `Producto "${name}" creado correctamente.`;
+
+    adminCreateProductForm.reset();
+    await loadProductsFromFirestore();
+  } catch (error) {
+    console.error(error);
+    adminStatus.textContent = 'No se pudo crear el producto.';
+  } finally {
+    createProductBtn.disabled = false;
+    createProductBtn.textContent = 'Guardar producto';
+  }
+}
 function renderAdminProducts(){
   if (!adminProducts || !isAdmin) return;
 
@@ -3777,6 +3888,10 @@ if (adminLogoutBtnInside) {
 
 if (reloadProductsBtn) {
   reloadProductsBtn.addEventListener('click', loadProductsFromFirestore);
+}
+
+if (adminCreateProductForm) {
+  adminCreateProductForm.addEventListener('submit', createNewProduct);
 }
 
 auth.onAuthStateChanged((user) => {
