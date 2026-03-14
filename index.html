@@ -2145,6 +2145,217 @@
   color:rgba(23,23,23,.68);
 }
 
+.banner-manager-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1300;
+  padding:24px;
+}
+
+.banner-manager-modal.show{
+  display:flex;
+}
+
+.banner-manager-box{
+  width:min(1280px, 100%);
+  max-height:92vh;
+  overflow:auto;
+  background:#fff;
+  border:1px solid rgba(23,23,23,.10);
+  box-shadow:0 30px 80px rgba(0,0,0,.22);
+}
+
+.banner-manager-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 24px;
+  border-bottom:1px solid rgba(23,23,23,.08);
+}
+
+.banner-manager-header h3{
+  margin:0;
+  font-size:32px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+}
+
+.banner-manager-close{
+  border:none;
+  background:transparent;
+  font-size:34px;
+  cursor:pointer;
+  line-height:1;
+}
+
+.banner-manager-content{
+  padding:24px;
+}
+
+.banner-manager-layout{
+  display:grid;
+  grid-template-columns:340px 1fr;
+  gap:20px;
+  align-items:start;
+}
+
+.banner-manager-sidebar{
+  border:1px solid rgba(23,23,23,.08);
+  background:#faf8f4;
+  padding:18px;
+  display:grid;
+  gap:18px;
+}
+
+.banner-manager-sidebar-top h4{
+  margin:0 0 8px;
+  font-size:24px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+}
+
+.banner-manager-sidebar-top p{
+  margin:0;
+  color:rgba(23,23,23,.68);
+  line-height:1.7;
+  font-size:14px;
+}
+
+.banner-news-list{
+  display:grid;
+  gap:14px;
+}
+
+.banner-news-item{
+  border:1px solid rgba(23,23,23,.08);
+  background:#fff;
+  padding:14px;
+  display:grid;
+  gap:8px;
+}
+
+.banner-news-item-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.banner-news-item-top strong{
+  font-size:18px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+}
+
+.banner-news-item span{
+  font-size:13px;
+  color:rgba(23,23,23,.66);
+  line-height:1.5;
+}
+
+.banner-manager-main{
+  border:1px solid rgba(23,23,23,.08);
+  background:#faf8f4;
+  padding:20px;
+  display:grid;
+  gap:18px;
+}
+
+.banner-manager-grid{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:18px;
+  align-items:start;
+}
+
+.banner-manager-left,
+.banner-manager-right{
+  display:grid;
+  gap:14px;
+}
+
+.banner-image-preview{
+  min-height:320px;
+  border:1px solid rgba(23,23,23,.10);
+  background:linear-gradient(180deg,#161616 0%, #090909 100%);
+  color:rgba(255,255,255,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:22px;
+}
+
+.banner-manager-right{
+  border:1px solid rgba(23,23,23,.08);
+  background:#111;
+  padding:18px;
+}
+
+.banner-manager-right .admin-field label{
+  color:rgba(244,240,234,.72);
+}
+
+.banner-manager-right input,
+.banner-manager-right textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.03);
+  color:#f4f0ea;
+  font-size:14px;
+  outline:none;
+}
+
+.banner-manager-right input::placeholder,
+.banner-manager-right textarea::placeholder{
+  color:rgba(244,240,234,.38);
+}
+
+.banner-manager-right input:focus,
+.banner-manager-right textarea:focus{
+  border-color:rgba(159,29,36,.45);
+  box-shadow:0 0 0 3px rgba(159,29,36,.10);
+}
+
+@media (max-width: 980px){
+  .banner-manager-layout{
+    grid-template-columns:1fr;
+  }
+
+  .banner-manager-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width: 780px){
+  .banner-manager-modal{
+    padding:0;
+  }
+
+  .banner-manager-box{
+    width:100%;
+    height:100dvh;
+    max-height:100dvh;
+    border:none;
+  }
+
+  .banner-manager-content{
+    padding:16px;
+  }
+
+  .banner-image-preview{
+    min-height:240px;
+  }
+}
+
+    
 @media (max-width: 780px){
   .admin-grid{
     grid-template-columns:1fr;
@@ -3008,8 +3219,10 @@
       <div id="adminPanelBox" class="admin-panel" style="display:none;">
   <div class="admin-actions">
     <button class="btn" id="reloadProductsBtn" type="button">Recargar productos</button>
+    <button class="btn" id="openBannerManagerBtn" type="button">Administrar banner principal</button>
     <button class="btn wine" id="adminLogoutBtnInside" type="button">Cerrar sesión</button>
   </div>
+
 <section class="admin-banner-card">
   <div class="admin-product-top">
     <div class="admin-product-title">Banner principal de inicio</div>
@@ -3189,6 +3402,111 @@
     </div>
   </div>
 </section>
+  <section class="banner-manager-modal" id="bannerManagerModal">
+  <div class="banner-manager-box">
+    <div class="banner-manager-header">
+      <h3>Administrar banner principal</h3>
+      <button type="button" class="banner-manager-close" id="bannerManagerClose">×</button>
+    </div>
+
+    <div class="banner-manager-content">
+      <div class="banner-manager-layout">
+        <aside class="banner-manager-sidebar">
+          <div class="banner-manager-sidebar-top">
+            <h4>Novedades activas</h4>
+            <p>Aquí podrás ver y eliminar las novedades que aparecen en el banner principal.</p>
+          </div>
+
+          <div class="banner-news-list">
+            <div class="banner-news-item">
+              <div class="banner-news-item-top">
+                <strong>Signature</strong>
+                <button type="button" class="btn delete-product-btn">Eliminar</button>
+              </div>
+              <span>Colección · Imagen 9PM · Mensaje principal activo</span>
+            </div>
+
+            <div class="banner-news-item">
+              <div class="banner-news-item-top">
+                <strong>Khamrah</strong>
+                <button type="button" class="btn delete-product-btn">Eliminar</button>
+              </div>
+              <span>Novedad · Banner secundario de ejemplo</span>
+            </div>
+          </div>
+        </aside>
+
+        <div class="banner-manager-main">
+          <div class="admin-product-top">
+            <div class="admin-product-title">Agregar nueva novedad</div>
+            <div class="admin-status">Interfaz visual del banner principal</div>
+          </div>
+
+          <div class="banner-manager-grid">
+            <div class="banner-manager-left">
+              <div class="admin-field">
+                <label for="bannerImagePath">Ruta de imagen</label>
+                <input
+                  type="text"
+                  id="bannerImagePath"
+                  placeholder="Ej: assets/afnan-9pm-nuevo.png"
+                >
+              </div>
+
+              <div class="banner-image-preview">
+                Vista previa de imagen
+              </div>
+            </div>
+
+            <div class="banner-manager-right">
+              <div class="admin-field">
+                <label for="bannerTopText">Texto superior</label>
+                <input
+                  type="text"
+                  id="bannerTopText"
+                  placeholder="Ej: Colección / Novedad / Aviso"
+                >
+              </div>
+
+              <div class="admin-field">
+                <label for="bannerMainTitle">Título principal</label>
+                <input
+                  type="text"
+                  id="bannerMainTitle"
+                  placeholder="Ej: Signature"
+                >
+              </div>
+
+              <div class="admin-field">
+                <label for="bannerMainMessage">Mensaje principal</label>
+                <textarea
+                  id="bannerMainMessage"
+                  rows="5"
+                  placeholder="Escribe aquí el mensaje que aparecerá al lado derecho del banner."
+                ></textarea>
+              </div>
+
+              <div class="admin-field">
+                <label for="bannerBottomText">Texto inferior</label>
+                <input
+                  type="text"
+                  id="bannerBottomText"
+                  placeholder="Ej: Masculinidad elegante con un matiz sensual."
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-actions">
+            <button class="btn primary" type="button">Agregar novedad</button>
+            <button class="btn" type="button">Limpiar campos</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -3785,6 +4103,10 @@ const adminLoginBox = document.getElementById('adminLoginBox');
 const adminPanelBox = document.getElementById('adminPanelBox');
 const adminProducts = document.getElementById('adminProducts');
 const reloadProductsBtn = document.getElementById('reloadProductsBtn');
+    
+const openBannerManagerBtn = document.getElementById('openBannerManagerBtn');
+const bannerManagerModal = document.getElementById('bannerManagerModal');
+const bannerManagerClose = document.getElementById('bannerManagerClose');
 
 const adminCreateProductForm = document.getElementById('adminCreateProductForm');
 const newProductName = document.getElementById('newProductName');
@@ -3872,6 +4194,15 @@ function openAdminModal(){
 
 function closeAdminModal(){
   adminModal.classList.remove('show');
+}
+function openBannerManager(){
+  if (!bannerManagerModal) return;
+  bannerManagerModal.classList.add('show');
+}
+
+function closeBannerManager(){
+  if (!bannerManagerModal) return;
+  bannerManagerModal.classList.remove('show');
 }
 
 function updateAdminUI(user){
@@ -4118,6 +4449,21 @@ if (adminClose) {
   adminClose.addEventListener('click', closeAdminModal);
 }
 
+if (openBannerManagerBtn) {
+  openBannerManagerBtn.addEventListener('click', openBannerManager);
+}
+
+if (bannerManagerClose) {
+  bannerManagerClose.addEventListener('click', closeBannerManager);
+}
+
+if (bannerManagerModal) {
+  bannerManagerModal.addEventListener('click', (e) => {
+    if (e.target === bannerManagerModal) closeBannerManager();
+  });
+}
+
+    
 if (adminModal) {
   adminModal.addEventListener('click', (e) => {
     if (e.target === adminModal) closeAdminModal();
