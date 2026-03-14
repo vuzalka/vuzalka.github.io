@@ -1698,6 +1698,11 @@
   overflow:hidden;
   position:relative;
   padding-top:var(--mobile-header-height);
+  transition:padding-top .25s ease;
+}
+
+.viewport.header-hidden{
+  padding-top:0;
 }
 
   .track{
@@ -2889,18 +2894,19 @@ function updateMobileHeaderHeight() {
     behavior: 'smooth'
   });
 
-  const viewport = document.querySelector('.viewport');
-  if (viewport) {
-    viewport.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
-  }
+ const viewport = document.querySelector('.viewport');
+if (viewport) {
+  viewport.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+  viewport.classList.remove('header-hidden');
+}
 
-  if (siteHeader) {
-    siteHeader.classList.remove('hide-on-scroll');
-  }
+if (siteHeader) {
+  siteHeader.classList.remove('hide-on-scroll');
+}
 
   lastMobileScrollTop = 0;
 }
@@ -3653,12 +3659,14 @@ function handleMobileHeaderScroll() {
   if (window.innerWidth > 780 || !siteHeader) return;
 
   const activePanel = document.querySelectorAll('.panel')[currentIndex];
-  if (!activePanel) return;
+  const viewport = document.querySelector('.viewport');
+  if (!activePanel || !viewport) return;
 
   const currentScrollTop = activePanel.scrollTop;
 
   if (currentScrollTop <= 10) {
     siteHeader.classList.remove('hide-on-scroll');
+    viewport.classList.remove('header-hidden');
     lastMobileScrollTop = currentScrollTop;
     return;
   }
@@ -3670,8 +3678,10 @@ function handleMobileHeaderScroll() {
 
   if (scrollingDown && currentScrollTop > 80) {
     siteHeader.classList.add('hide-on-scroll');
+    viewport.classList.add('header-hidden');
   } else {
     siteHeader.classList.remove('hide-on-scroll');
+    viewport.classList.remove('header-hidden');
   }
 
   lastMobileScrollTop = currentScrollTop;
