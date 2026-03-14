@@ -2824,7 +2824,25 @@
       </div>
     </div>
   </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBYlGCt2LhuArZeUGmvA0jfPnLfo0iVlFU",
+    authDomain: "vuzalka-73b95.firebaseapp.com",
+    projectId: "vuzalka-73b95",
+    storageBucket: "vuzalka-73b95.firebasestorage.app",
+    messagingSenderId: "392739606646",
+    appId: "1:392739606646:web:05f22f49163281e6dc4f57"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+</script>
   <script>
     const track = document.getElementById('track');
     const navButtons = document.querySelectorAll('.nav-btn');
