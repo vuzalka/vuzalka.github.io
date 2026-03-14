@@ -2413,7 +2413,7 @@
 </div>
               </article>
 
-              <article class="product-card" data-name="LATTAFA KHAMRAH" data-category="unisex" data-price="0">
+              <article class="product-card" data-name="LATTAFA KHAMRAH" data-category="unisex" data-price="190.000">
                 <div class="product-photo">
   <img src="assets/lattafa-khamrah.png" alt="LATTAFA KHAMRAH">
   <div class="product-info-overlay">
@@ -3339,13 +3339,18 @@ function saveCart() {
 
 function loadCart() {
   const saved = localStorage.getItem('vuzalka_cart');
-  if (saved) {
-    try {
-      cart = JSON.parse(saved);
-    } catch (e) {
-      cart = [];
-    }
+
+  if (!saved) {
+    cart = [];
+    return;
   }
+
+  try {
+    cart = JSON.parse(saved) || [];
+  } catch (e) {
+    cart = [];
+  }
+}
 }
 
 function updateCartUI() {
@@ -3355,6 +3360,7 @@ function updateCartUI() {
     cartItemsContainer.innerHTML = '<p class="cart-empty">Tu carrito está vacío.</p>';
     cartCount.textContent = '0';
     cartTotal.textContent = '$0';
+    saveCart(); // importante
     return;
   }
 
