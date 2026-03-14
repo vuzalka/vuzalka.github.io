@@ -1958,6 +1958,7 @@
 <button class="cart-toggle" id="cartToggle" type="button">
   Carrito <span class="cart-count" id="cartCount">0</span>
 </button>
+      <button class="btn" id="adminAccessBtn" type="button">Administrador</button>
     </header>
 
     <div class="viewport">
@@ -2827,7 +2828,21 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_AUTH_DOMAIN",
+    projectId: "TU_PROJECT_ID",
+    storageBucket: "TU_STORAGE_BUCKET",
+    messagingSenderId: "TU_MESSAGING_SENDER_ID",
+    appId: "TU_APP_ID"
+  };
 
+  firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+</script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBYlGCt2LhuArZeUGmvA0jfPnLfo0iVlFU",
