@@ -2666,22 +2666,23 @@
     <div class="hero-card hero-slider-card">
   <div class="hero-slider" id="heroSlider">
     <div class="hero-slide active">
-      <div class="hero-inner">
-        <div class="hero-image">
-          <img src="assets/afnan-9pm-inicio.png" alt="AFNAN 9PM" loading="lazy">
-        </div>
-        <div class="hero-copy">
-          <div>
-            <small>Colección</small>
-            <h2>Signature</h2>
-            <p>Una línea inspirada en la fuerza tranquila, el lujo contemporáneo y el detalle preciso.</p>
-          </div>
-          <div class="hero-copy-bottom">
-            Masculinidad elegante con un matiz sensual.
-          </div>
-        </div>
+  <div class="hero-inner">
+    <div class="hero-image">
+      <img id="mainBannerImage" src="assets/afnan-9pm.png" alt="AFNAN 9PM" loading="lazy">
+    </div>
+    <div class="hero-copy">
+      <div>
+        <small id="mainBannerTopText">Colección</small>
+        <h2 id="mainBannerTitle">Signature</h2>
+        <p id="mainBannerMessage">Una línea inspirada en la fuerza tranquila, el lujo contemporáneo y el detalle preciso.</p>
+      </div>
+      <div class="hero-copy-bottom" id="mainBannerBottomText">
+        Masculinidad elegante con un matiz sensual.
       </div>
     </div>
+  </div>
+</div>
+
 
     <div class="hero-slide">
       <div class="hero-inner">
@@ -3450,7 +3451,7 @@
             <p>Aquí podrás ver y eliminar las novedades que aparecen en el banner principal.</p>
           </div>
 
-          <div class="banner-news-list">
+          <div class="banner-news-list" id="bannerNewsList">
   <div class="banner-news-item">
     <div class="banner-news-item-top">
       <strong>Signature</strong>
@@ -3474,74 +3475,76 @@
   </div>
 </div>
 
+
         </aside>
 
         <div class="banner-manager-main">
-          <div class="admin-product-top">
-            <div class="admin-product-title">Agregar nueva novedad</div>
-            <div class="admin-status">Interfaz visual del banner principal</div>
-          </div>
+  <div class="admin-product-top">
+    <div class="admin-product-title">Agregar nueva novedad</div>
+    <div class="admin-status">Interfaz visual del banner principal</div>
+  </div>
 
-          <div class="banner-manager-grid">
-            <div class="banner-manager-left">
-              <div class="admin-field">
-                <label for="bannerImagePath">Ruta de imagen</label>
-                <input
-                  type="text"
-                  id="bannerImagePath"
-                  placeholder="Ej: assets/afnan-9pm-nuevo.png"
-                >
-              </div>
+  <div class="banner-manager-grid">
+    <div class="banner-manager-left">
+      <div class="admin-field">
+        <label for="bannerImagePath">Ruta de imagen</label>
+        <input
+          type="text"
+          id="bannerImagePath"
+          placeholder="Ej: assets/afnan-9pm-nuevo.png"
+        >
+      </div>
 
-              <div class="banner-image-preview">
-                Vista previa de imagen
-              </div>
-            </div>
+      <div class="banner-image-preview" id="bannerImagePreview">
+        Vista previa de imagen
+      </div>
+    </div>
 
-            <div class="banner-manager-right">
-              <div class="admin-field">
-                <label for="bannerTopText">Texto superior</label>
-                <input
-                  type="text"
-                  id="bannerTopText"
-                  placeholder="Ej: Colección / Novedad / Aviso"
-                >
-              </div>
+    <div class="banner-manager-right">
+      <div class="admin-field">
+        <label for="bannerTopText">Texto superior</label>
+        <input
+          type="text"
+          id="bannerTopText"
+          placeholder="Ej: Colección / Novedad / Aviso"
+        >
+      </div>
 
-              <div class="admin-field">
-                <label for="bannerMainTitle">Título principal</label>
-                <input
-                  type="text"
-                  id="bannerMainTitle"
-                  placeholder="Ej: Signature"
-                >
-              </div>
+      <div class="admin-field">
+        <label for="bannerMainTitle">Título principal</label>
+        <input
+          type="text"
+          id="bannerMainTitle"
+          placeholder="Ej: Signature"
+        >
+      </div>
 
-              <div class="admin-field">
-                <label for="bannerMainMessage">Mensaje principal</label>
-                <textarea
-                  id="bannerMainMessage"
-                  rows="5"
-                  placeholder="Escribe aquí el mensaje que aparecerá al lado derecho del banner."
-                ></textarea>
-              </div>
+      <div class="admin-field">
+        <label for="bannerMainMessage">Mensaje principal</label>
+        <textarea
+          id="bannerMainMessage"
+          rows="5"
+          placeholder="Escribe aquí el mensaje que aparecerá al lado derecho del banner."
+        ></textarea>
+      </div>
 
-              <div class="admin-field">
-                <label for="bannerBottomText">Texto inferior</label>
-                <input
-                  type="text"
-                  id="bannerBottomText"
-                  placeholder="Ej: Masculinidad elegante con un matiz sensual."
-                >
-              </div>
-            </div>
-          </div>
+      <div class="admin-field">
+        <label for="bannerBottomText">Texto inferior</label>
+        <input
+          type="text"
+          id="bannerBottomText"
+          placeholder="Ej: Masculinidad elegante con un matiz sensual."
+        >
+      </div>
+    </div>
+  </div>
 
-          <div class="admin-actions">
-            <button class="btn primary" type="button">Agregar novedad</button>
-            <button class="btn" type="button">Limpiar campos</button>
-          </div>
-        </div>
+  <div class="admin-actions">
+    <button class="btn primary" type="button" id="addBannerNewsBtn">Agregar novedad</button>
+    <button class="btn" type="button" id="clearBannerFieldsBtn">Limpiar campos</button>
+  </div>
+</div>
+
       </div>
     </div>
   </div>
@@ -4143,6 +4146,24 @@ const adminLoginBox = document.getElementById('adminLoginBox');
 const adminPanelBox = document.getElementById('adminPanelBox');
 const adminProducts = document.getElementById('adminProducts');
 const reloadProductsBtn = document.getElementById('reloadProductsBtn');
+
+const mainBannerImage = document.getElementById('mainBannerImage');
+const mainBannerTopText = document.getElementById('mainBannerTopText');
+const mainBannerTitle = document.getElementById('mainBannerTitle');
+const mainBannerMessage = document.getElementById('mainBannerMessage');
+const mainBannerBottomText = document.getElementById('mainBannerBottomText');
+
+const bannerImagePath = document.getElementById('bannerImagePath');
+const bannerTopText = document.getElementById('bannerTopText');
+const bannerMainTitle = document.getElementById('bannerMainTitle');
+const bannerMainMessage = document.getElementById('bannerMainMessage');
+const bannerBottomText = document.getElementById('bannerBottomText');
+
+const addBannerNewsBtn = document.getElementById('addBannerNewsBtn');
+const clearBannerFieldsBtn = document.getElementById('clearBannerFieldsBtn');
+const bannerNewsList = document.getElementById('bannerNewsList');
+const bannerImagePreview = document.getElementById('bannerImagePreview');
+
     
 const openBannerManagerBtn = document.getElementById('openBannerManagerBtn');
 const bannerManagerModal = document.getElementById('bannerManagerModal');
@@ -4530,6 +4551,19 @@ if (adminCreateProductForm) {
   adminCreateProductForm.addEventListener('submit', createNewProduct);
 }
 
+if (addBannerNewsBtn) {
+  addBannerNewsBtn.addEventListener('click', saveBannerNews);
+}
+
+if (clearBannerFieldsBtn) {
+  clearBannerFieldsBtn.addEventListener('click', clearBannerForm);
+}
+
+if (bannerImagePath) {
+  bannerImagePath.addEventListener('input', updateBannerPreviewCard);
+}
+
+    
 let lastMobileScrollTop = 0;
 
 function handleMobileHeaderScroll() {
@@ -4664,6 +4698,187 @@ function initHeroSlider() {
   heroSlider.addEventListener('mouseenter', stopHeroAutoplay);
   heroSlider.addEventListener('mouseleave', startHeroAutoplay);
 }
+
+let bannerNews = [
+  {
+    id: Date.now().toString(),
+    image: 'assets/afnan-9pm.png',
+    topText: 'Colección',
+    title: 'Signature',
+    message: 'Una línea inspirada en la fuerza tranquila, el lujo contemporáneo y el detalle preciso.',
+    bottomText: 'Masculinidad elegante con un matiz sensual.'
+  }
+];
+
+let editingBannerId = null;
+
+function updateBannerPreviewCard() {
+  if (!bannerImagePreview) return;
+
+  const imagePath = bannerImagePath?.value.trim();
+
+  if (!imagePath) {
+    bannerImagePreview.innerHTML = 'Vista previa de imagen';
+    return;
+  }
+
+  bannerImagePreview.innerHTML = `<img src="${imagePath}" alt="Vista previa" style="max-width:100%; max-height:300px; object-fit:contain;">`;
+}
+
+function reflectBannerToMain(data) {
+  if (mainBannerImage && data.image) mainBannerImage.src = data.image;
+  if (mainBannerTopText) mainBannerTopText.textContent = data.topText || '';
+  if (mainBannerTitle) mainBannerTitle.textContent = data.title || '';
+  if (mainBannerMessage) mainBannerMessage.textContent = data.message || '';
+  if (mainBannerBottomText) mainBannerBottomText.textContent = data.bottomText || '';
+}
+
+function clearBannerForm() {
+  if (bannerImagePath) bannerImagePath.value = '';
+  if (bannerTopText) bannerTopText.value = '';
+  if (bannerMainTitle) bannerMainTitle.value = '';
+  if (bannerMainMessage) bannerMainMessage.value = '';
+  if (bannerBottomText) bannerBottomText.value = '';
+  editingBannerId = null;
+
+  if (addBannerNewsBtn) {
+    addBannerNewsBtn.textContent = 'Agregar novedad';
+  }
+
+  updateBannerPreviewCard();
+}
+
+function fillBannerForm(item) {
+  if (!item) return;
+
+  if (bannerImagePath) bannerImagePath.value = item.image || '';
+  if (bannerTopText) bannerTopText.value = item.topText || '';
+  if (bannerMainTitle) bannerMainTitle.value = item.title || '';
+  if (bannerMainMessage) bannerMainMessage.value = item.message || '';
+  if (bannerBottomText) bannerBottomText.value = item.bottomText || '';
+
+  editingBannerId = item.id;
+
+  if (addBannerNewsBtn) {
+    addBannerNewsBtn.textContent = 'Guardar cambios';
+  }
+
+  updateBannerPreviewCard();
+  reflectBannerToMain(item);
+}
+
+function renderBannerNewsList() {
+  if (!bannerNewsList) return;
+
+  bannerNewsList.innerHTML = '';
+
+  bannerNews.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.className = 'banner-news-item';
+
+    card.innerHTML = `
+      <div class="banner-news-item-top">
+        <strong>${item.title || 'Sin título'}</strong>
+        <div class="banner-news-actions">
+          <button type="button" class="btn banner-edit-btn" data-id="${item.id}">Editar</button>
+          <button type="button" class="btn delete-product-btn" data-id="${item.id}">Eliminar</button>
+        </div>
+      </div>
+      <span>${item.topText || 'Sin categoría'} · ${item.image || 'Sin imagen'} · ${item.message ? 'Mensaje cargado' : 'Sin mensaje'}</span>
+    `;
+
+    bannerNewsList.appendChild(card);
+
+    if (index === 0) {
+      reflectBannerToMain(item);
+    }
+  });
+
+  bannerNewsList.querySelectorAll('.banner-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = bannerNews.find(news => news.id === btn.dataset.id);
+      fillBannerForm(item);
+    });
+  });
+
+  bannerNewsList.querySelectorAll('.delete-product-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      bannerNews = bannerNews.filter(news => news.id !== id);
+
+      if (editingBannerId === id) {
+        clearBannerForm();
+      }
+
+      renderBannerNewsList();
+
+      if (bannerNews.length === 0) {
+        reflectBannerToMain({
+          image: '',
+          topText: '',
+          title: 'Sin novedades',
+          message: 'Aún no has agregado una novedad al banner principal.',
+          bottomText: ''
+        });
+
+        if (mainBannerImage) {
+          mainBannerImage.src = '';
+          mainBannerImage.alt = 'Sin imagen';
+        }
+      }
+    });
+  });
+}
+
+function saveBannerNews() {
+  const newItem = {
+    image: bannerImagePath?.value.trim() || '',
+    topText: bannerTopText?.value.trim() || '',
+    title: bannerMainTitle?.value.trim() || '',
+    message: bannerMainMessage?.value.trim() || '',
+    bottomText: bannerBottomText?.value.trim() || ''
+  };
+
+  if (!newItem.image || !newItem.title || !newItem.message) {
+    alert('Debes completar al menos la imagen, el título y el mensaje principal.');
+    return;
+  }
+
+  if (editingBannerId) {
+    bannerNews = bannerNews.map(item =>
+      item.id === editingBannerId
+        ? { ...item, ...newItem, id: editingBannerId }
+        : item
+    );
+  } else {
+    bannerNews.unshift({
+      id: Date.now().toString(),
+      ...newItem
+    });
+  }
+
+  clearBannerForm();
+  renderBannerNewsList();
+}
+
+function bindBannerLivePreview() {
+  [bannerImagePath, bannerTopText, bannerMainTitle, bannerMainMessage, bannerBottomText]
+    .filter(Boolean)
+    .forEach(field => {
+      field.addEventListener('input', () => {
+        updateBannerPreviewCard();
+
+        reflectBannerToMain({
+          image: bannerImagePath?.value.trim() || 'assets/afnan-9pm.png',
+          topText: bannerTopText?.value.trim() || 'Colección',
+          title: bannerMainTitle?.value.trim() || 'Signature',
+          message: bannerMainMessage?.value.trim() || 'Una línea inspirada en la fuerza tranquila, el lujo contemporáneo y el detalle preciso.',
+          bottomText: bannerBottomText?.value.trim() || 'Masculinidad elegante con un matiz sensual.'
+        });
+      });
+    });
+}
+
     
 auth.onAuthStateChanged((user) => {
   updateAdminUI(user);
@@ -4679,6 +4894,9 @@ window.addEventListener('load', async () => {
 
   bindPanelScrollForMobileHeader();
   initHeroSlider();
+  bindBannerLivePreview();
+  renderBannerNewsList();
+
   await loadProductsFromFirestore();
 });
 window.addEventListener('resize', () => {
