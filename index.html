@@ -1791,9 +1791,10 @@
 
 .products-grid{
   display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:12px;
 }
+
 
 
 .product-card{
@@ -1995,7 +1996,7 @@
 }
     @media (min-width: 560px) and (max-width: 780px){
   .products-grid{
-    grid-template-columns:repeat(3, minmax(0, 1fr));
+    grid-template-columns:repeat(2, minmax(0, 1fr));
     gap:12px;
   }
 
@@ -2005,12 +2006,14 @@
 
   .product-card h3{
     font-size:16px;
+    line-height:1.12;
   }
 
   .meta{
     font-size:10px;
   }
 }
+
 
   .vibe{
     font-size:9px;
