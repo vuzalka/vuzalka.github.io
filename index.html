@@ -4906,16 +4906,14 @@ function renderBannerNewsList() {
       const id = btn.dataset.id;
 
       try {
-        await db.collection('bannerNews').doc(id).delete();
-        await loadBannerNewsFromFirestore();
-      } catch (error) {
-        catch (error) {
-  console.error('Error eliminando novedad del banner:', error);
-  alert(`No se pudo eliminar la novedad: ${error.message}`);
-}
-
-    });
+      await db.collection('bannerNews').doc(id).delete();
+      await loadBannerNewsFromFirestore();
+    } catch (error) {
+      console.error('Error eliminando novedad del banner:', error);
+      alert(`No se pudo eliminar la novedad: ${error.message}`);
+    }
   });
+});
 }
 
 async function saveBannerNews() {
