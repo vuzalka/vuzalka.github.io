@@ -4671,7 +4671,10 @@ function initHeroSlider() {
 
   heroSlides = Array.from(heroSlider.querySelectorAll('.hero-slide'));
 
-  if (!heroSlides.length) return;
+  if (!heroSlides.length) {
+    renderHeroDots();
+    return;
+  }
 
   showHeroSlide(0);
   renderHeroDots();
@@ -4695,9 +4698,8 @@ function initHeroSlider() {
   heroSlider.addEventListener('mouseleave', startHeroAutoplay);
 }
 
+
 let bannerNews = [];
-
-
 let editingBannerId = null;
 
 function updateBannerPreviewCard() {
@@ -4867,6 +4869,236 @@ function bindBannerLivePreview() {
     });
 }
 
+function updateBannerPreviewCard() {
+  if (!bannerImagePreview) return;
+
+  const imagePath = bannerImagePath?.value.trim();
+
+  if (!imagePath) {
+    bannerImagePreview.innerHTML = 'Vista previa de imagen';
+    return;
+  }
+
+  bannerImagePreview.innerHTML = `
+    <img src="${imagePath}" alt="Vista previa" style="max-width:100%; max-height:300px; object-fit:contain;">
+  `;
+}
+
+function clearBannerForm() {
+  if (bannerImagePath) bannerImagePath.value = '';
+  if (bannerTopText) bannerTopText.value = '';
+  if (bannerMainTitle) bannerMainTitle.value = '';
+  if (bannerMainMessage) bannerMainMessage.value = '';
+  if (bannerBottomText) bannerBottomText.value = '';
+
+  editingBannerId = null;
+
+  if (addBannerNewsBtn) {
+    addBannerNewsBtn.textContent = 'Agregar novedad';
+  }
+
+  updateBannerPreviewCard();
+}
+
+function fillBannerForm(item) {
+  if (!item) return;
+
+  if (bannerImagePath) bannerImagePath.value = item.image || '';
+  if (bannerTopText) bannerTopText.value = item.topText || '';
+  if (bannerMainTitle) bannerMainTitle.value = item.title || '';
+  if (bannerMainMessage) bannerMainMessage.value = item.message || '';
+  if (bannerBottomText) bannerBottomText.value = item.bottomText || '';
+
+  editingBannerId = item.id;
+
+  if (addBannerNewsBtn) {
+    addBannerNewsBtn.textContent = 'Guardar cambios';
+  }
+
+  updateBannerPreviewCard();
+}
+
+function createHeroSlide(item, isActive = false) {
+  const slide = document.createElement('div');
+  slide.className = `hero-slide ${isActive ? 'active' : ''}`;
+
+  slide.innerHTML = `
+    <div class="hero-inner">
+      <div class="hero-image">
+        <img src="${item.image || ''}" alt="${item.title || 'Banner'}" loading="lazy">
+      </div>
+      <div class="hero-copy">
+        <div>
+          <small>${item.topText || ''}</small>
+          <h2>${item.title || ''}</h2>
+          <p>${item.message || ''}</p>
+        </div>
+        <div class="hero-copy-bottom">
+          ${item.bottomText || ''}
+        </div>
+      </div>
+    </div>
+  `;
+
+  return slide;
+}
+
+function renderHeroSliderFromBannerNews() {
+  if (!heroSlidesContainer) return;
+
+  heroSlidesContainer.innerHTML = '';
+
+  if (!bannerNews.length) {
+    heroSlidesContainer.innerHTML = `
+      <div class="hero-slide active">
+        <div class="hero-inner">
+          <div class="hero-image">
+            <div style="color:rgba(255,255,255,.45); font-family:Georgia,'Times New Roman',serif; font-size:24px;">
+              Sin imagen
+            </div>
+          </div>
+          <div class="hero-copy">
+            <div>
+              <small>Banner</small>
+              <h2>Sin novedades</h2>
+              <p>Aún no has agregado novedades al banner principal.</p>
+            </div>
+            <div class="hero-copy-bottom">
+              Agrega una novedad desde el panel administrador.
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    bannerNews.forEach((item, index) => {
+      heroSlidesContainer.appendChild(createHeroSlide(item, index === 0));
+    });
+  }
+
+  heroSlides = Array.from(heroSlider.querySelectorAll('.hero-slide'));
+  heroCurrent = 0;
+  renderHeroDots();
+  startHeroAutoplay();
+}
+
+function renderBannerNewsList() {
+  if (!bannerNewsList) return;
+
+  bannerNewsList.innerHTML = '';
+
+  if (!bannerNews.length) {
+    bannerNewsList.innerHTML = `
+      <div class="banner-news-item">
+        <span>No hay novedades cargadas todavía.</span>
+      </div>
+    `;
+    return;
+  }
+
+  bannerNews.forEach((item) => {
+    const card = document.createElement('div');
+    card.className = 'banner-news-item';
+
+    card.innerHTML = `
+      <div class="banner-news-item-top">
+        <strong>${item.title || 'Sin título'}</strong>
+        <div class="banner-news-actions">
+          <button type="button" class="btn banner-edit-btn" data-id="${item.id}">Editar</button>
+          <button type="button" class="btn delete-product-btn" data-id="${item.id}">Eliminar</button>
+        </div>
+      </div>
+      <span>${item.topText || 'Sin categoría'} · ${item.image || 'Sin imagen'} · ${item.message ? 'Mensaje cargado' : 'Sin mensaje'}</span>
+    `;
+
+    bannerNewsList.appendChild(card);
+  });
+
+  bannerNewsList.querySelectorAll('.banner-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = bannerNews.find(news => news.id === btn.dataset.id);
+      fillBannerForm(item);
+    });
+  });
+
+  bannerNewsList.querySelectorAll('.delete-product-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+
+      try {
+        await db.collection('bannerNews').doc(id).delete();
+        await loadBannerNewsFromFirestore();
+      } catch (error) {
+        console.error('Error eliminando novedad del banner:', error);
+        alert('No se pudo eliminar la novedad.');
+      }
+    });
+  });
+}
+
+async function saveBannerNews() {
+  const newItem = {
+    image: bannerImagePath?.value.trim() || '',
+    topText: bannerTopText?.value.trim() || '',
+    title: bannerMainTitle?.value.trim() || '',
+    message: bannerMainMessage?.value.trim() || '',
+    bottomText: bannerBottomText?.value.trim() || '',
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  if (!newItem.image || !newItem.title || !newItem.message) {
+    alert('Debes completar al menos la imagen, el título y el mensaje principal.');
+    return;
+  }
+
+  try {
+    if (editingBannerId) {
+      await db.collection('bannerNews').doc(editingBannerId).update(newItem);
+    } else {
+      await db.collection('bannerNews').add({
+        ...newItem,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    clearBannerForm();
+    await loadBannerNewsFromFirestore();
+  } catch (error) {
+    console.error('Error guardando novedad del banner:', error);
+    alert('No se pudo guardar la novedad.');
+  }
+}
+
+async function loadBannerNewsFromFirestore() {
+  try {
+    const snapshot = await db
+      .collection('bannerNews')
+      .orderBy('createdAt', 'desc')
+      .get();
+
+    bannerNews = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    renderBannerNewsList();
+    renderHeroSliderFromBannerNews();
+  } catch (error) {
+    console.error('Error cargando bannerNews:', error);
+    bannerNews = [];
+    renderBannerNewsList();
+    renderHeroSliderFromBannerNews();
+  }
+}
+
+function bindBannerLivePreview() {
+  [bannerImagePath, bannerTopText, bannerMainTitle, bannerMainMessage, bannerBottomText]
+    .filter(Boolean)
+    .forEach(field => {
+      field.addEventListener('input', updateBannerPreviewCard);
+    });
+}
+
     
 auth.onAuthStateChanged((user) => {
   updateAdminUI(user);
@@ -4881,12 +5113,12 @@ window.addEventListener('load', async () => {
   goToPanel(initialIndex, false);
 
   bindPanelScrollForMobileHeader();
-  initHeroSlider();
   bindBannerLivePreview();
-  renderBannerNewsList();
-
+  await loadBannerNewsFromFirestore();
+  initHeroSlider();
   await loadProductsFromFirestore();
 });
+
 window.addEventListener('resize', () => {
   updateMobileHeaderHeight();
 });
