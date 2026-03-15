@@ -4457,7 +4457,12 @@ function handleMobileHeaderScroll() {
   if (!activePanel || !viewport) return;
 
   const currentScrollTop = activePanel.scrollTop;
+  const scrollingDown = currentScrollTop > lastMobileScrollTop;
+  const scrollDifference = Math.abs(currentScrollTop - lastMobileScrollTop);
 
+  if (scrollDifference < 8) return;
+
+  /* Si está arriba del todo, mostrar header */
   if (currentScrollTop <= 10) {
     siteHeader.classList.remove('hide-on-scroll');
     viewport.classList.remove('header-hidden');
@@ -4465,21 +4470,17 @@ function handleMobileHeaderScroll() {
     return;
   }
 
-  const scrollingDown = currentScrollTop > lastMobileScrollTop;
-  const scrollDifference = Math.abs(currentScrollTop - lastMobileScrollTop);
-
-  if (scrollDifference < 8) return;
-
+  /* Si baja, ocultar header */
   if (scrollingDown && currentScrollTop > 80) {
     siteHeader.classList.add('hide-on-scroll');
     viewport.classList.add('header-hidden');
-  } else {
-    siteHeader.classList.remove('hide-on-scroll');
-    viewport.classList.remove('header-hidden');
   }
+
+  /* Si sube pero NO ha llegado arriba, se mantiene oculto */
 
   lastMobileScrollTop = currentScrollTop;
 }
+
 
 function bindPanelScrollForMobileHeader() {
   const panels = document.querySelectorAll('.panel');
