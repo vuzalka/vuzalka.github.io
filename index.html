@@ -4909,9 +4909,11 @@ function renderBannerNewsList() {
         await db.collection('bannerNews').doc(id).delete();
         await loadBannerNewsFromFirestore();
       } catch (error) {
-        console.error('Error eliminando novedad del banner:', error);
-        alert('No se pudo eliminar la novedad.');
-      }
+        catch (error) {
+  console.error('Error eliminando novedad del banner:', error);
+  alert(`No se pudo eliminar la novedad: ${error.message}`);
+}
+
     });
   });
 }
@@ -4943,10 +4945,11 @@ async function saveBannerNews() {
 
     clearBannerForm();
     await loadBannerNewsFromFirestore();
-  } catch (error) {
-    console.error('Error guardando novedad del banner:', error);
-    alert('No se pudo guardar la novedad.');
-  }
+  } 
+  catch (error) {
+  console.error('Error guardando novedad del banner:', error);
+  alert(`No se pudo guardar la novedad: ${error.message}`);
+}
 }
 
 async function loadBannerNewsFromFirestore() {
