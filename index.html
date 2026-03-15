@@ -2665,22 +2665,16 @@
   </div>
     <div class="hero-card hero-slider-card">
   <div class="hero-slider" id="heroSlider">
-    <div class="hero-slide active">
-  <div class="hero-inner">
-    <div class="hero-image">
-      <img id="mainBannerImage" src="assets/afnan-9pm.png" alt="AFNAN 9PM" loading="lazy">
-    </div>
-    <div class="hero-copy">
-      <div>
-        <small id="mainBannerTopText">Colección</small>
-        <h2 id="mainBannerTitle">Signature</h2>
-        <p id="mainBannerMessage">Una línea inspirada en la fuerza tranquila, el lujo contemporáneo y el detalle preciso.</p>
-      </div>
-      <div class="hero-copy-bottom" id="mainBannerBottomText">
-        Masculinidad elegante con un matiz sensual.
-      </div>
+    <div id="heroSlidesContainer"></div>
+
+    <div class="hero-slider-controls">
+      <button type="button" class="hero-slider-btn" id="heroPrev">‹</button>
+      <div class="hero-slider-dots" id="heroDots"></div>
+      <button type="button" class="hero-slider-btn" id="heroNext">›</button>
     </div>
   </div>
+</div>
+
 </div>
 
 
@@ -3583,6 +3577,8 @@ const db = firebase.firestore();
 const heroPrev = document.getElementById('heroPrev');
 const heroNext = document.getElementById('heroNext');
 const heroDotsContainer = document.getElementById('heroDots');
+const heroSlidesContainer = document.getElementById('heroSlidesContainer');
+
 let heroSlides = [];
 let heroCurrent = 0;
 let heroInterval = null;
@@ -4699,16 +4695,8 @@ function initHeroSlider() {
   heroSlider.addEventListener('mouseleave', startHeroAutoplay);
 }
 
-let bannerNews = [
-  {
-    id: Date.now().toString(),
-    image: 'assets/afnan-9pm.png',
-    topText: 'Colección',
-    title: 'Signature',
-    message: 'Una línea inspirada en la fuerza tranquila, el lujo contemporáneo y el detalle preciso.',
-    bottomText: 'Masculinidad elegante con un matiz sensual.'
-  }
-];
+let bannerNews = [];
+
 
 let editingBannerId = null;
 
