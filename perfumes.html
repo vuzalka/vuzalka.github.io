@@ -29,6 +29,7 @@
     }
 
     a{text-decoration:none;color:inherit}
+    img{display:block;max-width:100%}
 
     .container{
       width:min(var(--max), calc(100% - 32px));
@@ -39,7 +40,7 @@
       position:sticky;
       top:0;
       z-index:1000;
-      background:rgba(255,255,255,.9);
+      background:rgba(255,255,255,.92);
       backdrop-filter:blur(10px);
       border-bottom:1px solid var(--soft);
     }
@@ -114,7 +115,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(3, 1fr);
       gap:24px;
     }
 
@@ -124,33 +125,45 @@
       overflow:hidden;
       box-shadow:var(--shadow);
       border:1px solid var(--soft);
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 24px 65px rgba(0,0,0,.14);
     }
 
     .card img{
       width:100%;
-      height:300px;
-      object-fit:cover;
+      height:320px;
+      object-fit:contain;
+      background:#fff;
+      padding:18px;
+      border-bottom:1px solid var(--soft);
     }
 
     .content{
-      padding:24px;
+      padding:22px;
     }
 
     .content h3{
       margin:0 0 10px;
       color:var(--wine);
-      font-size:1.2rem;
+      font-size:1.15rem;
+      line-height:1.3;
     }
 
     .content p{
-      margin:0 0 16px;
+      margin:0 0 14px;
       line-height:1.7;
       color:#444;
+      font-size:.96rem;
     }
 
     .price{
       font-weight:700;
       font-size:1.05rem;
+      color:var(--ink);
     }
 
     .footer{
@@ -198,7 +211,7 @@
     <div class="container">
       <h1>Nuestros perfumes</h1>
       <p>
-        Explora una selección de fragancias con identidad propia, pensadas para acompañar cada momento con elegancia y presencia.
+        Descubre fragancias seleccionadas para resaltar presencia, elegancia y personalidad.
       </p>
     </div>
   </section>
@@ -208,29 +221,83 @@
       <div class="grid">
 
         <article class="card">
-          <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80" alt="Perfume 1">
+          <img src="img/perfumes/afnan-9pm.png" alt="AFNAN 9PM">
           <div class="content">
-            <h3>Velvet Rose</h3>
-            <p>Una fragancia sofisticada con notas florales profundas y un fondo envolvente.</p>
+            <h3>AFNAN 9PM</h3>
+            <p>Fragancia intensa y moderna, ideal para destacar en la noche con mucha presencia.</p>
             <div class="price">$120.000</div>
           </div>
         </article>
 
         <article class="card">
-          <img src="https://images.unsplash.com/photo-1615634262417-9872298ca8d1?auto=format&fit=crop&w=900&q=80" alt="Perfume 2">
+          <img src="img/perfumes/armaf-club-de-nuit-intense.png" alt="ARMAF CLUB DE NUIT INTENSE">
           <div class="content">
-            <h3>Midnight Oud</h3>
-            <p>Aroma intenso y elegante con carácter amaderado y un toque oriental distintivo.</p>
-            <div class="price">$145.000</div>
+            <h3>ARMAF CLUB DE NUIT INTENSE</h3>
+            <p>Aroma elegante y poderoso con un perfil sofisticado y muy llamativo.</p>
+            <div class="price">$165.000</div>
           </div>
         </article>
 
         <article class="card">
-          <img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=900&q=80" alt="Perfume 3">
+          <img src="img/perfumes/acqua-di-gio.png" alt="GIORGIO ARMANI ACQUA DI GIO">
           <div class="content">
-            <h3>Golden Bloom</h3>
-            <p>Una mezcla luminosa y fresca ideal para quienes aman la delicadeza con estilo.</p>
-            <div class="price">$110.000</div>
+            <h3>GIORGIO ARMANI ACQUA DI GIO</h3>
+            <p>Fragancia fresca y refinada, perfecta para uso diario con un estilo limpio.</p>
+            <div class="price">$210.000</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="img/perfumes/hugo-boss-bottled-vi.png" alt="HUGO BOSS BOTTLED VI">
+          <div class="content">
+            <h3>HUGO BOSS BOTTLED VI</h3>
+            <p>Perfume versátil con carácter masculino y una presencia clásica muy atractiva.</p>
+            <div class="price">$180.000</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="img/perfumes/lattafa-khamrah-qahwa.png" alt="LATTAFA KHAMRAH QAHWA">
+          <div class="content">
+            <h3>LATTAFA KHAMRAH QAHWA</h3>
+            <p>Fragancia cálida y envolvente con un toque dulce y especiado de gran impacto.</p>
+            <div class="price">$190.000</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="img/perfumes/lattafa-khamrah.png" alt="LATTAFA KHAMRAH">
+          <div class="content">
+            <h3>LATTAFA KHAMRAH</h3>
+            <p>Perfume intenso y seductor, ideal para quienes buscan un aroma inolvidable.</p>
+            <div class="price">$185.000</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="img/perfumes/odyssey-mandarin-sky.png" alt="ODYSSEY MANDARIN SKY">
+          <div class="content">
+            <h3>ODYSSEY MANDARIN SKY</h3>
+            <p>Fragancia vibrante con aire juvenil, fresca al inicio y elegante al fondo.</p>
+            <div class="price">$140.000</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="img/perfumes/one-million.png" alt="PACO RABANNE ONE MILLION">
+          <div class="content">
+            <h3>PACO RABANNE ONE MILLION</h3>
+            <p>Aroma icónico, llamativo y seductor, pensado para quienes quieren sobresalir.</p>
+            <div class="price">$230.000</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="img/perfumes/eros-flame.png" alt="VERSACE EROS FLAME">
+          <div class="content">
+            <h3>VERSACE EROS FLAME</h3>
+            <p>Fragancia apasionada y fuerte, con un estilo elegante y muy masculino.</p>
+            <div class="price">$220.000</div>
           </div>
         </article>
 
