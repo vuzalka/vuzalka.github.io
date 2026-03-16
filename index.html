@@ -1582,6 +1582,120 @@
   margin-top:4px;
 }
 
+.mobile-menu-toggle{
+  display:none;
+  width:48px;
+  height:48px;
+  border:1px solid rgba(23,23,23,.12);
+  background:#fff;
+  cursor:pointer;
+  padding:0;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:5px;
+}
+
+.mobile-menu-toggle span{
+  display:block;
+  width:20px;
+  height:2px;
+  background:#171717;
+}
+
+.mobile-menu-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+  z-index:1390;
+}
+
+.mobile-menu-backdrop.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.mobile-menu-drawer{
+  position:fixed;
+  top:0;
+  left:0;
+  width:min(320px, 86vw);
+  height:100dvh;
+  background:#ffffff;
+  box-shadow:12px 0 40px rgba(0,0,0,.16);
+  transform:translateX(-100%);
+  transition:transform .28s ease;
+  z-index:1400;
+  display:flex;
+  flex-direction:column;
+}
+
+.mobile-menu-drawer.open{
+  transform:translateX(0);
+}
+
+.mobile-menu-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 16px;
+  border-bottom:1px solid rgba(23,23,23,.08);
+}
+
+.mobile-menu-header strong{
+  font-size:22px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+}
+
+.mobile-menu-close{
+  border:none;
+  background:transparent;
+  font-size:32px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.mobile-menu-links{
+  display:grid;
+  gap:0;
+  padding:8px 0;
+}
+
+.mobile-menu-link{
+  width:100%;
+  border:none;
+  border-bottom:1px solid rgba(23,23,23,.08);
+  background:#fff;
+  text-align:left;
+  padding:18px 16px;
+  font-size:16px;
+  color:#171717;
+  cursor:pointer;
+}
+
+.mobile-menu-link:hover{
+  background:#faf8f4;
+}
+
+.mobile-cart-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:24px;
+  height:24px;
+  padding:0 7px;
+  margin-left:8px;
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+}
+
     
 @media (max-width: 780px){
   .checkout-modal{
@@ -1654,12 +1768,11 @@
   top:0;
   left:0;
   right:0;
-  padding:16px 14px;
-  display:flex;
-  flex-direction:column;
+  padding:14px 14px;
+  display:grid;
+  grid-template-columns:48px 1fr;
   align-items:center;
-  justify-content:center;
-  gap:14px;
+  gap:12px;
   background:rgba(255,255,255,.96);
   z-index:60;
   transform:translateY(0);
@@ -1670,19 +1783,23 @@
   transform:translateY(-100%);
 }
 
-  .brandlogo{
-    height:auto;
-    max-width:240px;
-    width:78%;
-    margin:0 auto;
-  }
+.brandlogo{
+  height:auto;
+  max-width:220px;
+  width:100%;
+  justify-self:start;
+}
 
-  .main-nav{
-    width:100%;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-  }
+.mobile-menu-toggle{
+  display:inline-flex;
+}
+
+.main-nav,
+.cart-toggle,
+#adminAccessBtn{
+  display:none !important;
+}
+
 
   .nav-btn{
     width:100%;
@@ -2639,6 +2756,13 @@
     <header class="site-header">
       <img src="assets/logo.png" alt="VUZALKA" class="brandlogo" id="logoHome" style="cursor:pointer;" />
 
+<button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Abrir menú">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+      
       <nav class="main-nav">
   <button class="nav-btn active" data-index="0">Inicio</button>
   <button class="nav-btn" data-index="1">Perfumes</button>
@@ -2652,6 +2776,31 @@
       <button class="btn" id="adminAccessBtn" type="button">Administrador</button>
     </header>
 
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
+
+<aside class="mobile-menu-drawer" id="mobileMenuDrawer">
+  <div class="mobile-menu-header">
+    <strong>Menú</strong>
+    <button type="button" class="mobile-menu-close" id="mobileMenuClose">×</button>
+  </div>
+
+  <div class="mobile-menu-links">
+    <button class="mobile-menu-link go-to" type="button" data-index="0">Inicio</button>
+    <button class="mobile-menu-link go-to" type="button" data-index="1">Perfumes</button>
+    <button class="mobile-menu-link go-to" type="button" data-index="2">Quiénes somos</button>
+    <button class="mobile-menu-link go-to" type="button" data-index="3">Contacto</button>
+
+    <button class="mobile-menu-link" type="button" id="mobileCartToggle">
+      Carrito <span class="mobile-cart-badge" id="mobileCartCount">0</span>
+    </button>
+
+    <button class="mobile-menu-link" type="button" id="mobileAdminAccessBtn">
+      Administrador
+    </button>
+  </div>
+</aside>
+
+    
     <div class="viewport">
       <div class="track" id="track">
         <section class="panel">
@@ -3483,6 +3632,15 @@ const db = firebase.firestore();
     const track = document.getElementById('track');
     const navButtons = document.querySelectorAll('.nav-btn');
     const gotoButtons = document.querySelectorAll('.go-to');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+    const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+    const mobileMenuClose = document.getElementById('mobileMenuClose');
+    const mobileCartToggle = document.getElementById('mobileCartToggle');
+    const mobileAdminAccessBtn = document.getElementById('mobileAdminAccessBtn');
+    const mobileCartCount = document.getElementById('mobileCartCount');
+
+
     
     let currentIndex = 0;
     const siteHeader = document.querySelector('.site-header');
@@ -3569,6 +3727,8 @@ function updateMobileHeaderHeight() {
     const newHash = getHashFromIndex(index);
     history.replaceState(null, '', `#${newHash}`);
   }
+
+closeMobileMenu();
 }
 
     navButtons.forEach((btn) => {
@@ -3817,6 +3977,19 @@ function closeCart() {
   cartBackdrop.classList.remove('show');
 }
 
+function openMobileMenu() {
+  if (!mobileMenuDrawer || !mobileMenuBackdrop) return;
+  mobileMenuDrawer.classList.add('open');
+  mobileMenuBackdrop.classList.add('show');
+}
+
+function closeMobileMenu() {
+  if (!mobileMenuDrawer || !mobileMenuBackdrop) return;
+  mobileMenuDrawer.classList.remove('open');
+  mobileMenuBackdrop.classList.remove('show');
+}
+
+    
 function saveCart() {
   localStorage.setItem('vuzalka_cart', JSON.stringify(cart));
 }
@@ -3842,6 +4015,7 @@ function updateCartUI() {
   if (cart.length === 0) {
   cartItemsContainer.innerHTML = '<p class="cart-empty">Tu carrito está vacío.</p>';
   cartCount.textContent = '0';
+  if (mobileCartCount) mobileCartCount.textContent = '0';
   cartTotal.textContent = '$0';
   saveCart();
   return;
@@ -3877,6 +4051,7 @@ function updateCartUI() {
   });
 
   cartCount.textContent = String(totalItems);
+  if (mobileCartCount) mobileCartCount.textContent = String(totalItems);
   cartTotal.textContent = formatPrice(totalPrice);
 
   saveCart();
@@ -3969,6 +4144,33 @@ if (openCartFromCatalog) openCartFromCatalog.addEventListener('click', openCart)
 if (cartClose) cartClose.addEventListener('click', closeCart);
 if (cartBackdrop) cartBackdrop.addEventListener('click', closeCart);
 
+if (mobileMenuToggle) {
+  mobileMenuToggle.addEventListener('click', openMobileMenu);
+}
+
+if (mobileMenuClose) {
+  mobileMenuClose.addEventListener('click', closeMobileMenu);
+}
+
+if (mobileMenuBackdrop) {
+  mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
+}
+
+if (mobileCartToggle) {
+  mobileCartToggle.addEventListener('click', () => {
+    closeMobileMenu();
+    openCart();
+  });
+}
+
+if (mobileAdminAccessBtn) {
+  mobileAdminAccessBtn.addEventListener('click', () => {
+    closeMobileMenu();
+    openAdminModal();
+  });
+}
+
+    
 if (clearCartBtn) {
   clearCartBtn.addEventListener('click', clearCart);
 }
