@@ -768,29 +768,35 @@ function autoFillImagePath(){
 }
 
 function updatePreview(){
-      const nombre = nombreInput.value.trim() || "Nombre del perfume";
-      const precio = precioInput.value.trim();
-      const cantidad = cantidadInput.value.trim();
-      const descripcion = descripcionInput.value.trim() || "La descripción aparecerá aquí.";
-      const imagen = imagenInput.value.trim();
+  const nombre = nombreInput.value.trim() || "Nombre del perfume";
+  const precio = precioInput.value.trim();
+  const cantidad = cantidadInput.value.trim();
+  const descripcion = descripcionInput.value.trim() || "La descripción aparecerá aquí.";
+  const imagen = imagenInput.value.trim();
 
-      previewNombre.textContent = nombre;
-      previewPrecio.textContent = formatPrice(precio);
-      previewCantidad.textContent = "Cantidad: " + (cantidad === "" ? "0" : cantidad);
-      previewDescripcion.textContent = descripcion;
+  previewNombre.textContent = nombre;
+  previewPrecio.textContent = formatPrice(precio);
+  previewCantidad.textContent = "Cantidad: " + (cantidad === "" ? "0" : cantidad);
+  previewDescripcion.textContent = descripcion;
 
-      if(imagen){
-        previewImageBox.innerHTML = '<img src="' + escapeHtml(imagen) + '" alt="' + escapeHtml(nombre) + '" onerror="this.parentElement.innerHTML=&quot;<div class=\\'placeholder\\'>No se pudo cargar la imagen.<br>Revisa la ruta escrita.</div>&quot;">';
-      }else{
-        previewImageBox.innerHTML = '<div class="placeholder">Aquí aparecerá la imagen del perfume</div>';
-      }
+  if(imagen){
+    previewImageBox.innerHTML = `
+      <img 
+        src="${escapeHtml(imagen)}" 
+        alt="${escapeHtml(nombre)}"
+        onerror="this.parentElement.innerHTML='<div class=&quot;placeholder&quot;>No se pudo cargar la imagen.<br>Revisa la ruta escrita.</div>'"
+      >
+    `;
+  }else{
+    previewImageBox.innerHTML = '<div class="placeholder">Aquí aparecerá la imagen del perfume</div>';
+  }
 
-      if(productIdInput.value){
-        previewModeText.textContent = "Estás editando un producto existente. Los cambios se reflejarán cuando presiones guardar.";
-      }else{
-        previewModeText.textContent = "Estás creando un nuevo producto. Completa los campos y guarda para añadirlo al catálogo.";
-      }
-    }
+  if(productIdInput.value){
+    previewModeText.textContent = "Estás editando un producto existente. Los cambios se reflejarán cuando presiones guardar.";
+  }else{
+    previewModeText.textContent = "Estás creando un nuevo producto. Completa los campos y guarda para añadirlo al catálogo.";
+  }
+}
 
     function clearForm(){
   productIdInput.value = "";
@@ -846,7 +852,7 @@ function updatePreview(){
   cantidadInput.value = product.cantidad;
   descripcionInput.value = product.descripcion;
   imagenInput.value = product.imagen;
-  imageManuallyEdited = true;
+  imageManuallyEdited = false;
   updatePreview();
   previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
   window.scrollTo({ top: 0, behavior: "smooth" });
