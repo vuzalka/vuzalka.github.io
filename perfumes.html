@@ -7,24 +7,28 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#ffffff;
+      --bg:#f4f0ea;
+      --panel:#ffffff;
       --ink:#171717;
+      --muted:#666;
       --wine:#9f1d24;
-      --soft:#17171712;
-      --light:#f4f0ea;
+      --wine-dark:#7f171d;
+      --line:#17171714;
       --shadow:0 20px 60px rgba(0,0,0,.10);
-      --max:1200px;
+      --radius:24px;
+      --max:1240px;
     }
 
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:'Inter',sans-serif;
-      background:var(--light);
+      background:var(--bg);
       color:var(--ink);
     }
 
@@ -32,7 +36,7 @@
     img{display:block;max-width:100%}
 
     .container{
-      width:min(var(--max), calc(100% - 32px));
+      width:min(var(--max), calc(100% - 28px));
       margin:auto;
     }
 
@@ -42,11 +46,11 @@
       z-index:1000;
       background:rgba(255,255,255,.92);
       backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--soft);
+      border-bottom:1px solid var(--line);
     }
 
     .header-inner{
-      min-height:76px;
+      min-height:78px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -63,15 +67,16 @@
 
     .nav{
       display:flex;
-      gap:22px;
+      gap:20px;
       flex-wrap:wrap;
+      align-items:center;
     }
 
     .nav a{
       font-size:.95rem;
       font-weight:500;
+      padding:8px 0;
       position:relative;
-      padding:6px 0;
     }
 
     .nav a::after{
@@ -91,26 +96,66 @@
     }
 
     .hero{
-      padding:70px 0 30px;
+      padding:72px 0 34px;
       text-align:center;
     }
 
     .hero h1{
-      font-family:'Cormorant Garamond',serif;
-      font-size:3.3rem;
-      color:var(--wine);
       margin:0 0 12px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2.6rem, 5vw, 4rem);
+      color:var(--wine);
+      line-height:1;
     }
 
     .hero p{
-      max-width:700px;
+      max-width:760px;
       margin:0 auto;
-      color:#555;
-      line-height:1.8;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:1rem;
+    }
+
+    .toolbar{
+      padding:0 0 18px;
+    }
+
+    .toolbar-box{
+      background:rgba(255,255,255,.7);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:12px 18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      box-shadow:var(--shadow);
+    }
+
+    .toolbar-left{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .badge{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .toolbar-right{
+      color:var(--muted);
+      font-size:.95rem;
     }
 
     .products{
-      padding:30px 0 80px;
+      padding:10px 0 80px;
     }
 
     .grid{
@@ -120,66 +165,178 @@
     }
 
     .card{
-      background:white;
-      border-radius:22px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
       overflow:hidden;
       box-shadow:var(--shadow);
-      border:1px solid var(--soft);
       transition:transform .25s ease, box-shadow .25s ease;
+      display:flex;
+      flex-direction:column;
     }
 
     .card:hover{
       transform:translateY(-6px);
-      box-shadow:0 24px 65px rgba(0,0,0,.14);
+      box-shadow:0 24px 70px rgba(0,0,0,.14);
     }
 
-    .card img{
-      width:100%;
-      height:320px;
-      object-fit:contain;
+    .image-box{
+      height:340px;
       background:#fff;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .image-box img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .image-fallback{
+      width:100%;
+      height:100%;
+      border:2px dashed #ddd;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:var(--muted);
+      line-height:1.7;
       padding:18px;
-      border-bottom:1px solid var(--soft);
     }
 
     .content{
       padding:22px;
+      display:flex;
+      flex-direction:column;
+      flex:1;
     }
 
     .content h3{
-      margin:0 0 10px;
+      margin:0 0 12px;
       color:var(--wine);
-      font-size:1.15rem;
-      line-height:1.3;
+      font-size:1.16rem;
+      line-height:1.35;
     }
 
-    .content p{
-      margin:0 0 14px;
-      line-height:1.7;
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .chip{
+      background:#f8f4ef;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:.9rem;
+      font-weight:600;
+    }
+
+    .description{
+      margin:0 0 18px;
+      line-height:1.8;
       color:#444;
       font-size:.96rem;
+      flex:1;
+    }
+
+    .bottom{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:auto;
     }
 
     .price{
+      font-size:1.12rem;
       font-weight:700;
-      font-size:1.05rem;
       color:var(--ink);
     }
 
+    .stock-ok{
+      color:#1f6b2c;
+      font-weight:700;
+      font-size:.92rem;
+    }
+
+    .stock-low{
+      color:#9a6a00;
+      font-weight:700;
+      font-size:.92rem;
+    }
+
+    .stock-out{
+      color:#b42318;
+      font-weight:700;
+      font-size:.92rem;
+    }
+
+    .empty-state{
+      background:#fff;
+      border:1px dashed #d8d8d8;
+      border-radius:24px;
+      padding:40px 24px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+
+    .empty-state h2{
+      margin:0 0 10px;
+      color:var(--wine);
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;
+    }
+
+    .empty-state p{
+      margin:0 auto 20px;
+      max-width:620px;
+      color:var(--muted);
+      line-height:1.9;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 22px;
+      border-radius:999px;
+      background:var(--wine);
+      color:#fff;
+      font-weight:700;
+      transition:.2s ease;
+    }
+
+    .btn:hover{
+      background:var(--wine-dark);
+      transform:translateY(-1px);
+    }
+
     .footer{
-      border-top:1px solid var(--soft);
-      padding:26px 0;
+      border-top:1px solid var(--line);
+      padding:28px 0;
       text-align:center;
       color:#666;
       font-size:.95rem;
       background:#fff;
     }
 
-    @media (max-width:900px){
+    @media (max-width:980px){
       .grid{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(2, 1fr);
       }
+    }
 
+    @media (max-width:760px){
       .header-inner{
         flex-direction:column;
         justify-content:center;
@@ -188,6 +345,18 @@
 
       .nav{
         justify-content:center;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .toolbar-box{
+        border-radius:22px;
+      }
+
+      .image-box{
+        height:300px;
       }
     }
   </style>
@@ -203,6 +372,7 @@
         <a href="perfumes.html" class="active">Perfumes</a>
         <a href="nosotros.html">Nosotros</a>
         <a href="contacto.html">Contacto</a>
+        <a href="admin.html">Administrador</a>
       </nav>
     </div>
   </header>
@@ -212,96 +382,28 @@
       <h1>Nuestros perfumes</h1>
       <p>
         Descubre fragancias seleccionadas para resaltar presencia, elegancia y personalidad.
+        Esta sección se actualiza automáticamente con los productos creados desde el panel administrador.
       </p>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <div class="container">
+      <div class="toolbar-box">
+        <div class="toolbar-left">
+          <div class="badge" id="productCount">0 productos</div>
+          <div class="badge" id="stockCount">0 unidades totales</div>
+        </div>
+        <div class="toolbar-right">
+          Catálogo dinámico conectado con el panel administrador
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="products">
     <div class="container">
-      <div class="grid">
-
-        <article class="card">
-          <img src="img/perfumes/afnan-9pm.png" alt="AFNAN 9PM">
-          <div class="content">
-            <h3>AFNAN 9PM</h3>
-            <p>Fragancia intensa y moderna, ideal para destacar en la noche con mucha presencia.</p>
-            <div class="price">$120.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/armaf-club-de-nuit-intense.png" alt="ARMAF CLUB DE NUIT INTENSE">
-          <div class="content">
-            <h3>ARMAF CLUB DE NUIT INTENSE</h3>
-            <p>Aroma elegante y poderoso con un perfil sofisticado y muy llamativo.</p>
-            <div class="price">$165.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/acqua-di-gio.png" alt="GIORGIO ARMANI ACQUA DI GIO">
-          <div class="content">
-            <h3>GIORGIO ARMANI ACQUA DI GIO</h3>
-            <p>Fragancia fresca y refinada, perfecta para uso diario con un estilo limpio.</p>
-            <div class="price">$210.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/hugo-boss-bottled-vi.png" alt="HUGO BOSS BOTTLED VI">
-          <div class="content">
-            <h3>HUGO BOSS BOTTLED VI</h3>
-            <p>Perfume versátil con carácter masculino y una presencia clásica muy atractiva.</p>
-            <div class="price">$180.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/lattafa-khamrah-qahwa.png" alt="LATTAFA KHAMRAH QAHWA">
-          <div class="content">
-            <h3>LATTAFA KHAMRAH QAHWA</h3>
-            <p>Fragancia cálida y envolvente con un toque dulce y especiado de gran impacto.</p>
-            <div class="price">$190.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/lattafa-khamrah.png" alt="LATTAFA KHAMRAH">
-          <div class="content">
-            <h3>LATTAFA KHAMRAH</h3>
-            <p>Perfume intenso y seductor, ideal para quienes buscan un aroma inolvidable.</p>
-            <div class="price">$185.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/odyssey-mandarin-sky.png" alt="ODYSSEY MANDARIN SKY">
-          <div class="content">
-            <h3>ODYSSEY MANDARIN SKY</h3>
-            <p>Fragancia vibrante con aire juvenil, fresca al inicio y elegante al fondo.</p>
-            <div class="price">$140.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/one-million.png" alt="PACO RABANNE ONE MILLION">
-          <div class="content">
-            <h3>PACO RABANNE ONE MILLION</h3>
-            <p>Aroma icónico, llamativo y seductor, pensado para quienes quieren sobresalir.</p>
-            <div class="price">$230.000</div>
-          </div>
-        </article>
-
-        <article class="card">
-          <img src="img/perfumes/eros-flame.png" alt="VERSACE EROS FLAME">
-          <div class="content">
-            <h3>VERSACE EROS FLAME</h3>
-            <p>Fragancia apasionada y fuerte, con un estilo elegante y muy masculino.</p>
-            <div class="price">$220.000</div>
-          </div>
-        </article>
-
-      </div>
+      <div id="productsContainer"></div>
     </div>
   </section>
 
@@ -311,5 +413,129 @@
     </div>
   </footer>
 
+  <script>
+    const STORAGE_KEY = "vuzalka_productos";
+    const productsContainer = document.getElementById("productsContainer");
+    const productCount = document.getElementById("productCount");
+    const stockCount = document.getElementById("stockCount");
+
+    function getProducts(){
+      const data = localStorage.getItem(STORAGE_KEY);
+      try{
+        return data ? JSON.parse(data) : [];
+      }catch(error){
+        return [];
+      }
+    }
+
+    function formatPrice(value){
+      const number = Number(value) || 0;
+      return "$" + number.toLocaleString("es-CO");
+    }
+
+    function escapeHtml(text){
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getStockStatus(cantidad){
+      const stock = Number(cantidad) || 0;
+
+      if(stock <= 0){
+        return {
+          text: "Agotado",
+          className: "stock-out"
+        };
+      }
+
+      if(stock <= 3){
+        return {
+          text: "Últimas unidades",
+          className: "stock-low"
+        };
+      }
+
+      return {
+        text: "Disponible",
+        className: "stock-ok"
+      };
+    }
+
+    function renderEmptyState(){
+      productsContainer.innerHTML = `
+        <div class="empty-state">
+          <h2>Aún no hay perfumes publicados</h2>
+          <p>
+            Ve a <strong>admin.html</strong>, crea tus productos y al guardar aparecerán aquí automáticamente.
+          </p>
+          <a href="admin.html" class="btn">Ir al administrador</a>
+        </div>
+      `;
+    }
+
+    function renderProducts(){
+      const products = getProducts();
+
+      productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
+
+      const totalStock = products.reduce((acc, item) => {
+        return acc + (Number(item.cantidad) || 0);
+      }, 0);
+
+      stockCount.textContent = totalStock + (totalStock === 1 ? " unidad total" : " unidades totales");
+
+      if(products.length === 0){
+        renderEmptyState();
+        return;
+      }
+
+      const cards = products.map(product => {
+        const stock = getStockStatus(product.cantidad);
+
+        return `
+          <article class="card">
+            <div class="image-box">
+              ${
+                product.imagen
+                  ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre)}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen del producto</div>'">`
+                  : `<div class="image-fallback">Este producto no tiene imagen</div>`
+              }
+            </div>
+
+            <div class="content">
+              <h3>${escapeHtml(product.nombre || "Producto sin nombre")}</h3>
+
+              <div class="meta">
+                <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
+              </div>
+
+              <p class="description">
+                ${escapeHtml(product.descripcion || "Sin descripción disponible.")}
+              </p>
+
+              <div class="bottom">
+                <div class="price">${formatPrice(product.precio)}</div>
+                <div class="${stock.className}">${stock.text}</div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      productsContainer.innerHTML = `<div class="grid">${cards}</div>`;
+    }
+
+    renderProducts();
+
+    window.addEventListener("storage", function(e){
+      if(e.key === STORAGE_KEY){
+        renderProducts();
+      }
+    });
+  </script>
 </body>
 </html>
