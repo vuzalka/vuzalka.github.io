@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VUZALKA | Contacto</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#171717;
+      --wine:#9f1d24;
+      --soft:#17171712;
+      --light:#f4f0ea;
+      --shadow:0 20px 60px rgba(0,0,0,.10);
+      --max:1100px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:var(--light);
+      color:var(--ink);
+    }
+
+    a{text-decoration:none;color:inherit}
+
+    .container{
+      width:min(var(--max), calc(100% - 32px));
+      margin:auto;
+    }
+
+    .header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,255,255,.9);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--soft);
+    }
+
+    .header-inner{
+      min-height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      color:var(--wine);
+    }
+
+    .nav{
+      display:flex;
+      gap:22px;
+      flex-wrap:wrap;
+    }
+
+    .nav a{
+      font-size:.95rem;
+      font-weight:500;
+      position:relative;
+      padding:6px 0;
+    }
+
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:0;
+      height:2px;
+      background:var(--wine);
+      transition:.25s ease;
+    }
+
+    .nav a:hover::after,
+    .nav a.active::after{
+      width:100%;
+    }
+
+    .hero{
+      padding:80px 0 30px;
+      text-align:center;
+    }
+
+    .hero h1{
+      font-family:'Cormorant Garamond',serif;
+      font-size:3.2rem;
+      color:var(--wine);
+      margin:0 0 12px;
+    }
+
+    .hero p{
+      max-width:700px;
+      margin:0 auto;
+      color:#555;
+      line-height:1.8;
+    }
+
+    .contact{
+      padding:30px 0 80px;
+    }
+
+    .box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+    }
+
+    .card{
+      background:white;
+      border-radius:24px;
+      padding:30px;
+      box-shadow:var(--shadow);
+      border:1px solid var(--soft);
+    }
+
+    .card h2{
+      margin-top:0;
+      color:var(--wine);
+    }
+
+    .card p{
+      color:#444;
+      line-height:1.8;
+    }
+
+    .form-group{
+      margin-bottom:16px;
+    }
+
+    input, textarea{
+      width:100%;
+      padding:14px 16px;
+      border:1px solid #ddd;
+      border-radius:14px;
+      font:inherit;
+      outline:none;
+    }
+
+    input:focus, textarea:focus{
+      border-color:var(--wine);
+    }
+
+    textarea{
+      min-height:130px;
+      resize:vertical;
+    }
+
+    .btn{
+      display:inline-block;
+      background:var(--wine);
+      color:white;
+      border:none;
+      padding:14px 22px;
+      border-radius:999px;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .footer{
+      border-top:1px solid var(--soft);
+      padding:26px 0;
+      text-align:center;
+      color:#666;
+      font-size:.95rem;
+      background:#fff;
+    }
+
+    @media (max-width:900px){
+      .box{
+        grid-template-columns:1fr;
+      }
+
+      .header-inner{
+        flex-direction:column;
+        justify-content:center;
+        padding:14px 0;
+      }
+
+      .nav{
+        justify-content:center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">VUZALKA</a>
+
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="perfumes.html">Perfumes</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="contacto.html" class="active">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Contacto</h1>
+      <p>
+        Estamos para ayudarte. Escríbenos y con gusto atenderemos tu solicitud.
+      </p>
+    </div>
+  </section>
+
+  <section class="contact">
+    <div class="container">
+      <div class="box">
+
+        <div class="card">
+          <h2>Información</h2>
+          <p><strong>WhatsApp:</strong> +57 300 000 0000</p>
+          <p><strong>Correo:</strong> contacto@vuzalka.com</p>
+          <p><strong>Instagram:</strong> @vuzalka</p>
+          <p><strong>Horario:</strong> Lunes a sábado de 9:00 a.m. a 6:00 p.m.</p>
+        </div>
+
+        <div class="card">
+          <h2>Envíanos un mensaje</h2>
+          <form>
+            <div class="form-group">
+              <input type="text" placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <input type="email" placeholder="Tu correo" />
+            </div>
+            <div class="form-group">
+              <textarea placeholder="Tu mensaje"></textarea>
+            </div>
+            <button type="submit" class="btn">Enviar</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 VUZALKA. Todos los derechos reservados.
+    </div>
+  </footer>
+
+</body>
+</html>

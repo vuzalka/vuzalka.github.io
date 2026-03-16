@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VUZALKA | Inicio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#171717;
+      --wine:#9f1d24;
+      --soft:#17171712;
+      --light:#f4f0ea;
+      --panel:#ffffffd9;
+      --shadow:0 20px 60px rgba(0,0,0,.10);
+      --max:1200px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    .container{
+      width:min(var(--max), calc(100% - 32px));
+      margin:auto;
+    }
+
+    .header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--soft);
+    }
+
+    .header-inner{
+      min-height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      color:var(--wine);
+    }
+
+    .nav{
+      display:flex;
+      gap:22px;
+      flex-wrap:wrap;
+    }
+
+    .nav a{
+      font-size:.95rem;
+      font-weight:500;
+      position:relative;
+      padding:6px 0;
+    }
+
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:0;
+      height:2px;
+      background:var(--wine);
+      transition:.25s ease;
+    }
+
+    .nav a:hover::after,
+    .nav a.active::after{
+      width:100%;
+    }
+
+    .hero{
+      min-height:calc(100vh - 76px);
+      display:grid;
+      place-items:center;
+      background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+        url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      color:white;
+      text-align:center;
+      padding:80px 20px;
+    }
+
+    .hero-box{
+      max-width:760px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      backdrop-filter:blur(8px);
+      padding:40px 28px;
+      border-radius:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero h1{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(3rem, 8vw, 5.5rem);
+      line-height:.95;
+      margin:0 0 18px;
+      letter-spacing:.05em;
+    }
+
+    .hero p{
+      margin:0 auto 28px;
+      max-width:620px;
+      font-size:1.05rem;
+      line-height:1.8;
+      color:rgba(255,255,255,.92);
+    }
+
+    .btns{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 22px;
+      border-radius:999px;
+      font-weight:600;
+      transition:.25s ease;
+      border:1px solid transparent;
+    }
+
+    .btn-primary{
+      background:var(--wine);
+      color:white;
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      opacity:.95;
+    }
+
+    .btn-secondary{
+      background:transparent;
+      color:white;
+      border-color:rgba(255,255,255,.45);
+    }
+
+    .btn-secondary:hover{
+      background:rgba(255,255,255,.10);
+    }
+
+    .section{
+      padding:80px 0;
+    }
+
+    .section-title{
+      text-align:center;
+      margin-bottom:42px;
+    }
+
+    .section-title h2{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2.6rem;
+      color:var(--wine);
+      margin:0 0 10px;
+    }
+
+    .section-title p{
+      margin:0;
+      color:#555;
+      line-height:1.8;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
+    }
+
+    .card{
+      background:white;
+      border:1px solid var(--soft);
+      border-radius:22px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h3{
+      margin:0 0 12px;
+      font-size:1.15rem;
+      color:var(--wine);
+    }
+
+    .card p{
+      margin:0;
+      line-height:1.8;
+      color:#444;
+    }
+
+    .footer{
+      border-top:1px solid var(--soft);
+      padding:26px 0;
+      text-align:center;
+      color:#666;
+      font-size:.95rem;
+    }
+
+    @media (max-width:900px){
+      .cards{
+        grid-template-columns:1fr;
+      }
+
+      .header-inner{
+        flex-direction:column;
+        justify-content:center;
+        padding:14px 0;
+      }
+
+      .nav{
+        justify-content:center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">VUZALKA</a>
+
+      <nav class="nav">
+        <a href="index.html" class="active">Inicio</a>
+        <a href="perfumes.html">Perfumes</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-box">
+      <h1>VUZALKA</h1>
+      <p>
+        Elegancia, carácter y esencia en cada fragancia. Descubre una colección
+        pensada para quienes desean dejar huella con su aroma.
+      </p>
+      <div class="btns">
+        <a href="perfumes.html" class="btn btn-primary">Ver perfumes</a>
+        <a href="contacto.html" class="btn btn-secondary">Contáctanos</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Nuestra esencia</h2>
+        <p>Una marca inspirada en la sofisticación, la presencia y el detalle.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Selección exclusiva</h3>
+          <p>
+            Cada perfume es elegido para transmitir personalidad, lujo y distinción.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Presentación impecable</h3>
+          <p>
+            Diseñamos una experiencia visual elegante que represente el valor de cada esencia.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Experiencia memorable</h3>
+          <p>
+            Queremos que cada cliente encuentre una fragancia que conecte con su estilo.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 VUZALKA. Todos los derechos reservados.
+    </div>
+  </footer>
+
+</body>
+</html>
