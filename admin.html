@@ -593,13 +593,13 @@
               </div>
 
               <div class="field">
-                <label for="imagen">Ruta de la imagen</label>
-                <input type="text" id="imagen" placeholder="Ej: img/perfumes/afnan-9pm.png" required>
-                <small>
-                  Escribe la ruta exacta de tu imagen. Ejemplo:
-                  <strong>img/perfumes/afnan-9pm.png</strong>
-                </small>
-              </div>
+  <label for="imagen">Ruta de la imagen</label>
+  <input type="text" id="imagen" placeholder="Ej: img/perfumes/afnan-9pm.png" required>
+  <small>
+    La ruta se genera automáticamente a partir del nombre del producto.
+    Ejemplo: <strong>AFNAN 9PM → img/perfumes/afnan-9pm.png</strong>
+  </small>
+</div>
 
               <div class="form-actions">
                 <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar producto</button>
@@ -689,6 +689,8 @@
     const imagenInput = document.getElementById("imagen");
     const statusMsg = document.getElementById("statusMsg");
 
+    let imageManuallyEdited = false;
+
     const btnNuevo = document.getElementById("btnNuevo");
     const btnCancelarEdicion = document.getElementById("btnCancelarEdicion");
     const btnCargarDemo = document.getElementById("btnCargarDemo");
@@ -735,15 +737,37 @@
     }
 
     function escapeHtml(text){
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-    function updatePreview(){
+function slugifyProductName(text){
+  return String(text)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function buildImagePathFromName(productName){
+  const slug = slugifyProductName(productName);
+  return slug ? `img/perfumes/${slug}.png` : "";
+}
+
+function autoFillImagePath(){
+  if(imageManuallyEdited) return;
+
+  const nombre = nombreInput.value.trim();
+  imagenInput.value = buildImagePathFromName(nombre);
+}
+
+function updatePreview(){
       const nombre = nombreInput.value.trim() || "Nombre del perfume";
       const precio = precioInput.value.trim();
       const cantidad = cantidadInput.value.trim();
@@ -769,10 +793,11 @@
     }
 
     function clearForm(){
-      productIdInput.value = "";
-      form.reset();
-      updatePreview();
-    }
+  productIdInput.value = "";
+  imageManuallyEdited = false;
+  form.reset();
+  updatePreview();
+}
 
     function renderProducts(){
       const products = getProducts();
@@ -815,16 +840,17 @@
     }
 
     function fillForm(product){
-      productIdInput.value = product.id;
-      nombreInput.value = product.nombre;
-      precioInput.value = product.precio;
-      cantidadInput.value = product.cantidad;
-      descripcionInput.value = product.descripcion;
-      imagenInput.value = product.imagen;
-      updatePreview();
-      previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+  productIdInput.value = product.id;
+  nombreInput.value = product.nombre;
+  precioInput.value = product.precio;
+  cantidadInput.value = product.cantidad;
+  descripcionInput.value = product.descripcion;
+  imagenInput.value = product.imagen;
+  imageManuallyEdited = true;
+  updatePreview();
+  previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
     window.editProduct = function(id){
       const products = getProducts();
@@ -977,9 +1003,19 @@
       showStatus("Productos de ejemplo cargados.");
     });
 
-    [nombreInput, precioInput, cantidadInput, descripcionInput, imagenInput].forEach(input => {
-      input.addEventListener("input", updatePreview);
-    });
+    nombreInput.addEventListener("input", function(){
+  autoFillImagePath();
+  updatePreview();
+});
+
+precioInput.addEventListener("input", updatePreview);
+cantidadInput.addEventListener("input", updatePreview);
+descripcionInput.addEventListener("input", updatePreview);
+
+imagenInput.addEventListener("input", function(){
+  imageManuallyEdited = true;
+  updatePreview();
+});
 
     renderProducts();
     updatePreview();
