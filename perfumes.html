@@ -173,6 +173,7 @@
       transition:transform .25s ease, box-shadow .25s ease;
       display:flex;
       flex-direction:column;
+      cursor:pointer;
     }
 
     .card:hover{
@@ -313,6 +314,8 @@
       background:var(--wine);
       color:#fff;
       font-weight:700;
+      border:none;
+      cursor:pointer;
       transition:.2s ease;
     }
 
@@ -330,9 +333,395 @@
       background:#fff;
     }
 
+    .site-footer{
+      margin-top:80px;
+      background:#f3f0eb;
+      border-top:1px solid #d8d1c8;
+      color:#171717;
+    }
+
+    .footer-top{
+      border-bottom:1px solid #d8d1c8;
+      padding:28px 0;
+    }
+
+    .footer-top-inner{
+      width:min(1200px, calc(100% - 32px));
+      margin:auto;
+      display:grid;
+      grid-template-columns:2fr auto 1.4fr auto;
+      gap:24px;
+      align-items:center;
+    }
+
+    .footer-news{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.05rem;
+      line-height:1.5;
+      letter-spacing:.03em;
+    }
+
+    .footer-signup-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 26px;
+      background:#111;
+      color:#fff;
+      font-weight:600;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      border:1px solid #111;
+      transition:.25s ease;
+    }
+
+    .footer-signup-btn:hover{
+      background:transparent;
+      color:#111;
+    }
+
+    .footer-social-title{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1rem;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      text-align:right;
+    }
+
+    .footer-social{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .footer-social a{
+      font-size:1.6rem;
+      line-height:1;
+      transition:.2s ease;
+    }
+
+    .footer-social a:hover{
+      transform:translateY(-2px);
+      color:#9f1d24;
+    }
+
+    .footer-main{
+      padding:48px 0 28px;
+    }
+
+    .footer-main-inner{
+      width:min(1200px, calc(100% - 32px));
+      margin:auto;
+      display:grid;
+      grid-template-columns:1.1fr 1.4fr 1.2fr 1.4fr 1fr;
+      gap:34px;
+      align-items:start;
+    }
+
+    .footer-brand{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;
+      color:#171717;
+      letter-spacing:.08em;
+      line-height:1;
+    }
+
+    .footer-brand small{
+      display:block;
+      margin-top:8px;
+      font-size:.85rem;
+      letter-spacing:.2em;
+      color:#666;
+    }
+
+    .footer-col h4{
+      margin:0 0 18px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.05rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .footer-col a{
+      display:block;
+      margin-bottom:10px;
+      color:#171717;
+      line-height:1.5;
+      transition:.2s ease;
+    }
+
+    .footer-col a:hover{
+      color:#9f1d24;
+    }
+
+    .footer-bottom{
+      width:min(1200px, calc(100% - 32px));
+      margin:auto;
+      padding:24px 0 34px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:24px;
+      flex-wrap:wrap;
+    }
+
+    .footer-copy{
+      color:#666;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.05rem;
+      letter-spacing:.03em;
+    }
+
+    .footer-pay{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .footer-pay-title{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.05rem;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+
+    .footer-pay-icons{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .pay-chip{
+      min-width:74px;
+      height:46px;
+      padding:0 12px;
+      border:1px solid #bdb6ad;
+      border-radius:8px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:1rem;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      z-index:5000;
+    }
+
+    .modal.show{
+      display:flex;
+    }
+
+    .modal-dialog{
+      width:min(1100px, 100%);
+      max-height:90vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:28px;
+      box-shadow:0 30px 80px rgba(0,0,0,.25);
+      position:relative;
+    }
+
+    .modal-close{
+      position:absolute;
+      top:16px;
+      right:16px;
+      width:46px;
+      height:46px;
+      border:none;
+      border-radius:50%;
+      background:#171717;
+      color:#fff;
+      font-size:1.4rem;
+      cursor:pointer;
+      z-index:2;
+    }
+
+    .modal-body{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:0;
+    }
+
+    .modal-gallery{
+      padding:28px;
+      border-right:1px solid var(--line);
+      background:#faf8f5;
+    }
+
+    .modal-main-image{
+      width:100%;
+      height:480px;
+      border-radius:22px;
+      background:#fff;
+      border:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      padding:20px;
+    }
+
+    .modal-main-image img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .modal-thumbs{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .modal-thumb{
+      width:82px;
+      height:82px;
+      border-radius:16px;
+      border:2px solid transparent;
+      background:#fff;
+      overflow:hidden;
+      cursor:pointer;
+      padding:6px;
+    }
+
+    .modal-thumb.active{
+      border-color:var(--wine);
+    }
+
+    .modal-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .modal-info{
+      padding:34px 30px;
+    }
+
+    .modal-title{
+      margin:0 0 12px;
+      font-size:2rem;
+      color:var(--wine);
+      font-family:'Cormorant Garamond',serif;
+      line-height:1.05;
+    }
+
+    .modal-price{
+      font-size:1.25rem;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+
+    .modal-stock{
+      margin-bottom:18px;
+      font-weight:700;
+    }
+
+    .modal-section{
+      margin-top:22px;
+    }
+
+    .modal-section h4{
+      margin:0 0 10px;
+      font-size:1rem;
+      color:#171717;
+    }
+
+    .modal-text{
+      color:#444;
+      line-height:1.8;
+    }
+
+    .spec-list,
+    .review-list{
+      margin:0;
+      padding-left:18px;
+      color:#444;
+      line-height:1.8;
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+
+    .btn-secondary{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 22px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:#171717;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .qty-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+
+    .qty-box input{
+      width:90px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font-size:1rem;
+    }
+
+    @media (max-width:1100px){
+      .footer-top-inner{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      .footer-social-title,
+      .footer-social{
+        justify-content:center;
+        text-align:center;
+      }
+
+      .footer-main-inner{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
     @media (max-width:980px){
       .grid{
         grid-template-columns:repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width:900px){
+      .modal-body{
+        grid-template-columns:1fr;
+      }
+
+      .modal-gallery{
+        border-right:none;
+        border-bottom:1px solid var(--line);
+      }
+
+      .modal-main-image{
+        height:320px;
       }
     }
 
@@ -359,405 +748,16 @@
         height:300px;
       }
     }
-    .site-footer{
-  margin-top:80px;
-  background:#f3f0eb;
-  border-top:1px solid #d8d1c8;
-  color:#171717;
-}
 
-.footer-top{
-  border-bottom:1px solid #d8d1c8;
-  padding:28px 0;
-}
+    @media (max-width:700px){
+      .footer-main-inner{
+        grid-template-columns:1fr;
+      }
 
-.footer-top-inner{
-  width:min(1200px, calc(100% - 32px));
-  margin:auto;
-  display:grid;
-  grid-template-columns:2fr auto 1.4fr auto;
-  gap:24px;
-  align-items:center;
-}
-
-.footer-news{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;
-  line-height:1.5;
-  letter-spacing:.03em;
-}
-
-.footer-signup-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:14px 26px;
-  background:#111;
-  color:#fff;
-  font-weight:600;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  border:1px solid #111;
-  transition:.25s ease;
-}
-
-.footer-signup-btn:hover{
-  background:transparent;
-  color:#111;
-}
-
-.footer-social-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1rem;
-  letter-spacing:.05em;
-  text-transform:uppercase;
-  text-align:right;
-}
-
-.footer-social{
-  display:flex;
-  gap:16px;
-  align-items:center;
-  justify-content:flex-end;
-}
-
-.footer-social a{
-  font-size:1.6rem;
-  line-height:1;
-  transition:.2s ease;
-}
-
-.footer-social a:hover{
-  transform:translateY(-2px);
-  color:#9f1d24;
-}
-
-.footer-main{
-  padding:48px 0 28px;
-}
-
-.footer-main-inner{
-  width:min(1200px, calc(100% - 32px));
-  margin:auto;
-  display:grid;
-  grid-template-columns:1.1fr 1.4fr 1.2fr 1.4fr 1fr;
-  gap:34px;
-  align-items:start;
-}
-
-.footer-brand{
-  font-family:'Cormorant Garamond',serif;
-  font-size:2rem;
-  color:#171717;
-  letter-spacing:.08em;
-  line-height:1;
-}
-
-.footer-brand small{
-  display:block;
-  margin-top:8px;
-  font-size:.85rem;
-  letter-spacing:.2em;
-  color:#666;
-}
-
-.footer-col h4{
-  margin:0 0 18px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-}
-
-.footer-col a{
-  display:block;
-  margin-bottom:10px;
-  color:#171717;
-  line-height:1.5;
-  transition:.2s ease;
-}
-
-.footer-col a:hover{
-  color:#9f1d24;
-}
-
-.footer-bottom{
-  width:min(1200px, calc(100% - 32px));
-  margin:auto;
-  padding:24px 0 34px;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:24px;
-  flex-wrap:wrap;
-}
-
-.footer-copy{
-  color:#666;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;
-  letter-spacing:.03em;
-}
-
-.footer-pay{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.footer-pay-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-}
-
-.footer-pay-icons{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.pay-chip{
-  min-width:74px;
-  height:46px;
-  padding:0 12px;
-  border:1px solid #bdb6ad;
-  border-radius:8px;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  font-size:1rem;
-}
-
-@media (max-width:1100px){
-  .footer-top-inner{
-    grid-template-columns:1fr;
-    text-align:center;
-  }
-
-  .footer-social-title,
-  .footer-social{
-    justify-content:center;
-    text-align:center;
-  }
-
-  .footer-main-inner{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-
-@media (max-width:700px){
-  .footer-main-inner{
-    grid-template-columns:1fr;
-  }
-
-  .footer-bottom{
-    align-items:flex-start;
-  }
-}
-
-.card{
-  cursor:pointer;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  z-index:5000;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-dialog{
-  width:min(1100px, 100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:28px;
-  box-shadow:0 30px 80px rgba(0,0,0,.25);
-  position:relative;
-}
-
-.modal-close{
-  position:absolute;
-  top:16px;
-  right:16px;
-  width:46px;
-  height:46px;
-  border:none;
-  border-radius:50%;
-  background:#171717;
-  color:#fff;
-  font-size:1.4rem;
-  cursor:pointer;
-  z-index:2;
-}
-
-.modal-body{
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  gap:0;
-}
-
-.modal-gallery{
-  padding:28px;
-  border-right:1px solid var(--line);
-  background:#faf8f5;
-}
-
-.modal-main-image{
-  width:100%;
-  height:480px;
-  border-radius:22px;
-  background:#fff;
-  border:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  padding:20px;
-}
-
-.modal-main-image img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.modal-thumbs{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:16px;
-}
-
-.modal-thumb{
-  width:82px;
-  height:82px;
-  border-radius:16px;
-  border:2px solid transparent;
-  background:#fff;
-  overflow:hidden;
-  cursor:pointer;
-  padding:6px;
-}
-
-.modal-thumb.active{
-  border-color:var(--wine);
-}
-
-.modal-thumb img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.modal-info{
-  padding:34px 30px;
-}
-
-.modal-title{
-  margin:0 0 12px;
-  font-size:2rem;
-  color:var(--wine);
-  font-family:'Cormorant Garamond',serif;
-  line-height:1.05;
-}
-
-.modal-price{
-  font-size:1.25rem;
-  font-weight:800;
-  margin-bottom:12px;
-}
-
-.modal-stock{
-  margin-bottom:18px;
-  font-weight:700;
-}
-
-.modal-section{
-  margin-top:22px;
-}
-
-.modal-section h4{
-  margin:0 0 10px;
-  font-size:1rem;
-  color:#171717;
-}
-
-.modal-text{
-  color:#444;
-  line-height:1.8;
-}
-
-.spec-list,
-.review-list{
-  margin:0;
-  padding-left:18px;
-  color:#444;
-  line-height:1.8;
-}
-
-.modal-actions{
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  margin-top:28px;
-}
-
-.btn-secondary{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:14px 22px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#fff;
-  color:#171717;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.qty-box{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:14px;
-}
-
-.qty-box input{
-  width:90px;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  font-size:1rem;
-}
-
-@media (max-width:900px){
-  .modal-body{
-    grid-template-columns:1fr;
-  }
-
-  .modal-gallery{
-    border-right:none;
-    border-bottom:1px solid var(--line);
-  }
-
-  .modal-main-image{
-    height:320px;
-  }
-}
-    
+      .footer-bottom{
+        align-items:flex-start;
+      }
+    }
   </style>
 </head>
 <body>
@@ -806,419 +806,456 @@
     </div>
   </section>
 
-  <footer class="footer">
-    <div class="container">
-      © 2026 VUZALKA. Todos los derechos reservados.
+  <div class="modal" id="productModal">
+    <div class="modal-dialog">
+      <button class="modal-close" id="closeProductModal" aria-label="Cerrar">×</button>
+
+      <div class="modal-body">
+        <div class="modal-gallery">
+          <div class="modal-main-image" id="modalMainImage"></div>
+          <div class="modal-thumbs" id="modalThumbs"></div>
+        </div>
+
+        <div class="modal-info">
+          <h2 class="modal-title" id="modalTitle">Perfume</h2>
+          <div class="modal-price" id="modalPrice">$0</div>
+          <div class="modal-stock" id="modalStock"></div>
+
+          <div class="meta" id="modalMeta"></div>
+
+          <div class="modal-section">
+            <h4>Descripción</h4>
+            <div class="modal-text" id="modalDescription"></div>
+          </div>
+
+          <div class="modal-section">
+            <h4>Características</h4>
+            <ul class="spec-list" id="modalSpecs"></ul>
+          </div>
+
+          <div class="modal-section">
+            <h4>Críticas y reseñas</h4>
+            <ul class="review-list" id="modalReviews"></ul>
+          </div>
+
+          <div class="qty-box">
+            <label for="modalQty">Cantidad:</label>
+            <input type="number" id="modalQty" min="1" value="1">
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn" id="addToCartBtn">Añadir al carrito</button>
+            <button class="btn-secondary" id="buyWhatsAppBtn">Consultar por WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-top-inner">
+        <div class="footer-news">
+          Suscríbete para recibir las últimas novedades de VUZALKA,
+          acceso anticipado a nuevos lanzamientos y promociones exclusivas.
+        </div>
+
+        <a href="contacto.html" class="footer-signup-btn">Suscribirme</a>
+
+        <div class="footer-social-title">Conecta con nosotros</div>
+
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="X">𝕏</a>
+          <a href="#" aria-label="TikTok">♪</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-main">
+      <div class="footer-main-inner">
+        <div>
+          <div class="footer-brand">VUZALKA<small>2026</small></div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Ayuda e información</h4>
+          <a href="contacto.html">Contáctanos</a>
+          <a href="contacto.html">Centro de ayuda</a>
+          <a href="contacto.html">Política de devoluciones</a>
+          <a href="contacto.html">Información de envíos</a>
+          <a href="perfumes.html">Beneficios online</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>La compañía</h4>
+          <a href="nosotros.html">Nosotros</a>
+          <a href="nosotros.html">Nuestra esencia</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Términos y condiciones</h4>
+          <a href="#">Política de privacidad</a>
+          <a href="#">Términos de usuario</a>
+          <a href="#">Política de cookies</a>
+          <a href="#">Pagos</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Internacional</h4>
+          <a href="#">Colombia</a>
+          <a href="#">España</a>
+          <a href="#">México</a>
+          <a href="#">Estados Unidos</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 VUZALKA. Todos los derechos reservados.</div>
+
+      <div class="footer-pay">
+        <div class="footer-pay-title">Paga de forma segura con</div>
+        <div class="footer-pay-icons">
+          <div class="pay-chip">VISA</div>
+          <div class="pay-chip">MC</div>
+          <div class="pay-chip">PayPal</div>
+          <div class="pay-chip">AMEX</div>
+          <div class="pay-chip">Apple Pay</div>
+          <div class="pay-chip">G Pay</div>
+        </div>
+      </div>
     </div>
   </footer>
 
   <script>
-  const STORAGE_KEY = "vuzalka_productos";
-  const productsContainer = document.getElementById("productsContainer");
-  const productCount = document.getElementById("productCount");
-  const stockCount = document.getElementById("stockCount");
+    const STORAGE_KEY = "vuzalka_productos";
 
-  function getProducts(){
-    const data = localStorage.getItem(STORAGE_KEY);
-    try{
-      return data ? JSON.parse(data) : [];
-    }catch(error){
-      return [];
-    }
-  }
+    const productsContainer = document.getElementById("productsContainer");
+    const productCount = document.getElementById("productCount");
+    const stockCount = document.getElementById("stockCount");
 
-  function formatPrice(value){
-    const number = Number(value) || 0;
-    return "$" + number.toLocaleString("es-CO");
-  }
+    const productModal = document.getElementById("productModal");
+    const closeProductModal = document.getElementById("closeProductModal");
+    const modalMainImage = document.getElementById("modalMainImage");
+    const modalThumbs = document.getElementById("modalThumbs");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalPrice = document.getElementById("modalPrice");
+    const modalStock = document.getElementById("modalStock");
+    const modalMeta = document.getElementById("modalMeta");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalSpecs = document.getElementById("modalSpecs");
+    const modalReviews = document.getElementById("modalReviews");
+    const modalQty = document.getElementById("modalQty");
+    const addToCartBtn = document.getElementById("addToCartBtn");
+    const buyWhatsAppBtn = document.getElementById("buyWhatsAppBtn");
 
-  function escapeHtml(text){
-    return String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+    let currentProducts = [];
+    let currentProduct = null;
+    let currentGallery = [];
+    let cart = [];
 
-  function getStockStatus(cantidad){
-    const stock = Number(cantidad) || 0;
-
-    if(stock <= 0){
-      return {
-        text: "Agotado",
-        className: "stock-out"
-      };
+    function getProducts(){
+      const data = localStorage.getItem(STORAGE_KEY);
+      try{
+        const parsed = data ? JSON.parse(data) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      }catch(error){
+        return [];
+      }
     }
 
-    if(stock <= 3){
-      return {
-        text: "Últimas unidades",
-        className: "stock-low"
-      };
+    function formatPrice(value){
+      const number = Number(value) || 0;
+      return "$" + number.toLocaleString("es-CO");
     }
 
-    return {
-      text: "Disponible",
-      className: "stock-ok"
-    };
-  }
-
-  function renderEmptyState(){
-    productsContainer.innerHTML = `
-      <div class="empty-state">
-        <h2>Aún no hay perfumes publicados</h2>
-        <p>
-          Ve a <strong>admin.html</strong>, crea tus productos y al guardar aparecerán aquí automáticamente.
-        </p>
-        <a href="admin.html" class="btn">Ir al administrador</a>
-      </div>
-    `;
-  }
-
-  let currentProducts = getProducts();
-  let currentProduct = null;
-  let currentGallery = [];
-
-  function renderProducts(){
-    const products = getProducts();
-    currentProducts = products;
-
-    productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
-
-    const totalStock = products.reduce((acc, item) => {
-      return acc + (Number(item.cantidad) || 0);
-    }, 0);
-
-    stockCount.textContent = totalStock + (totalStock === 1 ? " unidad total" : " unidades totales");
-
-    if(products.length === 0){
-      renderEmptyState();
-      return;
+    function escapeHtml(text){
+      return String(text ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    const cards = products.map((product, index) => {
-      const stock = getStockStatus(product.cantidad);
+    function getStockStatus(cantidad){
+      const stock = Number(cantidad) || 0;
 
-      return `
-        <article class="card" onclick="openProductModal(${index})">
-          <div class="image-box">
-            ${
-              product.imagen
-                ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre)}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen del producto</div>'">`
-                : `<div class="image-fallback">Este producto no tiene imagen</div>`
+      if(stock <= 0){
+        return { text: "Agotado", className: "stock-out" };
+      }
+
+      if(stock <= 3){
+        return { text: "Últimas unidades", className: "stock-low" };
+      }
+
+      return { text: "Disponible", className: "stock-ok" };
+    }
+
+    function parseLines(value){
+      if(!value) return [];
+      return String(value)
+        .split("\n")
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
+
+    function getProductImages(product){
+      const images = [];
+
+      if(product && product.imagen && !images.includes(product.imagen)){
+        images.push(product.imagen);
+      }
+
+      if(product && Array.isArray(product.imagenes)){
+        product.imagenes.forEach(img => {
+          const clean = String(img || "").trim();
+          if(clean && !images.includes(clean)){
+            images.push(clean);
+          }
+        });
+      }
+
+      if(product && typeof product.imagenes === "string"){
+        product.imagenes
+          .split("\n")
+          .map(img => img.trim())
+          .filter(Boolean)
+          .forEach(img => {
+            if(!images.includes(img)){
+              images.push(img);
             }
-          </div>
+          });
+      }
 
-          <div class="content">
-            <h3>${escapeHtml(product.nombre || "Producto sin nombre")}</h3>
+      return images;
+    }
 
-            <div class="meta">
-              <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
-            </div>
-
-            <p class="description">
-              ${escapeHtml(product.descripcion || "Sin descripción disponible.")}
-            </p>
-
-            <div class="bottom">
-              <div class="price">${formatPrice(product.precio)}</div>
-              <div class="${stock.className}">${stock.text}</div>
-            </div>
-          </div>
-        </article>
+    function renderEmptyState(){
+      productsContainer.innerHTML = `
+        <div class="empty-state">
+          <h2>Aún no hay perfumes publicados</h2>
+          <p>
+            Ve a <strong>admin.html</strong>, crea tus productos y al guardar aparecerán aquí automáticamente.
+          </p>
+          <a href="admin.html" class="btn">Ir al administrador</a>
+        </div>
       `;
-    }).join("");
+    }
 
-    productsContainer.innerHTML = `<div class="grid">${cards}</div>`;
-  }
+    function renderProducts(){
+      const products = getProducts();
+      currentProducts = products;
 
-  const productModal = document.getElementById("productModal");
-  const closeProductModal = document.getElementById("closeProductModal");
-  const modalMainImage = document.getElementById("modalMainImage");
-  const modalThumbs = document.getElementById("modalThumbs");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalPrice = document.getElementById("modalPrice");
-  const modalStock = document.getElementById("modalStock");
-  const modalMeta = document.getElementById("modalMeta");
-  const modalDescription = document.getElementById("modalDescription");
-  const modalSpecs = document.getElementById("modalSpecs");
-  const modalReviews = document.getElementById("modalReviews");
-  const modalQty = document.getElementById("modalQty");
-  const addToCartBtn = document.getElementById("addToCartBtn");
-  const buyWhatsAppBtn = document.getElementById("buyWhatsAppBtn");
+      productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
 
-  function parseLines(value){
-    if(!value) return [];
-    return String(value)
-      .split("\n")
-      .map(item => item.trim())
-      .filter(Boolean);
-  }
+      const totalStock = products.reduce((acc, item) => {
+        return acc + (Number(item.cantidad) || 0);
+      }, 0);
 
-  function getProductImages(product){
-    const images = [];
+      stockCount.textContent = totalStock + (totalStock === 1 ? " unidad total" : " unidades totales");
 
-    if(product.imagen) images.push(product.imagen);
+      if(products.length === 0){
+        renderEmptyState();
+        return;
+      }
 
-    if(Array.isArray(product.imagenes)){
-      product.imagenes.forEach(img => {
-        if(img && !images.includes(img)) images.push(img);
+      const cards = products.map((product, index) => {
+        const stock = getStockStatus(product.cantidad);
+
+        return `
+          <article class="card" data-index="${index}">
+            <div class="image-box">
+              ${
+                product.imagen
+                  ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre || "Perfume")}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen del producto</div>'">`
+                  : `<div class="image-fallback">Este producto no tiene imagen</div>`
+              }
+            </div>
+
+            <div class="content">
+              <h3>${escapeHtml(product.nombre || "Producto sin nombre")}</h3>
+
+              <div class="meta">
+                <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
+                ${product.presentacion ? `<div class="chip">${escapeHtml(product.presentacion)}</div>` : ""}
+              </div>
+
+              <p class="description">
+                ${escapeHtml(product.descripcion || "Sin descripción disponible.")}
+              </p>
+
+              <div class="bottom">
+                <div class="price">${formatPrice(product.precio)}</div>
+                <div class="${stock.className}">${stock.text}</div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      productsContainer.innerHTML = `<div class="grid">${cards}</div>`;
+
+      productsContainer.querySelectorAll(".card").forEach(card => {
+        card.addEventListener("click", function(){
+          const index = Number(this.dataset.index);
+          openProductModal(index);
+        });
       });
     }
 
-    if(typeof product.imagenes === "string"){
-      product.imagenes
-        .split("\n")
-        .map(img => img.trim())
-        .filter(Boolean)
-        .forEach(img => {
-          if(!images.includes(img)) images.push(img);
+    function renderMainModalImage(src, alt){
+      modalMainImage.innerHTML = src
+        ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt || "Perfume")}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen</div>'">`
+        : `<div class="image-fallback">Sin imagen disponible</div>`;
+    }
+
+    function renderThumbs(images, productName){
+      if(!images.length){
+        modalThumbs.innerHTML = "";
+        return;
+      }
+
+      modalThumbs.innerHTML = images.map((img, i) => `
+        <button class="modal-thumb ${i === 0 ? "active" : ""}" type="button" data-image-index="${i}">
+          <img src="${escapeHtml(img)}" alt="${escapeHtml(productName || "Perfume")}">
+        </button>
+      `).join("");
+
+      modalThumbs.querySelectorAll(".modal-thumb").forEach(button => {
+        button.addEventListener("click", function(){
+          const index = Number(this.dataset.imageIndex);
+          changeModalImage(index);
         });
+      });
     }
 
-    return images;
-  }
+    function changeModalImage(index){
+      const image = currentGallery[index];
+      renderMainModalImage(image, currentProduct ? currentProduct.nombre : "Perfume");
 
-  function renderMainModalImage(src, alt){
-    modalMainImage.innerHTML = src
-      ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt || "Perfume")}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen</div>'">`
-      : `<div class="image-fallback">Sin imagen disponible</div>`;
-  }
-
-  function renderThumbs(images, productName){
-    if(!images.length){
-      modalThumbs.innerHTML = "";
-      return;
+      modalThumbs.querySelectorAll(".modal-thumb").forEach((thumb, i) => {
+        thumb.classList.toggle("active", i === index);
+      });
     }
 
-    modalThumbs.innerHTML = images.map((img, i) => `
-      <button class="modal-thumb ${i === 0 ? "active" : ""}" onclick="changeModalImage(${i})" type="button">
-        <img src="${escapeHtml(img)}" alt="${escapeHtml(productName)}">
-      </button>
-    `).join("");
-  }
+    function openProductModal(index){
+      currentProducts = getProducts();
+      const product = currentProducts[index];
+      if(!product) return;
 
-  function changeModalImage(index){
-    const image = currentGallery[index];
-    renderMainModalImage(image, currentProduct ? currentProduct.nombre : "Perfume");
+      currentProduct = product;
+      currentGallery = getProductImages(product);
 
-    [...modalThumbs.querySelectorAll(".modal-thumb")].forEach((thumb, i) => {
-      thumb.classList.toggle("active", i === index);
+      const stock = getStockStatus(product.cantidad);
+
+      modalTitle.textContent = product.nombre || "Producto sin nombre";
+      modalPrice.textContent = formatPrice(product.precio);
+      modalStock.className = "modal-stock " + stock.className;
+      modalStock.textContent = stock.text + " · " + (Number(product.cantidad) || 0) + " unidades";
+
+      modalMeta.innerHTML = `
+        <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
+        ${product.categoria ? `<div class="chip">${escapeHtml(product.categoria)}</div>` : ""}
+        ${product.presentacion ? `<div class="chip">${escapeHtml(product.presentacion)}</div>` : ""}
+      `;
+
+      modalDescription.textContent = product.descripcion || "Sin descripción disponible.";
+
+      const specs = parseLines(product.caracteristicas || product.especificaciones || "");
+      modalSpecs.innerHTML = specs.length
+        ? specs.map(item => `<li>${escapeHtml(item)}</li>`).join("")
+        : `<li>Próximamente agregaremos más características de este perfume.</li>`;
+
+      const reviews = parseLines(product.criticas || product.resenas || "");
+      modalReviews.innerHTML = reviews.length
+        ? reviews.map(item => `<li>${escapeHtml(item)}</li>`).join("")
+        : `<li>Aún no hay críticas registradas para este perfume.</li>`;
+
+      renderMainModalImage(currentGallery[0] || "", product.nombre || "Perfume");
+      renderThumbs(currentGallery, product.nombre || "Perfume");
+
+      modalQty.value = 1;
+      modalQty.max = Math.max(Number(product.cantidad) || 1, 1);
+
+      productModal.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      productModal.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    function addToCart(product, qty){
+      const existing = cart.find(item => item.nombre === product.nombre);
+
+      if(existing){
+        existing.cantidad += qty;
+      }else{
+        cart.push({
+          nombre: product.nombre || "Producto",
+          precio: Number(product.precio) || 0,
+          cantidad: qty,
+          imagen: product.imagen || ""
+        });
+      }
+
+      try{
+        localStorage.setItem("vuzalka_carrito", JSON.stringify(cart));
+      }catch(error){}
+    }
+
+    closeProductModal.addEventListener("click", closeModal);
+
+    productModal.addEventListener("click", function(e){
+      if(e.target === productModal){
+        closeModal();
+      }
     });
-  }
 
-  function openProductModal(index){
-    currentProducts = getProducts();
-    const product = currentProducts[index];
-    if(!product) return;
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape"){
+        closeModal();
+      }
+    });
 
-    currentProduct = product;
-    currentGallery = getProductImages(product);
+    addToCartBtn.addEventListener("click", function(){
+      if(!currentProduct) return;
 
-    const stock = getStockStatus(product.cantidad);
+      const qty = Math.max(1, Number(modalQty.value) || 1);
+      addToCart(currentProduct, qty);
+      alert(`Se añadió "${currentProduct.nombre}" al carrito. Cantidad: ${qty}`);
+    });
 
-    modalTitle.textContent = product.nombre || "Producto sin nombre";
-    modalPrice.textContent = formatPrice(product.precio);
-    modalStock.className = "modal-stock " + stock.className;
-    modalStock.textContent = stock.text + " · " + (Number(product.cantidad) || 0) + " unidades";
+    buyWhatsAppBtn.addEventListener("click", function(){
+      if(!currentProduct) return;
 
-    modalMeta.innerHTML = `
-      <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
-      ${product.categoria ? `<div class="chip">${escapeHtml(product.categoria)}</div>` : ""}
-      ${product.presentacion ? `<div class="chip">${escapeHtml(product.presentacion)}</div>` : ""}
-    `;
+      const qty = Math.max(1, Number(modalQty.value) || 1);
+      const text = encodeURIComponent(
+        `Hola, quiero información sobre ${currentProduct.nombre}. Cantidad: ${qty}`
+      );
+      window.open(`https://wa.me/?text=${text}`, "_blank");
+    });
 
-    modalDescription.textContent = product.descripcion || "Sin descripción disponible.";
+    window.addEventListener("storage", function(e){
+      if(e.key === STORAGE_KEY){
+        renderProducts();
+      }
+    });
 
-    const specs = parseLines(product.caracteristicas || product.especificaciones || "");
-    modalSpecs.innerHTML = specs.length
-      ? specs.map(item => `<li>${escapeHtml(item)}</li>`).join("")
-      : `<li>Familia olfativa, duración, ocasión de uso y notas aromáticas pueden ir aquí.</li>`;
-
-    const reviews = parseLines(product.criticas || product.resenas || "");
-    modalReviews.innerHTML = reviews.length
-      ? reviews.map(item => `<li>${escapeHtml(item)}</li>`).join("")
-      : `<li>Aún no hay críticas registradas para este perfume.</li>`;
-
-    renderMainModalImage(currentGallery[0], product.nombre);
-    renderThumbs(currentGallery, product.nombre);
-
-    modalQty.value = 1;
-    modalQty.max = Math.max(Number(product.cantidad) || 1, 1);
-
-    productModal.classList.add("show");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeModal(){
-    productModal.classList.remove("show");
-    document.body.style.overflow = "";
-  }
-
-  closeProductModal.addEventListener("click", closeModal);
-
-  productModal.addEventListener("click", function(e){
-    if(e.target === productModal){
-      closeModal();
+    try{
+      const savedCart = localStorage.getItem("vuzalka_carrito");
+      cart = savedCart ? JSON.parse(savedCart) : [];
+      if(!Array.isArray(cart)) cart = [];
+    }catch(error){
+      cart = [];
     }
-  });
 
-  document.addEventListener("keydown", function(e){
-    if(e.key === "Escape"){
-      closeModal();
-    }
-  });
+    renderProducts();
+  </script>
 
-  addToCartBtn.addEventListener("click", function(){
-    if(!currentProduct) return;
-
-    const qty = Math.max(1, Number(modalQty.value) || 1);
-    alert(`Se añadió "${currentProduct.nombre}" al carrito. Cantidad: ${qty}`);
-  });
-
-  buyWhatsAppBtn.addEventListener("click", function(){
-    if(!currentProduct) return;
-
-    const qty = Math.max(1, Number(modalQty.value) || 1);
-    const text = encodeURIComponent(`Hola, quiero información sobre ${currentProduct.nombre}. Cantidad: ${qty}`);
-    window.open(`https://wa.me/?text=${text}`, "_blank");
-  });
-
-  window.changeModalImage = changeModalImage;
-  window.openProductModal = openProductModal;
-
-  renderProducts();
-
-  window.addEventListener("storage", function(e){
-    if(e.key === STORAGE_KEY){
-      renderProducts();
-    }
-  });
-</script>
-
-<div class="modal" id="productModal">
-  <div class="modal-dialog">
-    <button class="modal-close" id="closeProductModal" aria-label="Cerrar">×</button>
-
-    <div class="modal-body">
-      <div class="modal-gallery">
-        <div class="modal-main-image" id="modalMainImage"></div>
-        <div class="modal-thumbs" id="modalThumbs"></div>
-      </div>
-
-      <div class="modal-info">
-        <h2 class="modal-title" id="modalTitle">Perfume</h2>
-        <div class="modal-price" id="modalPrice">$0</div>
-        <div class="modal-stock" id="modalStock"></div>
-
-        <div class="meta" id="modalMeta"></div>
-
-        <div class="modal-section">
-          <h4>Descripción</h4>
-          <div class="modal-text" id="modalDescription"></div>
-        </div>
-
-        <div class="modal-section">
-          <h4>Características</h4>
-          <ul class="spec-list" id="modalSpecs"></ul>
-        </div>
-
-        <div class="modal-section">
-          <h4>Críticas y reseñas</h4>
-          <ul class="review-list" id="modalReviews"></ul>
-        </div>
-
-        <div class="qty-box">
-          <label for="modalQty">Cantidad:</label>
-          <input type="number" id="modalQty" min="1" value="1">
-        </div>
-
-        <div class="modal-actions">
-          <button class="btn" id="addToCartBtn">Añadir al carrito</button>
-          <button class="btn-secondary" id="buyWhatsAppBtn">Consultar por WhatsApp</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-<footer class="site-footer">
-  <div class="footer-top">
-    <div class="footer-top-inner">
-      <div class="footer-news">
-        Suscríbete para recibir las últimas novedades de VUZALKA,
-        acceso anticipado a nuevos lanzamientos y promociones exclusivas.
-      </div>
-
-      <a href="contacto.html" class="footer-signup-btn">Suscribirme</a>
-
-      <div class="footer-social-title">Conecta con nosotros</div>
-
-      <div class="footer-social">
-        <a href="#" aria-label="Instagram">📷</a>
-        <a href="#" aria-label="Facebook">f</a>
-        <a href="#" aria-label="X">𝕏</a>
-        <a href="#" aria-label="TikTok">♪</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer-main">
-    <div class="footer-main-inner">
-      <div>
-        <div class="footer-brand">VUZALKA<small>2026</small></div>
-      </div>
-
-      <div class="footer-col">
-        <h4>Ayuda e información</h4>
-        <a href="contacto.html">Contáctanos</a>
-        <a href="contacto.html">Centro de ayuda</a>
-        <a href="contacto.html">Política de devoluciones</a>
-        <a href="contacto.html">Información de envíos</a>
-        <a href="perfumes.html">Beneficios online</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>La compañía</h4>
-        <a href="nosotros.html">Nosotros</a>
-        <a href="nosotros.html">Nuestra esencia</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>Términos y condiciones</h4>
-        <a href="#">Política de privacidad</a>
-        <a href="#">Términos de usuario</a>
-        <a href="#">Política de cookies</a>
-        <a href="#">Pagos</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>Internacional</h4>
-        <a href="#">Colombia</a>
-        <a href="#">España</a>
-        <a href="#">México</a>
-        <a href="#">Estados Unidos</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 VUZALKA. Todos los derechos reservados.</div>
-
-    <div class="footer-pay">
-      <div class="footer-pay-title">Paga de forma segura con</div>
-      <div class="footer-pay-icons">
-        <div class="pay-chip">VISA</div>
-        <div class="pay-chip">MC</div>
-        <div class="pay-chip">PayPal</div>
-        <div class="pay-chip">AMEX</div>
-        <div class="pay-chip">Apple Pay</div>
-        <div class="pay-chip">G Pay</div>
-      </div>
-    </div>
-  </div>
-</footer>
-  
 </body>
 </html>
