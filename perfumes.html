@@ -813,285 +813,289 @@
   </footer>
 
   <script>
-    const STORAGE_KEY = "vuzalka_productos";
-    const productsContainer = document.getElementById("productsContainer");
-    const productCount = document.getElementById("productCount");
-    const stockCount = document.getElementById("stockCount");
+  const STORAGE_KEY = "vuzalka_productos";
+  const productsContainer = document.getElementById("productsContainer");
+  const productCount = document.getElementById("productCount");
+  const stockCount = document.getElementById("stockCount");
 
-    function getProducts(){
-      const data = localStorage.getItem(STORAGE_KEY);
-      try{
-        return data ? JSON.parse(data) : [];
-      }catch(error){
-        return [];
-      }
+  function getProducts(){
+    const data = localStorage.getItem(STORAGE_KEY);
+    try{
+      return data ? JSON.parse(data) : [];
+    }catch(error){
+      return [];
     }
+  }
 
-    function formatPrice(value){
-      const number = Number(value) || 0;
-      return "$" + number.toLocaleString("es-CO");
-    }
+  function formatPrice(value){
+    const number = Number(value) || 0;
+    return "$" + number.toLocaleString("es-CO");
+  }
 
-    function escapeHtml(text){
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+  function escapeHtml(text){
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-    function getStockStatus(cantidad){
-      const stock = Number(cantidad) || 0;
+  function getStockStatus(cantidad){
+    const stock = Number(cantidad) || 0;
 
-      if(stock <= 0){
-        return {
-          text: "Agotado",
-          className: "stock-out"
-        };
-      }
-
-      if(stock <= 3){
-        return {
-          text: "Últimas unidades",
-          className: "stock-low"
-        };
-      }
-
+    if(stock <= 0){
       return {
-        text: "Disponible",
-        className: "stock-ok"
+        text: "Agotado",
+        className: "stock-out"
       };
     }
 
-    function renderEmptyState(){
-      productsContainer.innerHTML = `
-        <div class="empty-state">
-          <h2>Aún no hay perfumes publicados</h2>
-          <p>
-            Ve a <strong>admin.html</strong>, crea tus productos y al guardar aparecerán aquí automáticamente.
-          </p>
-          <a href="admin.html" class="btn">Ir al administrador</a>
-        </div>
+    if(stock <= 3){
+      return {
+        text: "Últimas unidades",
+        className: "stock-low"
+      };
+    }
+
+    return {
+      text: "Disponible",
+      className: "stock-ok"
+    };
+  }
+
+  function renderEmptyState(){
+    productsContainer.innerHTML = `
+      <div class="empty-state">
+        <h2>Aún no hay perfumes publicados</h2>
+        <p>
+          Ve a <strong>admin.html</strong>, crea tus productos y al guardar aparecerán aquí automáticamente.
+        </p>
+        <a href="admin.html" class="btn">Ir al administrador</a>
+      </div>
+    `;
+  }
+
+  let currentProducts = getProducts();
+  let currentProduct = null;
+  let currentGallery = [];
+
+  function renderProducts(){
+    const products = getProducts();
+    currentProducts = products;
+
+    productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
+
+    const totalStock = products.reduce((acc, item) => {
+      return acc + (Number(item.cantidad) || 0);
+    }, 0);
+
+    stockCount.textContent = totalStock + (totalStock === 1 ? " unidad total" : " unidades totales");
+
+    if(products.length === 0){
+      renderEmptyState();
+      return;
+    }
+
+    const cards = products.map((product, index) => {
+      const stock = getStockStatus(product.cantidad);
+
+      return `
+        <article class="card" onclick="openProductModal(${index})">
+          <div class="image-box">
+            ${
+              product.imagen
+                ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre)}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen del producto</div>'">`
+                : `<div class="image-fallback">Este producto no tiene imagen</div>`
+            }
+          </div>
+
+          <div class="content">
+            <h3>${escapeHtml(product.nombre || "Producto sin nombre")}</h3>
+
+            <div class="meta">
+              <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
+            </div>
+
+            <p class="description">
+              ${escapeHtml(product.descripcion || "Sin descripción disponible.")}
+            </p>
+
+            <div class="bottom">
+              <div class="price">${formatPrice(product.precio)}</div>
+              <div class="${stock.className}">${stock.text}</div>
+            </div>
+          </div>
+        </article>
       `;
-    }
+    }).join("");
 
-    function renderProducts(){
-      const products = getProducts();
-      
-      productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
-
-      const totalStock = products.reduce((acc, item) => {
-        return acc + (Number(item.cantidad) || 0);
-      }, 0);
-
-      stockCount.textContent = totalStock + (totalStock === 1 ? " unidad total" : " unidades totales");
-
-      if(products.length === 0){
-        renderEmptyState();
-        return;
-      }
-
-      const cards = products.map((product, index) => {
-        const stock = getStockStatus(product.cantidad);
-
-        return `
-          <article class="card" onclick="openProductModal(${index})">
-            <div class="image-box">
-              ${
-                product.imagen
-                  ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre)}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen del producto</div>'">`
-                  : `<div class="image-fallback">Este producto no tiene imagen</div>`
-              }
-            </div>
-
-            <div class="content">
-              <h3>${escapeHtml(product.nombre || "Producto sin nombre")}</h3>
-
-              <div class="meta">
-                <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
-              </div>
-
-              <p class="description">
-                ${escapeHtml(product.descripcion || "Sin descripción disponible.")}
-              </p>
-
-              <div class="bottom">
-                <div class="price">${formatPrice(product.precio)}</div>
-                <div class="${stock.className}">${stock.text}</div>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      productsContainer.innerHTML = `<div class="grid">${cards}</div>`;
-    }
-
-    let currentProducts = getProducts();
-let currentProduct = null;
-let currentGallery = [];
-
-renderProducts();;
-
-const productModal = document.getElementById("productModal");
-const closeProductModal = document.getElementById("closeProductModal");
-const modalMainImage = document.getElementById("modalMainImage");
-const modalThumbs = document.getElementById("modalThumbs");
-const modalTitle = document.getElementById("modalTitle");
-const modalPrice = document.getElementById("modalPrice");
-const modalStock = document.getElementById("modalStock");
-const modalMeta = document.getElementById("modalMeta");
-const modalDescription = document.getElementById("modalDescription");
-const modalSpecs = document.getElementById("modalSpecs");
-const modalReviews = document.getElementById("modalReviews");
-const modalQty = document.getElementById("modalQty");
-const addToCartBtn = document.getElementById("addToCartBtn");
-const buyWhatsAppBtn = document.getElementById("buyWhatsAppBtn");
-
-function parseLines(value){
-  if(!value) return [];
-  return String(value)
-    .split("\n")
-    .map(item => item.trim())
-    .filter(Boolean);
-}
-
-function getProductImages(product){
-  const images = [];
-
-  if(product.imagen) images.push(product.imagen);
-
-  if(Array.isArray(product.imagenes)){
-    product.imagenes.forEach(img => {
-      if(img && !images.includes(img)) images.push(img);
-    });
+    productsContainer.innerHTML = `<div class="grid">${cards}</div>`;
   }
 
-  if(typeof product.imagenes === "string"){
-    product.imagenes
+  const productModal = document.getElementById("productModal");
+  const closeProductModal = document.getElementById("closeProductModal");
+  const modalMainImage = document.getElementById("modalMainImage");
+  const modalThumbs = document.getElementById("modalThumbs");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalPrice = document.getElementById("modalPrice");
+  const modalStock = document.getElementById("modalStock");
+  const modalMeta = document.getElementById("modalMeta");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalSpecs = document.getElementById("modalSpecs");
+  const modalReviews = document.getElementById("modalReviews");
+  const modalQty = document.getElementById("modalQty");
+  const addToCartBtn = document.getElementById("addToCartBtn");
+  const buyWhatsAppBtn = document.getElementById("buyWhatsAppBtn");
+
+  function parseLines(value){
+    if(!value) return [];
+    return String(value)
       .split("\n")
-      .map(img => img.trim())
-      .filter(Boolean)
-      .forEach(img => {
-        if(!images.includes(img)) images.push(img);
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+
+  function getProductImages(product){
+    const images = [];
+
+    if(product.imagen) images.push(product.imagen);
+
+    if(Array.isArray(product.imagenes)){
+      product.imagenes.forEach(img => {
+        if(img && !images.includes(img)) images.push(img);
       });
+    }
+
+    if(typeof product.imagenes === "string"){
+      product.imagenes
+        .split("\n")
+        .map(img => img.trim())
+        .filter(Boolean)
+        .forEach(img => {
+          if(!images.includes(img)) images.push(img);
+        });
+    }
+
+    return images;
   }
 
-  return images;
-}
-
-function renderMainModalImage(src, alt){
-  modalMainImage.innerHTML = src
-    ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt || 'Perfume')}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen</div>'">`
-    : `<div class="image-fallback">Sin imagen disponible</div>`;
-}
-
-function renderThumbs(images, productName){
-  if(!images.length){
-    modalThumbs.innerHTML = "";
-    return;
+  function renderMainModalImage(src, alt){
+    modalMainImage.innerHTML = src
+      ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt || "Perfume")}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen</div>'">`
+      : `<div class="image-fallback">Sin imagen disponible</div>`;
   }
 
-  modalThumbs.innerHTML = images.map((img, i) => `
-    <button class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="changeModalImage(${i})" type="button">
-      <img src="${escapeHtml(img)}" alt="${escapeHtml(productName)}">
-    </button>
-  `).join("");
-}
+  function renderThumbs(images, productName){
+    if(!images.length){
+      modalThumbs.innerHTML = "";
+      return;
+    }
 
-function changeModalImage(index){
-  const image = currentGallery[index];
-  renderMainModalImage(image, currentProduct?.nombre || "Perfume");
-
-  [...modalThumbs.querySelectorAll(".modal-thumb")].forEach((thumb, i) => {
-    thumb.classList.toggle("active", i === index);
-  });
-}
-
-function openProductModal(index){
-  currentProducts = getProducts();
-  const product = currentProducts[index];
-  if(!product) return;
-
-  currentProduct = product;
-  currentGallery = getProductImages(product);
-
-  const stock = getStockStatus(product.cantidad);
-
-  modalTitle.textContent = product.nombre || "Producto sin nombre";
-  modalPrice.textContent = formatPrice(product.precio);
-  modalStock.className = "modal-stock " + stock.className;
-  modalStock.textContent = stock.text + " · " + (Number(product.cantidad) || 0) + " unidades";
-
-  modalMeta.innerHTML = `
-    <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
-    ${product.categoria ? `<div class="chip">${escapeHtml(product.categoria)}</div>` : ""}
-    ${product.presentacion ? `<div class="chip">${escapeHtml(product.presentacion)}</div>` : ""}
-  `;
-
-  modalDescription.textContent = product.descripcion || "Sin descripción disponible.";
-
-  const specs = parseLines(product.caracteristicas || product.especificaciones || "");
-  modalSpecs.innerHTML = specs.length
-    ? specs.map(item => `<li>${escapeHtml(item)}</li>`).join("")
-    : `<li>Familia olfativa, duración, ocasión de uso y notas aromáticas pueden ir aquí.</li>`;
-
-  const reviews = parseLines(product.criticas || product.resenas || "");
-  modalReviews.innerHTML = reviews.length
-    ? reviews.map(item => `<li>${escapeHtml(item)}</li>`).join("")
-    : `<li>Aún no hay críticas registradas para este perfume.</li>`;
-
-  renderMainModalImage(currentGallery[0], product.nombre);
-  renderThumbs(currentGallery, product.nombre);
-
-  modalQty.value = 1;
-  modalQty.max = Math.max(Number(product.cantidad) || 1, 1);
-
-  productModal.classList.add("show");
-  document.body.style.overflow = "hidden";
-}
-
-function closeModal(){
-  productModal.classList.remove("show");
-  document.body.style.overflow = "";
-}
-
-closeProductModal.addEventListener("click", closeModal);
-
-productModal.addEventListener("click", function(e){
-  if(e.target === productModal){
-    closeModal();
+    modalThumbs.innerHTML = images.map((img, i) => `
+      <button class="modal-thumb ${i === 0 ? "active" : ""}" onclick="changeModalImage(${i})" type="button">
+        <img src="${escapeHtml(img)}" alt="${escapeHtml(productName)}">
+      </button>
+    `).join("");
   }
-});
 
-document.addEventListener("keydown", function(e){
-  if(e.key === "Escape"){
-    closeModal();
-  }
-});
+  function changeModalImage(index){
+    const image = currentGallery[index];
+    renderMainModalImage(image, currentProduct ? currentProduct.nombre : "Perfume");
 
-addToCartBtn.addEventListener("click", function(){
-  if(!currentProduct) return;
-
-  const qty = Math.max(1, Number(modalQty.value) || 1);
-  alert(`Se añadió "${currentProduct.nombre}" al carrito. Cantidad: ${qty}`);
-});
-
-buyWhatsAppBtn.addEventListener("click", function(){
-  if(!currentProduct) return;
-
-  const qty = Math.max(1, Number(modalQty.value) || 1);
-  const text = encodeURIComponent(`Hola, quiero información sobre ${currentProduct.nombre}. Cantidad: ${qty}`);
-  window.open(`https://wa.me/?text=${text}`, "_blank");
-});
-    
-    window.addEventListener("storage", function(e){
-      if(e.key === STORAGE_KEY){
-        renderProducts();
-      }
+    [...modalThumbs.querySelectorAll(".modal-thumb")].forEach((thumb, i) => {
+      thumb.classList.toggle("active", i === index);
     });
-  </script>
+  }
+
+  function openProductModal(index){
+    currentProducts = getProducts();
+    const product = currentProducts[index];
+    if(!product) return;
+
+    currentProduct = product;
+    currentGallery = getProductImages(product);
+
+    const stock = getStockStatus(product.cantidad);
+
+    modalTitle.textContent = product.nombre || "Producto sin nombre";
+    modalPrice.textContent = formatPrice(product.precio);
+    modalStock.className = "modal-stock " + stock.className;
+    modalStock.textContent = stock.text + " · " + (Number(product.cantidad) || 0) + " unidades";
+
+    modalMeta.innerHTML = `
+      <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
+      ${product.categoria ? `<div class="chip">${escapeHtml(product.categoria)}</div>` : ""}
+      ${product.presentacion ? `<div class="chip">${escapeHtml(product.presentacion)}</div>` : ""}
+    `;
+
+    modalDescription.textContent = product.descripcion || "Sin descripción disponible.";
+
+    const specs = parseLines(product.caracteristicas || product.especificaciones || "");
+    modalSpecs.innerHTML = specs.length
+      ? specs.map(item => `<li>${escapeHtml(item)}</li>`).join("")
+      : `<li>Familia olfativa, duración, ocasión de uso y notas aromáticas pueden ir aquí.</li>`;
+
+    const reviews = parseLines(product.criticas || product.resenas || "");
+    modalReviews.innerHTML = reviews.length
+      ? reviews.map(item => `<li>${escapeHtml(item)}</li>`).join("")
+      : `<li>Aún no hay críticas registradas para este perfume.</li>`;
+
+    renderMainModalImage(currentGallery[0], product.nombre);
+    renderThumbs(currentGallery, product.nombre);
+
+    modalQty.value = 1;
+    modalQty.max = Math.max(Number(product.cantidad) || 1, 1);
+
+    productModal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal(){
+    productModal.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+
+  closeProductModal.addEventListener("click", closeModal);
+
+  productModal.addEventListener("click", function(e){
+    if(e.target === productModal){
+      closeModal();
+    }
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+      closeModal();
+    }
+  });
+
+  addToCartBtn.addEventListener("click", function(){
+    if(!currentProduct) return;
+
+    const qty = Math.max(1, Number(modalQty.value) || 1);
+    alert(`Se añadió "${currentProduct.nombre}" al carrito. Cantidad: ${qty}`);
+  });
+
+  buyWhatsAppBtn.addEventListener("click", function(){
+    if(!currentProduct) return;
+
+    const qty = Math.max(1, Number(modalQty.value) || 1);
+    const text = encodeURIComponent(`Hola, quiero información sobre ${currentProduct.nombre}. Cantidad: ${qty}`);
+    window.open(`https://wa.me/?text=${text}`, "_blank");
+  });
+
+  window.changeModalImage = changeModalImage;
+  window.openProductModal = openProductModal;
+
+  renderProducts();
+
+  window.addEventListener("storage", function(e){
+    if(e.key === STORAGE_KEY){
+      renderProducts();
+    }
+  });
+</script>
 
 <div class="modal" id="productModal">
   <div class="modal-dialog">
