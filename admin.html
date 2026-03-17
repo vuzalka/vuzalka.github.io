@@ -1241,16 +1241,21 @@
     }
 
     async function loadProducts(){
-      const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
-      const snapshot = await getDocs(q);
+  const snapshot = await getDocs(collection(db, "products"));
 
-      currentProducts = snapshot.docs.map(docSnap => ({
-        id: docSnap.id,
-        ...docSnap.data()
-      }));
+  currentProducts = snapshot.docs.map(docSnap => ({
+    id: docSnap.id,
+    ...docSnap.data()
+  }));
 
-      renderProducts();
-    }
+  currentProducts.sort((a, b) => {
+    const aTime = a.createdAt?.seconds || 0;
+    const bTime = b.createdAt?.seconds || 0;
+    return bTime - aTime;
+  });
+
+  renderProducts();
+}
 
     function renderProducts(){
       productCount.textContent = currentProducts.length + (currentProducts.length === 1 ? " producto" : " productos");
@@ -1463,35 +1468,60 @@
     });
 
     loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try{
-        await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPass.value.trim());
-        loginError.textContent = "";
-      }catch(error){
-        console.error(error);
-        loginError.textContent = "Correo o contraseña incorrectos.";
-      }
-    });
+  e.preventDefault();
+
+  const email = loginEmail.value.trim();
+  const password = loginPass.value.trim();
+
+  loginError.textContent = "Ingresando...";
+
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+    loginError.textContent = "";
+  }catch(error){
+    console.error("Error de login:", error);
+
+    if(error.code === "auth/invalid-credential"){
+      loginError.textContent = "Correo o contraseña incorrectos.";
+    }else if(error.code === "auth/user-not-found"){
+      loginError.textContent = "Ese usuario no existe.";
+    }else if(error.code === "auth/wrong-password"){
+      loginError.textContent = "Contraseña incorrecta.";
+    }else if(error.code === "auth/invalid-email"){
+      loginError.textContent = "El correo no es válido.";
+    }else if(error.code === "auth/network-request-failed"){
+      loginError.textContent = "Error de conexión. Revisa internet.";
+    }else{
+      loginError.textContent = "No se pudo iniciar sesión: " + (error.message || error.code);
+    }
+  }
+});
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
     });
 
     onAuthStateChanged(auth, async (user) => {
-      if(user){
-        loginScreen.classList.add("hidden");
-        adminApp.classList.remove("hidden");
-        welcomeUser.textContent = user.email || "Administrador";
-        await loadProducts();
-        await loadHomeContent();
-        updatePreview();
-      }else{
-        adminApp.classList.add("hidden");
-        loginScreen.classList.remove("hidden");
-        loginForm.reset();
-        loginError.textContent = "";
-      }
-    });
+  if(user){
+    loginScreen.classList.add("hidden");
+    adminApp.classList.remove("hidden");
+    welcomeUser.textContent = user.email || "Administrador";
+
+    try{
+      await loadProducts();
+      await loadHomeContent();
+      updatePreview();
+    }catch(error){
+      console.error("Error cargando el panel:", error);
+      alert("Se inició sesión, pero hubo un error cargando los datos del panel. Revisa Firestore y la consola.");
+    }
+  }else{
+    adminApp.classList.add("hidden");
+    loginScreen.classList.remove("hidden");
+    loginForm.reset();
+    loginError.textContent = "";
+  }
+});
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
