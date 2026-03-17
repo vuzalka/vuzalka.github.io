@@ -34,7 +34,6 @@
 
     a{text-decoration:none;color:inherit}
     button,input,textarea{font:inherit}
-
     .hidden{display:none !important}
 
     .container{
@@ -606,8 +605,8 @@
 
       <form id="loginForm" class="form-grid">
         <div class="field">
-          <label for="loginUser">Usuario</label>
-          <input type="text" id="loginUser" placeholder="Ingresa tu usuario" required>
+          <label for="loginEmail">Correo</label>
+          <input type="email" id="loginEmail" placeholder="Ingresa tu correo" required>
         </div>
 
         <div class="field">
@@ -653,8 +652,6 @@
 
           <div class="top-actions">
             <button class="btn btn-primary" id="btnNuevo">Nuevo producto</button>
-            <button class="btn btn-soft" id="btnCargarDemo">Cargar productos de ejemplo</button>
-            <button class="btn btn-danger" id="btnVaciarTodo">Vaciar todo</button>
           </div>
         </section>
 
@@ -702,7 +699,7 @@
                 </div>
 
                 <div class="form-actions">
-                  <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar producto</button>
+                  <button type="submit" class="btn btn-primary">Guardar producto</button>
                   <button type="button" class="btn btn-soft" id="btnCancelarEdicion">Cancelar edición</button>
                 </div>
 
@@ -778,17 +775,44 @@
     </footer>
   </div>
 
-  <script>
-    const STORAGE_KEY = "vuzalka_productos";
-    const AUTH_KEY = "vuzalka_admin_session";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      doc,
+      updateDoc,
+      deleteDoc,
+      orderBy,
+      query,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "vuzalka123";
+    const firebaseConfig = {
+      apiKey: "PEGA_AQUI_TU_API_KEY",
+      authDomain: "PEGA_AQUI_TU_AUTH_DOMAIN",
+      projectId: "PEGA_AQUI_TU_PROJECT_ID",
+      storageBucket: "PEGA_AQUI_TU_STORAGE_BUCKET",
+      messagingSenderId: "PEGA_AQUI_TU_MESSAGING_SENDER_ID",
+      appId: "PEGA_AQUI_TU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const loginScreen = document.getElementById("loginScreen");
     const adminApp = document.getElementById("adminApp");
     const loginForm = document.getElementById("loginForm");
-    const loginUser = document.getElementById("loginUser");
+    const loginEmail = document.getElementById("loginEmail");
     const loginPass = document.getElementById("loginPass");
     const loginError = document.getElementById("loginError");
     const logoutBtn = document.getElementById("logoutBtn");
@@ -803,12 +827,8 @@
     const imagenInput = document.getElementById("imagen");
     const statusMsg = document.getElementById("statusMsg");
 
-    let imageManuallyEdited = false;
-
     const btnNuevo = document.getElementById("btnNuevo");
     const btnCancelarEdicion = document.getElementById("btnCancelarEdicion");
-    const btnCargarDemo = document.getElementById("btnCargarDemo");
-    const btnVaciarTodo = document.getElementById("btnVaciarTodo");
 
     const previewNombre = document.getElementById("previewNombre");
     const previewPrecio = document.getElementById("previewPrecio");
@@ -820,65 +840,12 @@
     const productsList = document.getElementById("productsList");
     const productCount = document.getElementById("productCount");
 
-    function isAuthenticated(){
-      const session = localStorage.getItem(AUTH_KEY);
-      return session === ADMIN_USERNAME;
-    }
-
-    function showAdmin(username){
-      loginScreen.classList.add("hidden");
-      adminApp.classList.remove("hidden");
-      welcomeUser.textContent = "Sesión: " + username;
-      renderProducts();
-      updatePreview();
-    }
-
-    function showLogin(){
-      adminApp.classList.add("hidden");
-      loginScreen.classList.remove("hidden");
-      loginForm.reset();
-      loginError.textContent = "";
-    }
-
-    loginForm.addEventListener("submit", function(e){
-      e.preventDefault();
-
-      const user = loginUser.value.trim();
-      const pass = loginPass.value.trim();
-
-      if(user === ADMIN_USERNAME && pass === ADMIN_PASSWORD){
-        localStorage.setItem(AUTH_KEY, user);
-        showAdmin(user);
-      }else{
-        loginError.textContent = "Usuario o contraseña incorrectos.";
-      }
-    });
-
-    logoutBtn.addEventListener("click", function(){
-      localStorage.removeItem(AUTH_KEY);
-      showLogin();
-    });
-
-    function getProducts(){
-      const data = localStorage.getItem(STORAGE_KEY);
-      try{
-        return data ? JSON.parse(data) : [];
-      }catch(error){
-        return [];
-      }
-    }
-
-    function saveProducts(products){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-    }
+    let imageManuallyEdited = false;
+    let currentProducts = [];
 
     function formatPrice(value){
       const number = Number(value) || 0;
       return "$" + number.toLocaleString("es-CO");
-    }
-
-    function generateId(){
-      return "prod-" + Date.now() + "-" + Math.floor(Math.random() * 10000);
     }
 
     function showStatus(message){
@@ -890,7 +857,7 @@
     }
 
     function escapeHtml(text){
-      return String(text)
+      return String(text ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -915,8 +882,7 @@
 
     function autoFillImagePath(){
       if(imageManuallyEdited) return;
-      const nombre = nombreInput.value.trim();
-      imagenInput.value = buildImagePathFromName(nombre);
+      imagenInput.value = buildImagePathFromName(nombreInput.value.trim());
     }
 
     function updatePreview(){
@@ -939,15 +905,13 @@
             onerror="this.parentElement.innerHTML='<div class=&quot;placeholder&quot;>No se pudo cargar la imagen.<br>Revisa la ruta escrita.</div>'"
           >
         `;
-      }else{
+      } else {
         previewImageBox.innerHTML = '<div class="placeholder">Aquí aparecerá la imagen del perfume</div>';
       }
 
-      if(productIdInput.value){
-        previewModeText.textContent = "Estás editando un producto existente. Los cambios se reflejarán cuando presiones guardar.";
-      }else{
-        previewModeText.textContent = "Estás creando un nuevo producto. Completa los campos y guarda para añadirlo al catálogo.";
-      }
+      previewModeText.textContent = productIdInput.value
+        ? "Estás editando un producto existente. Los cambios se reflejarán cuando presiones guardar."
+        : "Estás creando un nuevo producto. Completa los campos y guarda para añadirlo al catálogo.";
     }
 
     function clearForm(){
@@ -957,11 +921,64 @@
       updatePreview();
     }
 
-    function renderProducts(){
-      const products = getProducts();
-      productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
+    function fillForm(product){
+      productIdInput.value = product.id;
+      nombreInput.value = product.nombre || "";
+      precioInput.value = product.precio ?? "";
+      cantidadInput.value = product.cantidad ?? "";
+      descripcionInput.value = product.descripcion || "";
+      imagenInput.value = product.imagen || "";
+      imageManuallyEdited = false;
+      updatePreview();
+      previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-      if(products.length === 0){
+    function validateForm(){
+      if(!nombreInput.value.trim()){
+        alert("Escribe el nombre del perfume.");
+        nombreInput.focus();
+        return false;
+      }
+      if(precioInput.value.trim() === ""){
+        alert("Escribe el precio.");
+        precioInput.focus();
+        return false;
+      }
+      if(cantidadInput.value.trim() === ""){
+        alert("Escribe la cantidad.");
+        cantidadInput.focus();
+        return false;
+      }
+      if(!descripcionInput.value.trim()){
+        alert("Escribe la descripción.");
+        descripcionInput.focus();
+        return false;
+      }
+      if(!imagenInput.value.trim()){
+        alert("Escribe la ruta de la imagen.");
+        imagenInput.focus();
+        return false;
+      }
+      return true;
+    }
+
+    async function loadProducts(){
+      const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+
+      currentProducts = snapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }));
+
+      renderProducts();
+    }
+
+    function renderProducts(){
+      productCount.textContent = currentProducts.length + (currentProducts.length === 1 ? " producto" : " productos");
+
+      if(currentProducts.length === 0){
         productsList.innerHTML = `
           <div class="empty">
             No hay productos guardados todavía.<br>
@@ -971,7 +988,7 @@
         return;
       }
 
-      productsList.innerHTML = products.map(product => `
+      productsList.innerHTML = currentProducts.map(product => `
         <article class="admin-item">
           <div class="thumb">
             ${
@@ -984,102 +1001,87 @@
           <div class="item-info">
             <h4>${escapeHtml(product.nombre)}</h4>
             <p>
-              ${formatPrice(product.precio)} · Cantidad: ${product.cantidad}<br>
+              ${formatPrice(product.precio)} · Cantidad: ${Number(product.cantidad) || 0}<br>
               ${escapeHtml(product.descripcion)}
             </p>
           </div>
 
           <div class="item-actions">
-            <button class="action-btn action-edit" onclick="editProduct('${product.id}')">Editar</button>
-            <button class="action-btn action-delete" onclick="deleteProduct('${product.id}')">Eliminar</button>
+            <button class="action-btn action-edit" data-edit-id="${product.id}">Editar</button>
+            <button class="action-btn action-delete" data-delete-id="${product.id}">Eliminar</button>
           </div>
         </article>
       `).join("");
+
+      productsList.querySelectorAll("[data-edit-id]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const product = currentProducts.find(p => p.id === btn.dataset.editId);
+          if(product){
+            fillForm(product);
+            showStatus("Producto cargado para edición.");
+          }
+        });
+      });
+
+      productsList.querySelectorAll("[data-delete-id]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.dataset.deleteId;
+          const product = currentProducts.find(p => p.id === id);
+          if(!product) return;
+
+          const ok = confirm(`¿Seguro que deseas eliminar "${product.nombre}"?`);
+          if(!ok) return;
+
+          try{
+            await deleteDoc(doc(db, "products", id));
+            if(productIdInput.value === id){
+              clearForm();
+            }
+            await loadProducts();
+            showStatus("Producto eliminado.");
+          }catch(error){
+            console.error(error);
+            alert("No se pudo eliminar el producto.");
+          }
+        });
+      });
     }
 
-    function fillForm(product){
-      productIdInput.value = product.id;
-      nombreInput.value = product.nombre;
-      precioInput.value = product.precio;
-      cantidadInput.value = product.cantidad;
-      descripcionInput.value = product.descripcion;
-      imagenInput.value = product.imagen;
-      imageManuallyEdited = false;
-      updatePreview();
-      previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    window.editProduct = function(id){
-      const products = getProducts();
-      const product = products.find(item => item.id === id);
-      if(!product) return;
-      fillForm(product);
-      showStatus("Producto cargado para edición.");
-    };
-
-    window.deleteProduct = function(id){
-      const products = getProducts();
-      const product = products.find(item => item.id === id);
-      if(!product) return;
-
-      const ok = confirm('¿Seguro que deseas eliminar "' + product.nombre + '"?');
-      if(!ok) return;
-
-      const updated = products.filter(item => item.id !== id);
-      saveProducts(updated);
-
-      if(productIdInput.value === id){
-        clearForm();
-      }
-
-      renderProducts();
-      showStatus("Producto eliminado.");
-    };
-
-    function validateForm(){
-      if(!nombreInput.value.trim()){
-        alert("Escribe el nombre del perfume.");
-        nombreInput.focus();
-        return false;
-      }
-
-      if(precioInput.value.trim() === ""){
-        alert("Escribe el precio.");
-        precioInput.focus();
-        return false;
-      }
-
-      if(cantidadInput.value.trim() === ""){
-        alert("Escribe la cantidad.");
-        cantidadInput.focus();
-        return false;
-      }
-
-      if(!descripcionInput.value.trim()){
-        alert("Escribe la descripción.");
-        descripcionInput.focus();
-        return false;
-      }
-
-      if(!imagenInput.value.trim()){
-        alert("Escribe la ruta de la imagen.");
-        imagenInput.focus();
-        return false;
-      }
-
-      return true;
-    }
-
-    form.addEventListener("submit", function(e){
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      try{
+        await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPass.value.trim());
+        loginError.textContent = "";
+      }catch(error){
+        console.error(error);
+        loginError.textContent = "Correo o contraseña incorrectos.";
+      }
+    });
 
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if(user){
+        loginScreen.classList.add("hidden");
+        adminApp.classList.remove("hidden");
+        welcomeUser.textContent = user.email || "Administrador";
+        await loadProducts();
+        updatePreview();
+      }else{
+        adminApp.classList.add("hidden");
+        loginScreen.classList.remove("hidden");
+        loginForm.reset();
+        loginError.textContent = "";
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
       if(!validateForm()) return;
 
-      const products = getProducts();
-
-      const productData = {
-        id: productIdInput.value || generateId(),
+      const payload = {
         nombre: nombreInput.value.trim(),
         precio: Number(precioInput.value),
         cantidad: Number(cantidadInput.value),
@@ -1087,81 +1089,37 @@
         imagen: imagenInput.value.trim()
       };
 
-      const existingIndex = products.findIndex(item => item.id === productData.id);
+      try{
+        if(productIdInput.value){
+          await updateDoc(doc(db, "products", productIdInput.value), payload);
+          showStatus("Producto actualizado correctamente.");
+        }else{
+          await addDoc(collection(db, "products"), {
+            ...payload,
+            createdAt: serverTimestamp()
+          });
+          showStatus("Producto agregado correctamente.");
+        }
 
-      if(existingIndex >= 0){
-        products[existingIndex] = productData;
-        saveProducts(products);
-        renderProducts();
-        updatePreview();
-        showStatus("Producto actualizado correctamente.");
-      }else{
-        products.unshift(productData);
-        saveProducts(products);
-        renderProducts();
-        fillForm(productData);
-        showStatus("Producto agregado correctamente.");
+        clearForm();
+        await loadProducts();
+      }catch(error){
+        console.error(error);
+        alert("No se pudo guardar el producto. Revisa tu sesión y las reglas de Firestore.");
       }
     });
 
-    btnNuevo.addEventListener("click", function(){
+    btnNuevo.addEventListener("click", () => {
       clearForm();
       showStatus("Formulario listo para un nuevo producto.");
     });
 
-    btnCancelarEdicion.addEventListener("click", function(){
+    btnCancelarEdicion.addEventListener("click", () => {
       clearForm();
       showStatus("Edición cancelada.");
     });
 
-    btnVaciarTodo.addEventListener("click", function(){
-      const ok = confirm("¿Seguro que deseas eliminar todos los productos guardados?");
-      if(!ok) return;
-
-      localStorage.removeItem(STORAGE_KEY);
-      clearForm();
-      renderProducts();
-      showStatus("Se eliminaron todos los productos.");
-    });
-
-    btnCargarDemo.addEventListener("click", function(){
-      const ok = confirm("Esto cargará productos de ejemplo. Si ya tienes productos, se reemplazarán.");
-      if(!ok) return;
-
-      const demoProducts = [
-        {
-          id: generateId(),
-          nombre: "AFNAN 9PM",
-          precio: 120000,
-          cantidad: 8,
-          descripcion: "Fragancia intensa y moderna, ideal para la noche y para destacar con elegancia.",
-          imagen: "img/perfumes/afnan-9pm.png"
-        },
-        {
-          id: generateId(),
-          nombre: "LATTAFA KHAMRAH",
-          precio: 185000,
-          cantidad: 5,
-          descripcion: "Perfume cálido, dulce y envolvente con mucha personalidad.",
-          imagen: "img/perfumes/lattafa-khamrah.png"
-        },
-        {
-          id: generateId(),
-          nombre: "VERSACE EROS FLAME",
-          precio: 220000,
-          cantidad: 4,
-          descripcion: "Fragancia apasionada, elegante y masculina con gran presencia.",
-          imagen: "img/perfumes/eros-flame.png"
-        }
-      ];
-
-      saveProducts(demoProducts);
-      clearForm();
-      renderProducts();
-      showStatus("Productos de ejemplo cargados.");
-    });
-
-    nombreInput.addEventListener("input", function(){
+    nombreInput.addEventListener("input", () => {
       imageManuallyEdited = false;
       autoFillImagePath();
       updatePreview();
@@ -1171,16 +1129,12 @@
     cantidadInput.addEventListener("input", updatePreview);
     descripcionInput.addEventListener("input", updatePreview);
 
-    imagenInput.addEventListener("input", function(){
+    imagenInput.addEventListener("input", () => {
       imageManuallyEdited = true;
       updatePreview();
     });
 
-    if(isAuthenticated()){
-      showAdmin(localStorage.getItem(AUTH_KEY));
-    }else{
-      showLogin();
-    }
+    updatePreview();
   </script>
 </body>
 </html>
