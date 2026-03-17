@@ -864,6 +864,21 @@
                   <textarea id="descripcion" placeholder="Describe el perfume..." required></textarea>
                 </div>
 
+<div class="field field-full">
+  <label for="caracteristicas">Características del perfume</label>
+  <textarea
+    id="caracteristicas"
+    rows="6"
+    placeholder="Escribe una característica por línea. Ejemplo:
+Salida cítrica y especiada
+Buena duración
+Ideal para la noche
+Estela moderada a alta"></textarea>
+  <small>
+    Escribe una característica por línea. Luego se mostrarán como lista en la ventana del perfume.
+  </small>
+</div>
+                
                 <div class="field">
                   <label for="imagen">Ruta de la imagen principal</label>
                   <input type="text" id="imagen" placeholder="Ej: img/perfumes/afnan-9pm.png" required>
@@ -1157,6 +1172,7 @@
     const precioInput = document.getElementById("precio");
     const cantidadInput = document.getElementById("cantidad");
     const descripcionInput = document.getElementById("descripcion");
+    const caracteristicasInput = document.getElementById("caracteristicas");
     const imagenInput = document.getElementById("imagen");
     const imagenesExtraInput = document.getElementById("imagenesExtra");
     const statusMsg = document.getElementById("statusMsg");
@@ -1335,6 +1351,7 @@
       productIdInput.value = "";
       imageManuallyEdited = false;
       form.reset();
+      caracteristicasInput.value = "";
       imagenesExtraInput.value = "";
       updatePreview();
     }
@@ -1345,6 +1362,13 @@
       precioInput.value = product.precio ?? product.price ?? "";
       cantidadInput.value = product.cantidad ?? product.stock ?? "";
       descripcionInput.value = product.descripcion || product.description || "";
+      
+      caracteristicasInput.value = Array.isArray(product.caracteristicas)
+  ? product.caracteristicas.join("\n")
+  : Array.isArray(product.features)
+    ? product.features.join("\n")
+    : "";
+      
       imagenInput.value = product.imagen || product.image || "";
       imagenesExtraInput.value = normalizeImageArray(product).join("\n");
       imageManuallyEdited = false;
@@ -1687,11 +1711,14 @@
       if(!validateForm()) return;
 
       const extraImages = parseImageLines(imagenesExtraInput.value);
+      const caracteristicasList = parseLinesToArray(caracteristicasInput.value);
+      
       const payload = {
         nombre: nombreInput.value.trim(),
         precio: Number(precioInput.value),
         cantidad: Number(cantidadInput.value),
         descripcion: descripcionInput.value.trim(),
+        caracteristicas: caracteristicasList,
         imagen: imagenInput.value.trim(),
         imagenes: extraImages,
 
@@ -1699,6 +1726,7 @@
         price: Number(precioInput.value),
         stock: Number(cantidadInput.value),
         description: descripcionInput.value.trim(),
+        features: caracteristicasList,
         image: imagenInput.value.trim(),
         images: extraImages,
 
