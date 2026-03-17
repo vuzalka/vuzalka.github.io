@@ -878,7 +878,6 @@
 
     function renderProducts(){
       const products = getProducts();
-      currentProducts = products;
       
       productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
 
@@ -929,11 +928,11 @@
       productsContainer.innerHTML = `<div class="grid">${cards}</div>`;
     }
 
-    renderProducts();
-
     let currentProducts = getProducts();
 let currentProduct = null;
 let currentGallery = [];
+
+renderProducts();;
 
 const productModal = document.getElementById("productModal");
 const closeProductModal = document.getElementById("closeProductModal");
