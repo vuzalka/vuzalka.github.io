@@ -1479,7 +1479,7 @@
     await signInWithEmailAndPassword(auth, email, password);
     loginError.textContent = "";
   }catch(error){
-    console.error("Error de login:", error);
+    console.error("LOGIN ERROR:", error);
 
     if(error.code === "auth/invalid-credential"){
       loginError.textContent = "Correo o contraseña incorrectos.";
@@ -1492,7 +1492,7 @@
     }else if(error.code === "auth/network-request-failed"){
       loginError.textContent = "Error de conexión. Revisa internet.";
     }else{
-      loginError.textContent = "No se pudo iniciar sesión: " + (error.message || error.code);
+      loginError.textContent = "No se pudo iniciar sesión: " + (error.code || error.message);
     }
   }
 });
