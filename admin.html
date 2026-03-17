@@ -1200,18 +1200,17 @@
     }
 
     function fillForm(product){
-      productIdInput.value = product.id;
-      nombreInput.value = product.nombre || "";
-      precioInput.value = product.precio ?? "";
-      cantidadInput.value = product.cantidad ?? "";
-      descripcionInput.value = product.descripcion || "";
-      imagenInput.value = product.imagen || "";
-      imageManuallyEdited = false;
-      updatePreview();
-      previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
+  productIdInput.value = product.id;
+  nombreInput.value = product.nombre || product.name || "";
+  precioInput.value = product.precio ?? product.price ?? "";
+  cantidadInput.value = product.cantidad ?? product.stock ?? "";
+  descripcionInput.value = product.descripcion || product.description || "";
+  imagenInput.value = product.imagen || product.image || "";
+  imageManuallyEdited = false;
+  updatePreview();
+  previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
     function validateForm(){
       if(!nombreInput.value.trim()){
         alert("Escribe el nombre del perfume.");
@@ -1266,23 +1265,38 @@
         return;
       }
 
-      productsList.innerHTML = currentProducts.map(product => `
-        <article class="admin-item">
-          <div class="thumb">
-            ${
-              product.imagen
-                ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre)}" onerror="this.parentElement.innerHTML='<span>Sin imagen válida</span>'">`
-                : `<span>Sin imagen</span>`
-            }
-          </div>
+      productsList.innerHTML = currentProducts.map(product => {
+  const nombre = product.nombre || product.name || "Producto sin nombre";
+  const precio = product.precio ?? product.price ?? 0;
+  const cantidad = product.cantidad ?? product.stock ?? 0;
+  const descripcion = product.descripcion || product.description || "";
+  const imagen = product.imagen || product.image || "";
 
-          <div class="item-info">
-            <h4>${escapeHtml(product.nombre)}</h4>
-            <p>
-              ${formatPrice(product.precio)} · Cantidad: ${Number(product.cantidad) || 0}<br>
-              ${escapeHtml(product.descripcion)}
-            </p>
-          </div>
+  return `
+    <article class="admin-item">
+      <div class="thumb">
+        ${
+          imagen
+            ? `<img src="${escapeHtml(imagen)}" alt="${escapeHtml(nombre)}" onerror="this.parentElement.innerHTML='<span>Sin imagen válida</span>'">`
+            : `<span>Sin imagen</span>`
+        }
+      </div>
+
+      <div class="item-info">
+        <h4>${escapeHtml(nombre)}</h4>
+        <p>
+          ${formatPrice(precio)} · Cantidad: ${Number(cantidad) || 0}<br>
+          ${escapeHtml(descripcion)}
+        </p>
+      </div>
+
+      <div class="item-actions">
+        <button class="action-btn action-edit" data-edit-id="${product.id}">Editar</button>
+        <button class="action-btn action-delete" data-delete-id="${product.id}">Eliminar</button>
+      </div>
+    </article>
+  `;
+}).join("");
 
           <div class="item-actions">
             <button class="action-btn action-edit" data-edit-id="${product.id}">Editar</button>
@@ -1484,13 +1498,20 @@
       if(!validateForm()) return;
 
       const payload = {
-        nombre: nombreInput.value.trim(),
-        precio: Number(precioInput.value),
-        cantidad: Number(cantidadInput.value),
-        descripcion: descripcionInput.value.trim(),
-        imagen: imagenInput.value.trim()
-      };
+  nombre: nombreInput.value.trim(),
+  precio: Number(precioInput.value),
+  cantidad: Number(cantidadInput.value),
+  descripcion: descripcionInput.value.trim(),
+  imagen: imagenInput.value.trim(),
 
+  name: nombreInput.value.trim(),
+  price: Number(precioInput.value),
+  stock: Number(cantidadInput.value),
+  description: descripcionInput.value.trim(),
+  image: imagenInput.value.trim(),
+
+  active: true
+};
       try{
         if(productIdInput.value){
           await updateDoc(doc(db, "products", productIdInput.value), payload);
