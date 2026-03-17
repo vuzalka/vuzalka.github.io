@@ -1301,6 +1301,13 @@ Estela moderada a alta"></textarea>
         .filter(Boolean);
     }
 
+    function parseLinesToArray(value){
+  return String(value || "")
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean);
+}
+
     function normalizeImageArray(product = {}){
       const raw = product.imagenes ?? product.images ?? [];
       if(Array.isArray(raw)) return raw.filter(Boolean);
