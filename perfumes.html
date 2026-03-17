@@ -282,6 +282,7 @@
       font-size:.92rem;
     }
 
+    .loading-state,
     .empty-state{
       background:#fff;
       border:1px dashed #d8d8d8;
@@ -291,6 +292,7 @@
       box-shadow:var(--shadow);
     }
 
+    .loading-state h2,
     .empty-state h2{
       margin:0 0 10px;
       color:var(--wine);
@@ -298,6 +300,7 @@
       font-size:2rem;
     }
 
+    .loading-state p,
     .empty-state p{
       margin:0 auto 20px;
       max-width:620px;
@@ -996,7 +999,7 @@
           <div class="badge" id="stockCount">0 unidades totales</div>
         </div>
         <div class="toolbar-right">
-          Catálogo dinámico conectado con el panel administrador
+          Catálogo dinámico conectado con Firebase
         </div>
       </div>
     </div>
@@ -1004,7 +1007,12 @@
 
   <section class="products">
     <div class="container">
-      <div id="productsContainer"></div>
+      <div id="productsContainer">
+        <div class="loading-state">
+          <h2>Cargando perfumes</h2>
+          <p>Espera un momento mientras se carga el catálogo.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1163,8 +1171,26 @@
     </div>
   </footer>
 
-  <script>
-    const STORAGE_KEY = "vuzalka_productos";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYlGCt2LhuArZeUGmvA0jfPnLfo0iVlFU",
+      authDomain: "vuzalka-73b95.firebaseapp.com",
+      projectId: "vuzalka-73b95",
+      storageBucket: "vuzalka-73b95.firebasestorage.app",
+      messagingSenderId: "392739606646",
+      appId: "1:392739606646:web:05f22f49163281e6dc4f57"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const CART_KEY = "vuzalka_carrito";
     const WHATSAPP_NUMBER = "573026451420";
 
@@ -1202,35 +1228,6 @@
     let currentGallery = [];
     let cart = [];
 
-    function getProducts(){
-      const data = localStorage.getItem(STORAGE_KEY);
-      try{
-        const parsed = data ? JSON.parse(data) : [];
-        return Array.isArray(parsed) ? parsed : [];
-      }catch(error){
-        return [];
-      }
-    }
-
-    function loadCart(){
-      try{
-        const saved = localStorage.getItem(CART_KEY);
-        const parsed = saved ? JSON.parse(saved) : [];
-        cart = Array.isArray(parsed) ? parsed : [];
-      }catch(error){
-        cart = [];
-      }
-    }
-
-    function saveCart(){
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    }
-
-    function formatPrice(value){
-      const number = Number(value) || 0;
-      return "$" + number.toLocaleString("es-CO");
-    }
-
     function escapeHtml(text){
       return String(text ?? "")
         .replace(/&/g, "&amp;")
@@ -1238,6 +1235,47 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    }
+
+    function formatPrice(value){
+      const number = Number(value) || 0;
+      return "$" + number.toLocaleString("es-CO");
+    }
+
+    function parseLines(value){
+      if(!value) return [];
+      return String(value)
+        .split("\n")
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
+
+    function normalizeProduct(docData, id){
+      const nombre = docData.nombre || docData.name || "Producto sin nombre";
+      const precio = Number(docData.precio ?? docData.price ?? 0);
+      const cantidad = Number(docData.cantidad ?? docData.stock ?? 0);
+      const descripcion = docData.descripcion || docData.description || "";
+      const imagen = docData.imagen || docData.image || "";
+      const categoria = docData.categoria || docData.category || "";
+      const presentacion = docData.presentacion || docData.size || "";
+      const caracteristicas = docData.caracteristicas || docData.especificaciones || "";
+      const criticas = docData.criticas || docData.resenas || "";
+      const imagenes = docData.imagenes || docData.images || [];
+
+      return {
+        id,
+        nombre,
+        precio,
+        cantidad,
+        descripcion,
+        imagen,
+        categoria,
+        presentacion,
+        caracteristicas,
+        criticas,
+        imagenes,
+        activo: docData.active !== false
+      };
     }
 
     function getStockStatus(cantidad){
@@ -1254,22 +1292,14 @@
       return { text: "Disponible", className: "stock-ok" };
     }
 
-    function parseLines(value){
-      if(!value) return [];
-      return String(value)
-        .split("\n")
-        .map(item => item.trim())
-        .filter(Boolean);
-    }
-
     function getProductImages(product){
       const images = [];
 
-      if(product && product.imagen && !images.includes(product.imagen)){
+      if(product.imagen && !images.includes(product.imagen)){
         images.push(product.imagen);
       }
 
-      if(product && Array.isArray(product.imagenes)){
+      if(Array.isArray(product.imagenes)){
         product.imagenes.forEach(img => {
           const clean = String(img || "").trim();
           if(clean && !images.includes(clean)){
@@ -1278,7 +1308,7 @@
         });
       }
 
-      if(product && typeof product.imagenes === "string"){
+      if(typeof product.imagenes === "string"){
         product.imagenes
           .split("\n")
           .map(img => img.trim())
@@ -1293,6 +1323,15 @@
       return images;
     }
 
+    function renderLoadingState(){
+      productsContainer.innerHTML = `
+        <div class="loading-state">
+          <h2>Cargando perfumes</h2>
+          <p>Espera un momento mientras se carga el catálogo.</p>
+        </div>
+      `;
+    }
+
     function renderEmptyState(){
       productsContainer.innerHTML = `
         <div class="empty-state">
@@ -1305,9 +1344,30 @@
       `;
     }
 
+    async function loadProducts(){
+      renderLoadingState();
+
+      try{
+        const snapshot = await getDocs(collection(db, "products"));
+
+        currentProducts = snapshot.docs
+          .map(docSnap => normalizeProduct(docSnap.data(), docSnap.id))
+          .filter(product => product.activo);
+
+        renderProducts();
+      }catch(error){
+        console.error(error);
+        productsContainer.innerHTML = `
+          <div class="empty-state">
+            <h2>No se pudo cargar el catálogo</h2>
+            <p>Revisa tu conexión o la configuración de Firestore.</p>
+          </div>
+        `;
+      }
+    }
+
     function renderProducts(){
-      const products = getProducts();
-      currentProducts = products;
+      const products = currentProducts;
 
       productCount.textContent = products.length + (products.length === 1 ? " producto" : " productos");
 
@@ -1330,17 +1390,18 @@
             <div class="image-box">
               ${
                 product.imagen
-                  ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre || "Perfume")}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen del producto</div>'">`
+                  ? `<img src="${escapeHtml(product.imagen)}" alt="${escapeHtml(product.nombre)}" onerror="this.outerHTML='<div class=&quot;image-fallback&quot;>No se pudo cargar la imagen del producto</div>'">`
                   : `<div class="image-fallback">Este producto no tiene imagen</div>`
               }
             </div>
 
             <div class="content">
-              <h3>${escapeHtml(product.nombre || "Producto sin nombre")}</h3>
+              <h3>${escapeHtml(product.nombre)}</h3>
 
               <div class="meta">
                 <div class="chip">Cantidad: ${Number(product.cantidad) || 0}</div>
                 ${product.presentacion ? `<div class="chip">${escapeHtml(product.presentacion)}</div>` : ""}
+                ${product.categoria ? `<div class="chip">${escapeHtml(product.categoria)}</div>` : ""}
               </div>
 
               <p class="description">
@@ -1403,7 +1464,6 @@
     }
 
     function openProductModal(index){
-      currentProducts = getProducts();
       const product = currentProducts[index];
       if(!product) return;
 
@@ -1412,7 +1472,7 @@
 
       const stock = getStockStatus(product.cantidad);
 
-      modalTitle.textContent = product.nombre || "Producto sin nombre";
+      modalTitle.textContent = product.nombre;
       modalPrice.textContent = formatPrice(product.precio);
       modalStock.className = "modal-stock " + stock.className;
       modalStock.textContent = stock.text + " · " + (Number(product.cantidad) || 0) + " unidades";
@@ -1425,18 +1485,18 @@
 
       modalDescription.textContent = product.descripcion || "Sin descripción disponible.";
 
-      const specs = parseLines(product.caracteristicas || product.especificaciones || "");
+      const specs = parseLines(product.caracteristicas);
       modalSpecs.innerHTML = specs.length
         ? specs.map(item => `<li>${escapeHtml(item)}</li>`).join("")
         : `<li>Próximamente agregaremos más características de este perfume.</li>`;
 
-      const reviews = parseLines(product.criticas || product.resenas || "");
+      const reviews = parseLines(product.criticas);
       modalReviews.innerHTML = reviews.length
         ? reviews.map(item => `<li>${escapeHtml(item)}</li>`).join("")
         : `<li>Aún no hay críticas registradas para este perfume.</li>`;
 
-      renderMainModalImage(currentGallery[0] || "", product.nombre || "Perfume");
-      renderThumbs(currentGallery, product.nombre || "Perfume");
+      renderMainModalImage(currentGallery[0] || "", product.nombre);
+      renderThumbs(currentGallery, product.nombre);
 
       modalQty.value = 1;
       modalQty.max = Math.max(Number(product.cantidad) || 1, 1);
@@ -1448,6 +1508,20 @@
     function closeModal(){
       productModal.classList.remove("show");
       document.body.style.overflow = "";
+    }
+
+    function loadCart(){
+      try{
+        const saved = localStorage.getItem(CART_KEY);
+        const parsed = saved ? JSON.parse(saved) : [];
+        cart = Array.isArray(parsed) ? parsed : [];
+      }catch(error){
+        cart = [];
+      }
+    }
+
+    function saveCart(){
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
     }
 
     function openCart(){
@@ -1544,13 +1618,14 @@
     }
 
     function addToCart(product, qty){
-      const existing = cart.find(item => item.nombre === product.nombre);
+      const existing = cart.find(item => item.id === product.id);
 
       if(existing){
         existing.cantidad += qty;
       }else{
         cart.push({
-          nombre: product.nombre || "Producto",
+          id: product.id,
+          nombre: product.nombre,
           precio: Number(product.precio) || 0,
           cantidad: qty,
           imagen: product.imagen || ""
@@ -1643,19 +1718,9 @@
 
     sendOrderBtn.addEventListener("click", sendCartToWhatsApp);
 
-    window.addEventListener("storage", function(e){
-      if(e.key === STORAGE_KEY){
-        renderProducts();
-      }
-      if(e.key === CART_KEY){
-        loadCart();
-        renderCart();
-      }
-    });
-
     loadCart();
-    renderProducts();
     renderCart();
+    loadProducts();
   </script>
 
 </body>
