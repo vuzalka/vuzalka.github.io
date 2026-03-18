@@ -1247,7 +1247,7 @@
   position: fixed;
   inset: 0;
   display: none;
-  z-index: 3000;
+  z-index: 8000;
 }
 
 .checkout-modal.show{
@@ -2103,6 +2103,8 @@ const clienteNotas = document.getElementById("clienteNotas");
     alert("Tu carrito está vacío.");
     return;
   }
+
+  closeCart();
 
   checkoutModal.classList.add("show");
   checkoutModal.setAttribute("aria-hidden", "false");
