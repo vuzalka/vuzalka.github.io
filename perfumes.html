@@ -2142,29 +2142,6 @@ function sendCartToWhatsApp(customerData){
 
   closeCheckout();
 }
-      const lines = [];
-      lines.push("Hola, quiero hacer este pedido de VUZALKA:");
-      lines.push("");
-
-      cart.forEach((item, index) => {
-        const qty = Number(item.cantidad) || 0;
-        const price = Number(item.precio) || 0;
-        const subtotal = qty * price;
-
-        lines.push(
-          `${index + 1}. ${item.nombre} | Cantidad: ${qty} | Precio: ${formatPrice(price)} | Subtotal: ${formatPrice(subtotal)}`
-        );
-      });
-
-      lines.push("");
-      lines.push(`Total del pedido: ${formatPrice(getCartTotal())}`);
-      lines.push("");
-      lines.push("Quedo atento(a) a la confirmación del pedido.");
-
-      const message = encodeURIComponent(lines.join("\n"));
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-      window.open(url, "_blank");
-    }
 
     closeProductModal.addEventListener("click", closeModal);
 
