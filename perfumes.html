@@ -1239,6 +1239,124 @@
         align-items:flex-start;
       }
     }
+
+.checkout-modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 3000;
+}
+
+.checkout-modal.show{
+  display: block;
+}
+
+.checkout-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+}
+
+.checkout-card{
+  position: relative;
+  width: min(680px, calc(100% - 32px));
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 25px 70px rgba(0,0,0,.18);
+  z-index: 2;
+}
+
+.checkout-close{
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  border: none;
+  background: transparent;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  color: #171717;
+}
+
+.checkout-subtitle{
+  color: #666;
+  margin: 8px 0 22px;
+}
+
+.checkout-form{
+  display: grid;
+  gap: 18px;
+}
+
+.checkout-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field{
+  display: grid;
+  gap: 8px;
+}
+
+.field.full{
+  grid-column: 1 / -1;
+}
+
+.field label{
+  font-weight: 600;
+  color: #171717;
+}
+
+.field input,
+.field textarea{
+  width: 100%;
+  border: 1px solid #17171722;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font: inherit;
+  outline: none;
+  background: #fff;
+}
+
+.field input:focus,
+.field textarea:focus{
+  border-color: #9f1d24;
+  box-shadow: 0 0 0 3px rgba(159,29,36,.10);
+}
+
+.checkout-actions{
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px){
+  .checkout-card{
+    padding: 22px 16px;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    border-radius: 22px;
+  }
+
+  .checkout-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-actions{
+    flex-direction: column;
+  }
+
+  .checkout-actions .btn,
+  .checkout-actions .btn-secondary{
+    width: 100%;
+  }
+}
+    
   </style>
 </head>
 <body>
@@ -1345,6 +1463,58 @@
 
   <div class="cart-overlay" id="cartOverlay"></div>
 
+<div class="checkout-modal" id="checkoutModal" aria-hidden="true">
+  <div class="checkout-backdrop" id="checkoutBackdrop"></div>
+
+  <div class="checkout-card" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <button class="checkout-close" id="closeCheckoutModal" type="button" aria-label="Cerrar">×</button>
+
+    <h3 id="checkoutTitle">Completa tus datos</h3>
+    <p class="checkout-subtitle">
+      Ingresa los datos mínimos para enviar tu pedido por WhatsApp.
+    </p>
+
+    <form id="checkoutForm" class="checkout-form">
+      <div class="checkout-grid">
+        <div class="field">
+          <label for="clienteNombre">Nombres y apellidos</label>
+          <input type="text" id="clienteNombre" required placeholder="Ej: María Gómez" />
+        </div>
+
+        <div class="field">
+          <label for="clienteTelefono">Teléfono</label>
+          <input type="tel" id="clienteTelefono" required placeholder="Ej: 3001234567" />
+        </div>
+
+        <div class="field full">
+          <label for="clienteDireccion">Dirección</label>
+          <input type="text" id="clienteDireccion" required placeholder="Ej: Calle 10 # 20-30, Barrio Centro" />
+        </div>
+
+        <div class="field">
+          <label for="clienteCiudad">Ciudad</label>
+          <input type="text" id="clienteCiudad" required placeholder="Ej: Medellín" />
+        </div>
+
+        <div class="field">
+          <label for="clienteReferencia">Referencia</label>
+          <input type="text" id="clienteReferencia" placeholder="Ej: Casa blanca, portón negro" />
+        </div>
+
+        <div class="field full">
+          <label for="clienteNotas">Notas adicionales</label>
+          <textarea id="clienteNotas" rows="3" placeholder="Ej: Entregar en la tarde"></textarea>
+        </div>
+      </div>
+
+      <div class="checkout-actions">
+        <button type="button" class="btn-secondary" id="cancelCheckoutBtn">Cancelar</button>
+        <button type="submit" class="btn">Enviar pedido por WhatsApp</button>
+      </div>
+    </form>
+  </div>
+</div>
+  
   <aside class="cart-panel" id="cartPanel">
     <div class="cart-header">
       <h3>Tu carrito</h3>
@@ -1470,7 +1640,20 @@
     const cartCount = document.getElementById("cartCount");
     const clearCartBtn = document.getElementById("clearCartBtn");
     const sendOrderBtn = document.getElementById("sendOrderBtn");
+const checkoutModal = document.getElementById("checkoutModal");
+const checkoutBackdrop = document.getElementById("checkoutBackdrop");
+const closeCheckoutModal = document.getElementById("closeCheckoutModal");
+const cancelCheckoutBtn = document.getElementById("cancelCheckoutBtn");
+const checkoutForm = document.getElementById("checkoutForm");
 
+const clienteNombre = document.getElementById("clienteNombre");
+const clienteTelefono = document.getElementById("clienteTelefono");
+const clienteDireccion = document.getElementById("clienteDireccion");
+const clienteCiudad = document.getElementById("clienteCiudad");
+const clienteReferencia = document.getElementById("clienteReferencia");
+const clienteNotas = document.getElementById("clienteNotas");
+
+    
     let currentProducts = [];
     let currentProduct = null;
     let currentGallery = [];
@@ -1890,12 +2073,75 @@
       renderCart();
     }
 
-    function sendCartToWhatsApp(){
-      if(cart.length === 0){
-        alert("Tu carrito está vacío.");
-        return;
-      }
+    function openCheckoutModal(){
+  if(cart.length === 0){
+    alert("Tu carrito está vacío.");
+    return;
+  }
 
+  checkoutModal.classList.add("show");
+  checkoutModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+
+  setTimeout(() => {
+    clienteNombre.focus();
+  }, 50);
+}
+
+function closeCheckout(){
+  checkoutModal.classList.remove("show");
+  checkoutModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+function sendCartToWhatsApp(customerData){
+  if(cart.length === 0){
+    alert("Tu carrito está vacío.");
+    return;
+  }
+
+  const lines = [];
+  lines.push("Hola, quiero hacer este pedido de VUZALKA:");
+  lines.push("");
+
+  lines.push("DATOS DEL CLIENTE");
+  lines.push(`Nombre: ${customerData.nombre}`);
+  lines.push(`Teléfono: ${customerData.telefono}`);
+  lines.push(`Dirección: ${customerData.direccion}`);
+  lines.push(`Ciudad: ${customerData.ciudad}`);
+
+  if(customerData.referencia){
+    lines.push(`Referencia: ${customerData.referencia}`);
+  }
+
+  if(customerData.notas){
+    lines.push(`Notas: ${customerData.notas}`);
+  }
+
+  lines.push("");
+  lines.push("PRODUCTOS");
+
+  cart.forEach((item, index) => {
+    const qty = Number(item.cantidad) || 0;
+    const price = Number(item.precio) || 0;
+    const subtotal = qty * price;
+
+    lines.push(
+      `${index + 1}. ${item.nombre} | Cantidad: ${qty} | Precio: ${formatPrice(price)} | Subtotal: ${formatPrice(subtotal)}`
+    );
+  });
+
+  lines.push("");
+  lines.push(`Total del pedido: ${formatPrice(getCartTotal())}`);
+  lines.push("");
+  lines.push("Quedo atento(a) a la confirmación del pedido.");
+
+  const message = encodeURIComponent(lines.join("\n"));
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+  window.open(url, "_blank");
+
+  closeCheckout();
+}
       const lines = [];
       lines.push("Hola, quiero hacer este pedido de VUZALKA:");
       lines.push("");
@@ -1929,13 +2175,16 @@
     });
 
     document.addEventListener("keydown", function(e){
-      if(e.key === "Escape" && productModal.classList.contains("show")){
-        closeModal();
-      }
-      if(e.key === "Escape" && cartPanel.classList.contains("show")){
-        closeCart();
-      }
-    });
+  if(e.key === "Escape" && productModal.classList.contains("show")){
+    closeModal();
+  }
+  if(e.key === "Escape" && cartPanel.classList.contains("show")){
+    closeCart();
+  }
+  if(e.key === "Escape" && checkoutModal.classList.contains("show")){
+    closeCheckout();
+  }
+});
 
     addToCartBtn.addEventListener("click", function(){
       if(!currentProduct) return;
@@ -1964,8 +2213,32 @@
       clearCart();
     });
 
-    sendOrderBtn.addEventListener("click", sendCartToWhatsApp);
+    sendOrderBtn.addEventListener("click", openCheckoutModal);
 
+closeCheckoutModal.addEventListener("click", closeCheckout);
+cancelCheckoutBtn.addEventListener("click", closeCheckout);
+checkoutBackdrop.addEventListener("click", closeCheckout);
+
+checkoutForm.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const customerData = {
+    nombre: clienteNombre.value.trim(),
+    telefono: clienteTelefono.value.trim(),
+    direccion: clienteDireccion.value.trim(),
+    ciudad: clienteCiudad.value.trim(),
+    referencia: clienteReferencia.value.trim(),
+    notas: clienteNotas.value.trim()
+  };
+
+  if(!customerData.nombre || !customerData.telefono || !customerData.direccion || !customerData.ciudad){
+    alert("Por favor completa los datos obligatorios.");
+    return;
+  }
+
+  sendCartToWhatsApp(customerData);
+});
+    
     loadCart();
     renderCart();
     loadProducts();
