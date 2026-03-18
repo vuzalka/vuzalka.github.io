@@ -2104,6 +2104,18 @@ const clienteNotas = document.getElementById("clienteNotas");
     return;
   }
 
+  cartPanel.classList.remove("show");
+  cartOverlay.classList.remove("show");
+
+  checkoutModal.classList.add("show");
+  checkoutModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+
+  setTimeout(() => {
+    clienteNombre.focus();
+  }, 50);
+}
+
   closeCart();
 
   checkoutModal.classList.add("show");
