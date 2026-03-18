@@ -1381,6 +1381,11 @@
     width: 100%;
   }
 }
+
+.checkout-modal.show + .cart-panel,
+.checkout-modal.show ~ .cart-panel{
+  transform: translateX(100%) !important;
+}
     
   </style>
 </head>
