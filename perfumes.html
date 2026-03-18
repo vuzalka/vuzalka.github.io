@@ -1349,35 +1349,28 @@
   }
 
   .checkout-actions{
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px){
+  .checkout-card{
+    padding: 22px 16px;
+    width: calc(100% - 20px);
+    border-radius: 22px;
+  }
+
+  .checkout-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-actions{
     flex-direction: column;
   }
 
   .checkout-actions .btn,
   .checkout-actions .btn-secondary{
-    width: 100%;
-  }
-}
-
-@media (max-width: 640px){
-  .cart-panel{
-    width: 100%;
-    height: 100dvh;
-  }
-
-  .cart-header{
-    padding: 16px;
-  }
-
-  .cart-body{
-    padding: 14px 16px 10px;
-  }
-
-  .cart-footer{
-    padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
-  }
-
-  .cart-actions .btn,
-  .cart-actions .btn-secondary{
     width: 100%;
   }
 }
@@ -2109,18 +2102,6 @@ const clienteNotas = document.getElementById("clienteNotas");
     return;
   }
 
-  cartPanel.classList.remove("show");
-  cartOverlay.classList.remove("show");
-
-  checkoutModal.classList.add("show");
-  checkoutModal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-
-  setTimeout(() => {
-    clienteNombre.focus();
-  }, 50);
-}
-
   closeCart();
 
   checkoutModal.classList.add("show");
@@ -2131,6 +2112,7 @@ const clienteNotas = document.getElementById("clienteNotas");
     clienteNombre.focus();
   }, 50);
 }
+
 
 function closeCheckout(){
   checkoutModal.classList.remove("show");
