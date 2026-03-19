@@ -1384,6 +1384,131 @@
 .checkout-modal.show ~ .cart-panel{
   transform: translateX(100%) !important;
 }
+
+.special-request{
+  padding: 0 0 20px;
+}
+
+.special-request-box{
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.special-request-text h2{
+  margin: 0 0 10px;
+  color: var(--wine);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+}
+
+.special-request-text p{
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 760px;
+}
+
+.special-modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 8500;
+}
+
+.special-modal.show{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.special-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+}
+
+.special-card{
+  position: relative;
+  width: min(760px, calc(100% - 24px));
+  max-height: calc(100vh - 30px);
+  overflow: auto;
+  background: #fff;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 25px 70px rgba(0,0,0,.18);
+  z-index: 2;
+}
+
+.special-close{
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  border: none;
+  background: transparent;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  color: #171717;
+}
+
+.special-subtitle{
+  color: #666;
+  margin: 8px 0 22px;
+}
+
+.special-form{
+  display: grid;
+  gap: 18px;
+}
+
+.special-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.special-actions{
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 760px){
+  .special-request-box{
+    padding: 22px 18px;
+  }
+
+  .special-request-text h2{
+    font-size: 1.7rem;
+  }
+
+  .special-card{
+    width: calc(100% - 16px);
+    padding: 22px 16px;
+    border-radius: 22px;
+  }
+
+  .special-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .special-actions{
+    flex-direction: column;
+  }
+
+  .special-actions .btn,
+  .special-actions .btn-secondary{
+    width: 100%;
+  }
+}
     
   </style>
 </head>
@@ -1566,7 +1691,86 @@
         <button class="btn" id="sendOrderBtn" type="button">Hacer pedido por WhatsApp</button>
       </div>
     </div>
-  </aside>
+    </section>
+
+  <section class="special-request">
+    <div class="container">
+      <div class="special-request-box">
+        <div class="special-request-text">
+          <h2>¿No encontraste tu perfume?</h2>
+          <p>
+            Solicítalo. Este pedido lleva de 3 a 5 días hábiles y sin ningún costo extra.
+          </p>
+        </div>
+
+        <button class="btn" id="openSpecialRequestBtn" type="button">
+          Solicitar perfume
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="special-modal" id="specialModal" aria-hidden="true">
+    <div class="special-backdrop" id="specialBackdrop"></div>
+
+    <div class="special-card" role="dialog" aria-modal="true" aria-labelledby="specialTitle">
+      <button class="special-close" id="closeSpecialModal" type="button" aria-label="Cerrar">×</button>
+
+      <h3 id="specialTitle">Solicitud de perfume</h3>
+      <p class="special-subtitle">
+        Completa los datos del perfume que deseas y tu información para hacer el pedido.
+      </p>
+
+      <form id="specialForm" class="special-form">
+        <div class="special-grid">
+          <div class="field">
+            <label for="perfumeNombreSolicitado">Nombre del perfume</label>
+            <input type="text" id="perfumeNombreSolicitado" required placeholder="Ej: Afnan 9PM" />
+          </div>
+
+          <div class="field">
+            <label for="perfumeMarcaSolicitada">Marca</label>
+            <input type="text" id="perfumeMarcaSolicitada" placeholder="Ej: Afnan" />
+          </div>
+
+          <div class="field full">
+            <label for="perfumeDetalleSolicitado">Especifica cuál es</label>
+            <input type="text" id="perfumeDetalleSolicitado" required placeholder="Ej: 100 ml, Eau de Parfum, original" />
+          </div>
+
+          <div class="field">
+            <label for="clienteNombreSolicitud">Nombres y apellidos</label>
+            <input type="text" id="clienteNombreSolicitud" required placeholder="Ej: María Gómez" />
+          </div>
+
+          <div class="field">
+            <label for="clienteTelefonoSolicitud">Teléfono</label>
+            <input type="tel" id="clienteTelefonoSolicitud" required placeholder="Ej: 3001234567" />
+          </div>
+
+          <div class="field">
+            <label for="clienteCiudadSolicitud">Ciudad</label>
+            <input type="text" id="clienteCiudadSolicitud" required placeholder="Ej: Medellín" />
+          </div>
+
+          <div class="field full">
+            <label for="clienteDireccionSolicitud">Dirección</label>
+            <input type="text" id="clienteDireccionSolicitud" required placeholder="Ej: Calle 10 # 20-30" />
+          </div>
+
+          <div class="field full">
+            <label for="clienteNotasSolicitud">Notas adicionales</label>
+            <textarea id="clienteNotasSolicitud" rows="4" placeholder="Ej: Lo quiero para entrega en la tarde"></textarea>
+          </div>
+        </div>
+
+        <div class="special-actions">
+          <button type="button" class="btn-secondary" id="cancelSpecialBtn">Cancelar</button>
+          <button type="submit" class="btn">Enviar solicitud por WhatsApp</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-top">
@@ -1680,7 +1884,22 @@ const clienteDireccion = document.getElementById("clienteDireccion");
 const clienteCiudad = document.getElementById("clienteCiudad");
 const clienteReferencia = document.getElementById("clienteReferencia");
 const clienteNotas = document.getElementById("clienteNotas");
+const openSpecialRequestBtn = document.getElementById("openSpecialRequestBtn");
+const specialModal = document.getElementById("specialModal");
+const specialBackdrop = document.getElementById("specialBackdrop");
+const closeSpecialModal = document.getElementById("closeSpecialModal");
+const cancelSpecialBtn = document.getElementById("cancelSpecialBtn");
+const specialForm = document.getElementById("specialForm");
 
+const perfumeNombreSolicitado = document.getElementById("perfumeNombreSolicitado");
+const perfumeMarcaSolicitada = document.getElementById("perfumeMarcaSolicitada");
+const perfumeDetalleSolicitado = document.getElementById("perfumeDetalleSolicitado");
+const clienteNombreSolicitud = document.getElementById("clienteNombreSolicitud");
+const clienteTelefonoSolicitud = document.getElementById("clienteTelefonoSolicitud");
+const clienteCiudadSolicitud = document.getElementById("clienteCiudadSolicitud");
+const clienteDireccionSolicitud = document.getElementById("clienteDireccionSolicitud");
+const clienteNotasSolicitud = document.getElementById("clienteNotasSolicitud");
+    
     
     let currentProducts = [];
     let currentProduct = null;
@@ -2131,6 +2350,55 @@ function sendCartToWhatsApp(customerData){
     return;
   }
 
+function openSpecialModal(){
+  specialModal.classList.add("show");
+  specialModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+
+  setTimeout(() => {
+    perfumeNombreSolicitado.focus();
+  }, 50);
+}
+
+function closeSpecialRequestModal(){
+  specialModal.classList.remove("show");
+  specialModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+function sendSpecialRequestToWhatsApp(data){
+  const lines = [];
+  lines.push("Hola, quiero solicitar un perfume que no encontré en el catálogo:");
+  lines.push("");
+  lines.push("PERFUME SOLICITADO");
+  lines.push(`Nombre del perfume: ${data.perfume}`);
+
+  if(data.marca){
+    lines.push(`Marca: ${data.marca}`);
+  }
+
+  lines.push(`Especificación: ${data.detalle}`);
+  lines.push("");
+  lines.push("DATOS DEL CLIENTE");
+  lines.push(`Nombre: ${data.nombre}`);
+  lines.push(`Teléfono: ${data.telefono}`);
+  lines.push(`Ciudad: ${data.ciudad}`);
+  lines.push(`Dirección: ${data.direccion}`);
+
+  if(data.notas){
+    lines.push(`Notas: ${data.notas}`);
+  }
+
+  lines.push("");
+  lines.push("Entiendo que este pedido tarda de 3 a 5 días hábiles y no tiene costo extra.");
+
+  const message = encodeURIComponent(lines.join("\n"));
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+  window.open(url, "_blank");
+
+  closeSpecialRequestModal();
+}
+  
   const lines = [];
   lines.push("Hola, quiero hacer este pedido de VUZALKA:");
   lines.push("");
@@ -2192,6 +2460,9 @@ function sendCartToWhatsApp(customerData){
   if(e.key === "Escape" && checkoutModal.classList.contains("show")){
     closeCheckout();
   }
+  if(e.key === "Escape" && specialModal.classList.contains("show")){
+    closeSpecialRequestModal();
+  }
 });
 
     addToCartBtn.addEventListener("click", function(){
@@ -2245,6 +2516,33 @@ checkoutForm.addEventListener("submit", function(e){
   }
 
   sendCartToWhatsApp(customerData);
+});
+
+openSpecialRequestBtn.addEventListener("click", openSpecialModal);
+closeSpecialModal.addEventListener("click", closeSpecialRequestModal);
+cancelSpecialBtn.addEventListener("click", closeSpecialRequestModal);
+specialBackdrop.addEventListener("click", closeSpecialRequestModal);
+
+specialForm.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const data = {
+    perfume: perfumeNombreSolicitado.value.trim(),
+    marca: perfumeMarcaSolicitada.value.trim(),
+    detalle: perfumeDetalleSolicitado.value.trim(),
+    nombre: clienteNombreSolicitud.value.trim(),
+    telefono: clienteTelefonoSolicitud.value.trim(),
+    ciudad: clienteCiudadSolicitud.value.trim(),
+    direccion: clienteDireccionSolicitud.value.trim(),
+    notas: clienteNotasSolicitud.value.trim()
+  };
+
+  if(!data.perfume || !data.detalle || !data.nombre || !data.telefono || !data.ciudad || !data.direccion){
+    alert("Por favor completa los datos obligatorios.");
+    return;
+  }
+
+  sendSpecialRequestToWhatsApp(data);
 });
     
     loadCart();
