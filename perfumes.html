@@ -2321,7 +2321,6 @@ const clienteNotasSolicitud = document.getElementById("clienteNotasSolicitud");
   }, 50);
 }
 
-
 function closeCheckout(){
   checkoutModal.classList.remove("show");
   checkoutModal.setAttribute("aria-hidden", "true");
@@ -2425,9 +2424,16 @@ function sendSpecialRequestToWhatsApp(data){
 
   closeSpecialRequestModal();
 }
-    });
 
-    document.addEventListener("keydown", function(e){
+closeProductModal.addEventListener("click", closeModal);
+
+productModal.addEventListener("click", function(e){
+  if(e.target === productModal){
+    closeModal();
+  }
+});
+
+document.addEventListener("keydown", function(e){
   if(e.key === "Escape" && productModal.classList.contains("show")){
     closeModal();
   }
