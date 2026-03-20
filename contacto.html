@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VUZALKA | Contacto</title>
+  <meta name="description" content="Contacta a VUZALKA por WhatsApp, correo o formulario. Atención personalizada y soporte para elegir tu perfume ideal." />
+  <link rel="icon" type="image/ico" href="assets/logo.ico" />
+  <link rel="shortcut icon" href="assets/logo.ico" />
+  <link rel="apple-touch-icon" href="assets/logo.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="contact">
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+
+  <header class="site-header solid" id="siteHeader">
+    <div class="header-bar">
+      <div class="header-side">
+        <button class="icon-btn" type="button" data-menu-toggle><span class="icon" data-icon="menu"></span><span>Menú</span></button>
+        <button class="icon-btn" type="button" data-search-toggle><span class="icon" data-icon="search"></span><span>Buscar</span></button>
+      </div>
+      <a class="site-logo serif" href="index.html">VUZALKA</a>
+      <div class="header-side right">
+        <a class="header-text-link" href="https://wa.me/573026451420" target="_blank" rel="noopener">Llámanos</a>
+        <button class="icon-only" type="button" data-favorites-toggle aria-label="Favoritos"><span data-icon="heart"></span><span class="header-badge" data-favorite-count hidden>0</span></button>
+        <button class="icon-only" type="button" data-cart-toggle aria-label="Carrito"><span data-icon="bag"></span><span class="header-badge" data-cart-count hidden>0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="mega-menu" id="megaMenu"><button class="menu-close" type="button" data-close-panel aria-label="Cerrar menú">✕</button><div class="menu-grid"><nav class="menu-nav"><a href="index.html">Inicio</a><a href="perfumes.html">Perfumes</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a><a href="admin.html">Administrador</a></nav><div class="menu-panel-card"><h3>Hablemos</h3><p>Te ayudamos a elegir perfume, resolver dudas de envío o acompañarte en la compra.</p></div></div></section>
+  <section class="search-panel" id="searchPanel"><button class="search-close" type="button" data-close-panel aria-label="Cerrar búsqueda">✕</button><div class="search-grid"><div class="search-panel-card"><h3>Buscar perfumes</h3><p>Encuentra por nombre, marca o estilo.</p><div class="search-form"><input class="search-input" id="globalSearchInput" type="search" placeholder="Ej: Khamrah, fresco, noche" autocomplete="off" /></div><div class="search-results" id="searchResults"></div></div><div class="menu-panel-card"><h3>Atención directa</h3><p>La web ahora es más visual, pero seguimos priorizando el trato humano y cercano.</p></div></div></section>
+  <aside class="side-drawer" id="favoritesDrawer"><div class="drawer-card"><button class="drawer-close" type="button" data-close-panel aria-label="Cerrar favoritos">✕</button><h3>Favoritos</h3><p>Guarda aquí los perfumes que quieras comparar o revisar después.</p><div class="favorite-list" id="favoriteList"></div></div></aside>
+  <aside class="side-drawer" id="cartDrawer"><div class="drawer-card"><button class="drawer-close" type="button" data-close-panel aria-label="Cerrar carrito">✕</button><h3>Carrito</h3><p>Tu selección se guarda localmente. Cuando estés listo, finaliza por WhatsApp.</p><div class="cart-list" id="cartList"></div><div class="drawer-footer"><div class="cart-total-row"><span>Total</span><span id="cartTotal">$0</span></div><a class="dark-btn" id="checkoutWhatsapp" href="https://wa.me/573026451420" target="_blank" rel="noopener">Continuar por WhatsApp</a></div></div></aside>
+
+  <main class="static-page">
+    <section class="container">
+      <div class="header-copy" style="max-width:760px;display:grid;gap:14px;margin-bottom:26px;">
+        <div class="eyebrow">Contacto</div>
+        <h1 class="section-title">Atención personalizada, rápida y clara</h1>
+        <p class="section-copy">Escríbenos si necesitas ayuda para elegir perfume, confirmar disponibilidad, revisar medios de pago o coordinar tu pedido.</p>
+      </div>
+
+      <div class="contact-grid">
+        <article class="contact-card">
+          <h3>Información</h3>
+          <div class="contact-list">
+            <div class="contact-item"><strong>WhatsApp</strong><span>+57 302 645 1420</span></div>
+            <div class="contact-item"><strong>Correo</strong><span>vuzalkaoficial@gmail.com</span></div>
+            <div class="contact-item"><strong>Instagram</strong><span>@vuzalkaoficial</span></div>
+            <div class="contact-item"><strong>Horario</strong><span>Lunes a sábado · 9:00 a.m. a 6:00 p.m.</span></div>
+          </div>
+        </article>
+
+        <article class="contact-card">
+          <h3>Envíanos un mensaje</h3>
+          <form class="form-grid" id="contactForm">
+            <input class="input" type="text" placeholder="Tu nombre" aria-label="Tu nombre" required />
+            <input class="input" type="email" placeholder="Tu correo" aria-label="Tu correo" required />
+            <textarea class="textarea" placeholder="Cuéntanos qué perfume buscas o cómo podemos ayudarte" aria-label="Mensaje" required></textarea>
+            <button class="dark-btn" type="submit">Enviar</button>
+          </form>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <div>
+        <h3 class="footer-brand-title serif">VUZALKA</h3>
+        <p class="footer-brand-copy">Perfumes seleccionados con una experiencia de compra más limpia, elegante y enfocada en lo esencial.</p>
+        <form class="footer-newsletter" id="footerNewsletterForm"><input class="input" type="email" placeholder="Tu correo electrónico" aria-label="Tu correo" /><button class="dark-btn" type="submit">Únete</button></form>
+      </div>
+      <div class="footer-col"><h4>Sobre nosotros</h4><a href="nosotros.html">Nuestra esencia</a><a href="nosotros.html">Curaduría</a><a href="admin.html">Administrador</a></div>
+      <div class="footer-col"><h4>Categorías</h4><a href="perfumes.html">Ver todos</a><a href="perfumes.html">Árabes</a><a href="perfumes.html">Frescos</a><a href="perfumes.html">De noche</a></div>
+      <div class="footer-col"><h4>Ayuda &amp; contacto</h4><p>WhatsApp: +57 302 645 1420<br />Correo: vuzalkaoficial@gmail.com<br />Lunes a sábado · 9:00 a.m. a 6:00 p.m.</p></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span data-current-year></span> VUZALKA. Todos los derechos reservados.</span><span>Contacto claro · soporte real · respuesta rápida</span></div>
+  </footer>
+
+  <div class="toast-stack" id="toastStack"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

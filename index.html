@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VUZALKA | Inicio</title>
+  <meta name="description" content="VUZALKA: perfumes curados con una experiencia visual minimalista, elegante y funcional." />
+  <link rel="icon" type="image/ico" href="assets/logo.ico" />
+  <link rel="shortcut icon" href="assets/logo.ico" />
+  <link rel="apple-touch-icon" href="assets/logo.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-bar">
+      <div class="header-side">
+        <button class="icon-btn" type="button" data-menu-toggle>
+          <span class="icon" data-icon="menu"></span>
+          <span>Menú</span>
+        </button>
+        <button class="icon-btn" type="button" data-search-toggle>
+          <span class="icon" data-icon="search"></span>
+          <span>Buscar</span>
+        </button>
+      </div>
+
+      <a class="site-logo serif" href="index.html">VUZALKA</a>
+
+      <div class="header-side right">
+        <a class="header-text-link" href="https://wa.me/573026451420" target="_blank" rel="noopener">Llámanos</a>
+        <button class="icon-only" type="button" data-favorites-toggle aria-label="Favoritos">
+          <span data-icon="heart"></span>
+          <span class="header-badge" data-favorite-count hidden>0</span>
+        </button>
+        <button class="icon-only" type="button" data-cart-toggle aria-label="Carrito">
+          <span data-icon="bag"></span>
+          <span class="header-badge" data-cart-count hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="mega-menu" id="megaMenu" aria-hidden="true">
+    <button class="menu-close" type="button" data-close-panel aria-label="Cerrar menú">✕</button>
+    <div class="menu-grid">
+      <nav class="menu-nav" aria-label="Navegación principal">
+        <a href="index.html" data-nav-link="home">Inicio</a>
+        <a href="perfumes.html" data-nav-link="catalog">Perfumes</a>
+        <a href="nosotros.html" data-nav-link="about">Nosotros</a>
+        <a href="contacto.html" data-nav-link="contact">Contacto</a>
+        <a href="admin.html">Administrador</a>
+      </nav>
+      <div class="menu-panel-card">
+        <h3>Curaduría VUZALKA</h3>
+        <p>Una experiencia más limpia, visual y directa: menos texto, mejores decisiones y navegación clara desde el primer vistazo.</p>
+        <ul class="menu-list">
+          <li><span>Estética minimalista</span><span>Blanco &amp; Negro</span></li>
+          <li><span>Catálogo conectado</span><span>Firestore</span></li>
+          <li><span>Compra asistida</span><span>WhatsApp</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="search-panel" id="searchPanel" aria-hidden="true">
+    <button class="search-close" type="button" data-close-panel aria-label="Cerrar búsqueda">✕</button>
+    <div class="search-grid">
+      <div class="search-panel-card">
+        <h3>Buscar perfumes</h3>
+        <p>Encuentra por nombre, marca o estilo. Todo con una navegación rápida y visual.</p>
+        <div class="search-form">
+          <input class="search-input" id="globalSearchInput" type="search" placeholder="Ej: Khamrah, fresco, noche" autocomplete="off" />
+        </div>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+      <div class="menu-panel-card">
+        <h3>Atención personalizada</h3>
+        <p>Si no encuentras el perfume que buscas, escríbenos y te ayudamos a elegir la mejor opción según ocasión, clima y estilo.</p>
+      </div>
+    </div>
+  </section>
+
+  <aside class="side-drawer" id="favoritesDrawer" aria-hidden="true">
+    <div class="drawer-card">
+      <button class="drawer-close" type="button" data-close-panel aria-label="Cerrar favoritos">✕</button>
+      <h3>Favoritos</h3>
+      <p>Guarda aquí los perfumes que quieras comparar o revisar después.</p>
+      <div class="favorite-list" id="favoriteList"></div>
+    </div>
+  </aside>
+
+  <aside class="side-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-card">
+      <button class="drawer-close" type="button" data-close-panel aria-label="Cerrar carrito">✕</button>
+      <h3>Carrito</h3>
+      <p>Tu selección se guarda localmente. Cuando estés listo, finaliza por WhatsApp.</p>
+      <div class="cart-list" id="cartList"></div>
+      <div class="drawer-footer">
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span id="cartTotal">$0</span>
+        </div>
+        <a class="dark-btn" id="checkoutWhatsapp" href="https://wa.me/573026451420" target="_blank" rel="noopener">Continuar por WhatsApp</a>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="hero-home" id="homeHero">
+      <div class="hero-media">
+        <img data-hero-image src="assets/fondo-vuzalka.png" alt="Colección principal VUZALKA" />
+      </div>
+      <div class="hero-content">
+        <div class="eyebrow" data-hero-kicker>Colección destacada</div>
+        <h1 class="display-title" data-hero-title>VUZALKA</h1>
+        <p data-hero-description>Una curaduría de fragancias con carácter, presencia y estética contemporánea. Menos ruido, más esencia.</p>
+        <a class="underline-link" href="#coleccion">Descubrir la selección</a>
+      </div>
+    </section>
+
+    <section class="home-intro container" id="coleccion">
+      <h2 class="section-title">Explora la selección esencial de VUZALKA</h2>
+      <p class="section-copy" data-home-news>Envíos a todo Colombia · atención personalizada por WhatsApp · selección premium de perfumes.</p>
+    </section>
+
+    <section class="container">
+      <div class="collection-grid" id="featuredGrid"></div>
+      <div class="home-cta-wrap">
+        <a class="dark-btn" href="perfumes.html">Ver catálogo completo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <div>
+        <h3 class="footer-brand-title serif">VUZALKA</h3>
+        <p class="footer-brand-copy">Perfumes seleccionados con una experiencia de compra más limpia, elegante y enfocada en lo esencial.</p>
+        <form class="footer-newsletter" id="footerNewsletterForm">
+          <input class="input" type="email" placeholder="Tu correo electrónico" aria-label="Tu correo" />
+          <button class="dark-btn" type="submit">Únete</button>
+        </form>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/vuzalkaoficial/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+          <a href="https://www.facebook.com/share/1CUujbXXKN/" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+          <a href="https://x.com/vuzalkaoficial" target="_blank" rel="noopener" aria-label="X">X</a>
+          <a href="https://www.tiktok.com/@vuzalkaoficial" target="_blank" rel="noopener" aria-label="TikTok">TT</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Sobre nosotros</h4>
+        <a href="nosotros.html">Nuestra esencia</a>
+        <a href="nosotros.html">Curaduría</a>
+        <a href="admin.html">Administrador</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categorías</h4>
+        <a href="perfumes.html">Ver todos</a>
+        <a href="perfumes.html">Árabes</a>
+        <a href="perfumes.html">Frescos</a>
+        <a href="perfumes.html">De noche</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Ayuda &amp; contacto</h4>
+        <p>WhatsApp: +57 302 645 1420<br />Correo: vuzalkaoficial@gmail.com<br />Lunes a sábado · 9:00 a.m. a 6:00 p.m.</p>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>© <span data-current-year></span> VUZALKA. Todos los derechos reservados.</span>
+      <span>Diseño minimalista · responsive · conectado a Firestore</span>
+    </div>
+  </footer>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
