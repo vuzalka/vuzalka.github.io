@@ -1,5 +1,13 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
-import { getFirestore, collection, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBYlGCt2LhuArZeUGmvA0jfPnLfo0iVlFU',
@@ -12,6 +20,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const MP_PUBLIC_KEY = 'APP_USR-7d5d8049-5d0e-4737-a02d-e7f6938dc4f6';
+const CREATE_PREFERENCE_URL = 'https://createpreference-iqdpqh6hnq-uc.a.run.app';
+
 
 const CONTACT = {
   whatsappNumber: '573026451420',
@@ -277,6 +288,61 @@ function slugify(text){
 function formatMoney(value){
   const number = Number(value) || 0;
   return '$' + number.toLocaleString('es-CO');
+}
+
+async function pagarConMercadoPago(product, quantity = 1, presentation = 'Disponible'){
+  try{
+    const safeQty = Math.max(1, Number(quantity) || 1);
+    const price = Number(product.price || 0);
+
+    const orderRef = await addDoc(collection(db, 'orders'), {
+      productId: product.id || '',
+      productName: product.name || 'Producto VUZALKA',
+      price,
+      quantity: safeQty,
+      presentation,
+      status: 'pending',
+      createdAt: serverTimestamp()
+    });
+
+    const orderId = orderRef.id;
+
+    const response = await fetch(CREATE_PREFERENCE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        orderId,
+        productId: product.id || '',
+        productName: `${product.name} · ${presentation}`,
+        price,
+        quantity: safeQty,
+        siteUrl: window.location.origin
+      })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok || !data.preferenceId){
+      throw new Error(data.error || 'No se pudo crear la preferencia de pago.');
+    }
+
+    const mp = new MercadoPago(MP_PUBLIC_KEY, {
+      locale: 'es-CO'
+    });
+
+    mp.checkout({
+      preference: {
+        id: data.preferenceId
+      },
+      autoOpen: true
+    });
+
+  }catch(error){
+    console.error('Error al iniciar pago con Mercado Pago:', error);
+    showToast('No se pudo iniciar el pago. Intenta de nuevo.');
+  }
 }
 
 function inferBrand(name = ''){
@@ -1054,7 +1120,10 @@ async function initProductPage(){
     });
   });
 
-  const buyNow = (quantity) => addToCart(product, quantity, selectedPresentation);
+ const addOnlyToCart = (quantity) => addToCart(product, quantity, selectedPresentation);
+const buyNow = async (quantity) => {
+  await pagarConMercadoPago(product, quantity, selectedPresentation);
+};
 
   document.getElementById('qtyMinus').addEventListener('click', () => { qtyInput.value = Math.max(1, Number(qtyInput.value || 1) - 1); });
   document.getElementById('qtyPlus').addEventListener('click', () => { qtyInput.value = Math.max(1, Number(qtyInput.value || 1) + 1); });
@@ -1067,8 +1136,16 @@ async function initProductPage(){
     target.value = Math.max(1, Number(target.value || 1) + 1);
   });
 
-  addBtn.addEventListener('click', () => buyNow(qtyInput.value));
-  stickyBtn.addEventListener('click', () => buyNow(document.getElementById('stickyQtyValue').value));
+addBtn.textContent = 'Pagar ahora';
+stickyBtn.textContent = 'Pagar ahora';
+
+addBtn.addEventListener('click', async () => {
+  await buyNow(qtyInput.value);
+});
+
+stickyBtn.addEventListener('click', async () => {
+  await buyNow(document.getElementById('stickyQtyValue').value);
+});
 
   if(favoriteBtn){
     favoriteBtn.dataset.favoriteBtn = product.id;
