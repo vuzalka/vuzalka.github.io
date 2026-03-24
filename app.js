@@ -345,7 +345,7 @@ async function pagarConMercadoPago(product, quantity = 1, presentation = 'Dispon
     }
 
     if(!response.ok || !data.preferenceId){
-      throw new Error(data.error || data.detail || 'No se pudo crear la preferencia de pago.');
+      throw new Error(data.detail || data.error || 'No se pudo crear la preferencia de pago.');
     }
 
     const mp = new MercadoPago(MP_PUBLIC_KEY, {
