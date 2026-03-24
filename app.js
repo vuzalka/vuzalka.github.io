@@ -295,6 +295,11 @@ async function pagarConMercadoPago(product, quantity = 1, presentation = 'Dispon
     const safeQty = Math.max(1, Number(quantity) || 1);
     const price = Number(product.price || 0);
 
+    console.log('Producto a pagar:', product);
+    console.log('Cantidad:', safeQty);
+    console.log('Presentación:', presentation);
+    console.log('Precio:', price);
+
     const orderRef = await addDoc(collection(db, 'orders'), {
       productId: product.id || '',
       productName: product.name || 'Producto VUZALKA',
@@ -306,26 +311,41 @@ async function pagarConMercadoPago(product, quantity = 1, presentation = 'Dispon
     });
 
     const orderId = orderRef.id;
+    console.log('Order ID creado:', orderId);
+
+    const payload = {
+      orderId,
+      productId: product.id || '',
+      productName: `${product.name} · ${presentation}`,
+      price,
+      quantity: safeQty,
+      siteUrl: window.location.origin
+    };
+
+    console.log('Payload enviado a createPreference:', payload);
+    console.log('URL función:', CREATE_PREFERENCE_URL);
 
     const response = await fetch(CREATE_PREFERENCE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        orderId,
-        productId: product.id || '',
-        productName: `${product.name} · ${presentation}`,
-        price,
-        quantity: safeQty,
-        siteUrl: window.location.origin
-      })
+      body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const rawText = await response.text();
+    console.log('Status función:', response.status);
+    console.log('Respuesta cruda función:', rawText);
+
+    let data = {};
+    try{
+      data = JSON.parse(rawText);
+    }catch(parseError){
+      throw new Error(`La función no devolvió JSON válido. Respuesta: ${rawText}`);
+    }
 
     if(!response.ok || !data.preferenceId){
-      throw new Error(data.error || 'No se pudo crear la preferencia de pago.');
+      throw new Error(data.error || data.detail || 'No se pudo crear la preferencia de pago.');
     }
 
     const mp = new MercadoPago(MP_PUBLIC_KEY, {
@@ -340,7 +360,8 @@ async function pagarConMercadoPago(product, quantity = 1, presentation = 'Dispon
     });
 
   }catch(error){
-    console.error('Error al iniciar pago con Mercado Pago:', error);
+    console.error('Error real al iniciar pago con Mercado Pago:', error);
+    alert(`Error al iniciar pago: ${error.message}`);
     showToast('No se pudo iniciar el pago. Intenta de nuevo.');
   }
 }
