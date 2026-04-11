@@ -1662,6 +1662,17 @@ body{
   .section-heading-inline,
   .featured-heading-side,
   .collection-meta-row{display:grid}
+
+  .featured-heading-inline{
+    display:grid;
+    gap:10px;
+  }
+
+  .universe-heading{
+    display:grid;
+    gap:12px;
+  }
+  
   .editorial-block{grid-template-columns:1fr}
   .editorial-media{min-height:380px}
   .module-grid{grid-template-columns:1fr}
@@ -1690,7 +1701,10 @@ body{
   .featured-section,
   .editorial-block,
   .home-modules{padding:26px 0}
-  .collection-grid{grid-template-columns:repeat(2, minmax(0, 1fr));gap:14px}
+  .collection-rail{
+  grid-auto-columns:minmax(240px, 82vw);
+  gap:14px;
+}
   .collection-card{padding:8px;border-radius:24px}
   .collection-media{border-radius:18px}
   .collection-media img{padding:18px}
