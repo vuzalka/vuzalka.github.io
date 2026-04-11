@@ -1124,7 +1124,7 @@ async function initProductPage(){
   const gallery = product.gallery?.length
   ? product.gallery
   : (product.image ? [product.image] : []);
-  const mainImage = document.getElementById('mainProductImage');
+  const mainImage = document.getElementById('productMainImage');
   const thumbs = document.getElementById('productThumbs');
   const stickyImage = document.getElementById('stickyBarImage');
 
