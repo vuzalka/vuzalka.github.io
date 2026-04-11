@@ -1174,6 +1174,8 @@ body{
 }
 
 .hero-home{
+  position:relative;
+  overflow:hidden;
   min-height:100svh;
   padding:140px 0 74px;
   color:var(--ink);
@@ -1186,8 +1188,13 @@ body{
 .hero-home::before{
   content:"";
   position:absolute;
-  inset:0;
-  background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
+  top:0;
+  left:0;
+  width:58%;
+  height:100%;
+  background:
+    linear-gradient(90deg, rgba(248,248,246,.86) 0%, rgba(248,248,246,.66) 45%, rgba(248,248,246,0) 100%),
+    url("assets/hero-inicio.webp") center center / cover no-repeat;
   pointer-events:none;
 }
 
@@ -1201,9 +1208,15 @@ body{
 }
 
 .hero-copy{
+  position:relative;
+  z-index:2;
   max-width:640px;
   display:grid;
   gap:24px;
+  padding:28px;
+  border-radius:28px;
+  background:rgba(255,255,255,.32);
+  backdrop-filter:blur(8px);
 }
 
 .hero-lead{
@@ -1595,6 +1608,21 @@ body{
   .hero-composition{min-height:auto;grid-template-columns:1.05fr .95fr}
   .collection-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
   .module-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+}
+
+@media (max-width: 980px){
+  .hero-home::before{
+    width:100%;
+    opacity:.32;
+    background:
+      linear-gradient(180deg, rgba(248,248,246,.82) 0%, rgba(248,248,246,.58) 55%, rgba(248,248,246,.30) 100%),
+      url("assets/hero-inicio.webp") center center / cover no-repeat;
+  }
+
+  .hero-copy{
+    padding:22px;
+    background:rgba(255,255,255,.45);
+  }
 }
 
 @media (max-width:900px){
