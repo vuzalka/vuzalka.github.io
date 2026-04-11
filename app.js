@@ -1000,13 +1000,14 @@ function renderHomeCollection(products, filter = 'all'){
   const grid = document.getElementById('featuredGrid');
   const count = document.getElementById('homeResultCount');
   if(!grid) return;
+  grid.className = 'collection-rail';
 
   const normalizedFilter = (filter || 'all').toLowerCase();
   const filtered = normalizedFilter === 'all'
     ? products
     : products.filter((product) => [product.category, product.gender, product.brand].filter(Boolean).some((value) => value.toLowerCase() === normalizedFilter));
 
-  const selection = filtered.slice(0, 8);
+  const selection = filtered.slice(0, 12);
   grid.innerHTML = selection.length
     ? selection.map(createCollectionCard).join('')
     : '<div class="catalog-empty">No encontramos perfumes dentro de este universo. Prueba otro filtro.</div>';
