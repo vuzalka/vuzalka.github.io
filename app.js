@@ -398,7 +398,7 @@ function parseMultiValue(value, fallback = []){
   if(Array.isArray(value)) return value.map(item => String(item).trim()).filter(Boolean);
   if(!value) return fallback;
   return String(value)
-    .split(/\n|\||,|\/+/)
+    .split(/\n|\||,/)
     .map(item => item.trim())
     .filter(Boolean);
 }
@@ -440,8 +440,8 @@ function normalizeProduct(raw, id){
     shipping: raw.envios || raw.shipping || 'Envíos a todo Colombia con confirmación directa por WhatsApp.',
     warranty: raw.garantia || raw.warranty || 'Atención postventa y respaldo por novedades de transporte.',
     payments: raw.mediosPago || raw.payments || 'Transferencia y opciones de pago acordadas directamente con VUZALKA.',
-    image: raw.imagen || raw.image || gallery[0] || 'assets/fondo-vuzalka.png',
-    gallery: gallery.length ? gallery : [raw.imagen || raw.image || 'assets/fondo-vuzalka.png'],
+    image: raw.imagen || raw.image || gallery[0] || '',
+    gallery: gallery.length ? gallery : (raw.imagen || raw.image ? [raw.imagen || raw.image] : []),
     active: raw.active !== false
   };
 
@@ -1121,9 +1121,24 @@ async function initProductPage(){
   const breadcrumbName = document.getElementById('breadcrumbName');
   if(breadcrumbName) breadcrumbName.textContent = product.name;
 
-  const gallery = product.gallery.length ? product.gallery : [product.image];
+  const gallery = product.gallery?.length
+  ? product.gallery
+  : (product.image ? [product.image] : []);
   const mainImage = document.getElementById('mainProductImage');
   const thumbs = document.getElementById('productThumbs');
+  const stickyImage = document.getElementById('stickyBarImage');
+
+if(mainImage){
+  mainImage.hidden = true;
+  mainImage.removeAttribute('src');
+  mainImage.alt = '';
+}
+
+if(stickyImage){
+  stickyImage.hidden = true;
+  stickyImage.removeAttribute('src');
+  stickyImage.alt = '';
+}
   const prevBtn = document.getElementById('mediaPrev');
   const nextBtn = document.getElementById('mediaNext');
   const brand = document.getElementById('productBrand');
@@ -1168,9 +1183,11 @@ async function initProductPage(){
   `;
   stickyTitle.textContent = product.name;
   stickyPrice.textContent = formatMoney(product.price);
-  document.getElementById('stickyBarImage').src = product.image;
-  document.getElementById('stickyBarImage').alt = product.name;
-
+  if(stickyImage && product.image){
+  stickyImage.src = product.image;
+  stickyImage.alt = product.name;
+  stickyImage.hidden = false;
+}
   const factRows = [
     { icon: ICONS.gender, label: 'Género', value: product.gender || 'No especificado' },
     { icon: ICONS.atom, label: 'Concentración', value: product.concentration || 'Información disponible por WhatsApp' },
@@ -1188,13 +1205,17 @@ async function initProductPage(){
   `).join('');
 
   function renderMainImage(index){
-    currentIndex = (index + gallery.length) % gallery.length;
-    mainImage.src = gallery[currentIndex];
-    mainImage.alt = product.name;
-    thumbs.querySelectorAll('[data-thumb-index]').forEach((button, thumbIndex) => {
-      button.classList.toggle('active', thumbIndex === currentIndex);
-    });
-  }
+  if(!gallery.length || !mainImage) return;
+
+  currentIndex = (index + gallery.length) % gallery.length;
+  mainImage.src = gallery[currentIndex];
+  mainImage.alt = product.name;
+  mainImage.hidden = false;
+
+  thumbs.querySelectorAll('[data-thumb-index]').forEach((button, thumbIndex) => {
+    button.classList.toggle('active', thumbIndex === currentIndex);
+  });
+}
 
   thumbs.innerHTML = gallery.map((image, index) => `
     <button class="product-thumb ${index === 0 ? 'active' : ''}" type="button" data-thumb-index="${index}">
@@ -1206,9 +1227,14 @@ async function initProductPage(){
     button.addEventListener('click', () => renderMainImage(Number(button.dataset.thumbIndex)));
   });
 
-  prevBtn.addEventListener('click', () => renderMainImage(currentIndex - 1));
-  nextBtn.addEventListener('click', () => renderMainImage(currentIndex + 1));
+  if(gallery.length){
+  prevBtn?.addEventListener('click', () => renderMainImage(currentIndex - 1));
+  nextBtn?.addEventListener('click', () => renderMainImage(currentIndex + 1));
   renderMainImage(0);
+} else {
+  if(prevBtn) prevBtn.style.display = 'none';
+  if(nextBtn) nextBtn.style.display = 'none';
+}
 
   presentationWrap.innerHTML = product.presentationOptions.map((option, index) => `
     <button class="option-chip ${index === 0 ? 'active' : ''}" type="button" data-presentation-option="${escapeHtml(option)}">${escapeHtml(option)}</button>
