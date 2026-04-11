@@ -1353,13 +1353,32 @@ body{
 .collection-rail{
   display:grid;
   grid-auto-flow:column;
-  grid-auto-columns:minmax(280px, 320px);
-  gap:18px;
+  grid-auto-columns:minmax(320px, 360px);
+  gap:10px;
   overflow-x:auto;
   overflow-y:hidden;
-  padding:6px 2px 14px;
+  padding:8px 0 20px;
   scroll-snap-type:x mandatory;
   scrollbar-width:thin;
+}
+
+.collection-rail::-webkit-scrollbar{
+  height:8px;
+}
+
+.collection-rail::-webkit-scrollbar-thumb{
+  background:rgba(15,15,16,.18);
+  border-radius:999px;
+}
+
+.collection-rail .collection-card{
+  scroll-snap-align:start;
+  min-height:100%;
+  border-radius:0;
+  padding:0;
+  background:transparent;
+  border:none;
+  box-shadow:none;
 }
 
 .collection-rail::-webkit-scrollbar{
@@ -1386,18 +1405,18 @@ body{
 .collection-media{
   position:relative;
   display:block;
-  border-radius:24px;
+  border-radius:0;
   overflow:hidden;
-  background:linear-gradient(180deg, #f4f0ea, #ebe4d8);
-  aspect-ratio:1 / 1.18;
+  background:#efefea;
+  aspect-ratio:4 / 5;
 }
 
 .collection-media img{
   width:100%;
   height:100%;
   object-fit:contain;
-  padding:28px;
-  transition:transform .55s ease;
+  padding:18px;
+  transition:transform .45s ease;
 }
 
 .collection-hover-panel{
@@ -1437,14 +1456,13 @@ body{
 
 .collection-info{
   display:grid;
-  gap:12px;
-  padding:18px 6px 8px;
+  gap:8px;
+  padding:14px 2px 8px;
 }
-
 .collection-card h3{
-  margin:6px 0 0;
-  font-size:1.9rem;
-  line-height:.98;
+  margin:2px 0 0;
+  font-size:1.35rem;
+  line-height:1.02;
 }
 
 .collection-meta-row{
