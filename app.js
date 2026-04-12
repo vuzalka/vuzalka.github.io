@@ -776,38 +776,19 @@ function renderSearchResults(products, query){
 
 function createCollectionCard(product){
   const productUrl = getProductUrl(product);
-  const notes = (product.features || []).slice(0, 3);
-  const preview = notes.length ? notes.join(' · ') : (product.description || 'Descubre su perfil olfativo.');
-  const story = product.story || product.description || 'Una referencia pensada para destacar con presencia y estilo.';
 
   return `
-    <article class="collection-card" data-home-card>
+    <article class="collection-card">
       <a class="collection-media" href="${productUrl}">
         <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}">
-        <div class="collection-hover-panel">
-          <span class="collection-kicker">${escapeHtml(product.category || 'Colección')} · ${escapeHtml(product.gender || 'Perfil curado')}</span>
-          <strong>Perfil olfativo</strong>
-          <p>${escapeHtml(preview)}</p>
-          <span class="collection-link-inline">Ver detalle</span>
-        </div>
       </a>
+
       <div class="collection-info">
-        <div>
-          <div class="item-subtle">${escapeHtml(product.brand)}</div>
-          <h3><a href="${productUrl}">${escapeHtml(product.name)}</a></h3>
-        </div>
-        <div class="collection-meta-row">
-          <span class="price-now">${formatMoney(product.price)}</span>
-          <div class="collection-actions">
-            <button class="collection-toggle" type="button" data-card-toggle aria-expanded="false">Notas</button>
-            <a class="collection-detail-link" href="${productUrl}">Ver detalle</a>
-          </div>
-        </div>
-      </div>
-      <div class="collection-drawer" data-card-drawer>
-        <p>${escapeHtml(story)}</p>
-        <div class="collection-drawer-tags">
-          ${(notes.length ? notes : [product.concentration || 'Edición curada', product.presentation || 'Disponible']).map((item) => `<span>${escapeHtml(item)}</span>`).join('')}
+        <div class="item-subtle">${escapeHtml(product.brand)}</div>
+        <h3><a href="${productUrl}">${escapeHtml(product.name)}</a></h3>
+        <div class="price-now">${formatMoney(product.price)}</div>
+        <div class="section-copy" style="font-size:.95rem;line-height:1.5;">
+          ${escapeHtml(product.category || product.gender || 'Colección')}
         </div>
       </div>
     </article>
