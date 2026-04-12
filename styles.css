@@ -1327,20 +1327,35 @@ body{
 .section-heading-inline > .section-copy,
 .featured-heading-side{max-width:440px}
 
-.universe-chip-wrap,
-.collection-actions,
-.home-news-strip-inner{
+.universe-chip-wrap{
+  display:flex;
+  gap:12px;
   flex-wrap:wrap;
+  align-items:center;
 }
 
-.home-universes{
-  display:grid;
-  gap:22px;
+.universe-chip{
+  min-height:46px;
+  padding:0 18px;
+  border-radius:4px;
+  border:1px solid rgba(15,15,16,.18);
+  background:#fff;
+  color:var(--ink);
+  font-size:.95rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  transition:.22s ease;
 }
 
-.universe-heading{
-  align-items:end;
-  justify-content:space-between;
+.universe-chip:hover{
+  background:#f4f4f1;
+  border-color:#111;
+}
+
+.universe-chip.active{
+  background:#111;
+  color:#fff;
+  border-color:#111;
 }
 
 .featured-heading-inline{
