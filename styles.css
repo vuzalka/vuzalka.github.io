@@ -1389,11 +1389,11 @@ body{
 .collection-rail .collection-card{
   scroll-snap-align:start;
   min-height:100%;
-  padding:0;
-  border:none;
-  border-radius:0;
-  background:transparent;
-  box-shadow:none;
+  padding:20px;
+  border:1px solid rgba(15,15,16,.08);
+  border-radius:30px;
+  background:#fafafa;
+  box-shadow:0 20px 44px rgba(15,15,16,.05);
 }
 
 .collection-card{
@@ -1406,17 +1406,18 @@ body{
 .collection-media{
   position:relative;
   display:block;
-  border-radius:0;
+  border-radius:24px;
   overflow:hidden;
-  background:#efefea;
-  aspect-ratio:4 / 5;
+  background:#f5f5f5;
+  aspect-ratio:1 / 1;
 }
 
 .collection-media img{
   width:100%;
   height:100%;
   object-fit:contain;
-  padding:16px;
+  background:#f5f5f5;
+  padding:22px;
   transition:transform .35s ease;
 }
 
