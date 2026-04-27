@@ -784,7 +784,6 @@ function renderSearchResults(products, query){
 
 function createCollectionCard(product){
   const productUrl = getProductUrl(product);
-  const categoryLabel = product.category || product.gender || 'Colección';
 
   return `
     <article class="collection-card">
@@ -795,7 +794,6 @@ function createCollectionCard(product){
       <div class="collection-info">
         <div class="collection-meta-top">
           <div class="item-subtle">${escapeHtml(product.brand)}</div>
-          <span class="collection-tag">${escapeHtml(categoryLabel)}</span>
         </div>
         <h3><a href="${productUrl}">${escapeHtml(product.name)}</a></h3>
         <div class="collection-bottom">
