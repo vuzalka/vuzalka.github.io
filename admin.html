@@ -1,0 +1,3009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VUZALKA | Administrador</title>
+
+   <link rel="icon" type="image/ico" href="assets/logo.ico">
+<link rel="shortcut icon" href="assets/logo.ico">
+<link rel="apple-touch-icon" href="assets/logo.ico">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --ink:#1a1a1a;
+      --muted:#6b7280;
+      --wine:#000000;
+      --wine-dark:#1a1a1a;
+      --light:#f3f4f6;
+      --line:#e5e7eb;
+      --gold:#374151;
+      --shadow:0 4px 12px rgba(0,0,0,.08);
+      --radius:16px;
+      --max:1380px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:#f9fafb;
+      color:var(--ink);
+    }
+
+    a{text-decoration:none;color:inherit}
+    button,input,textarea{font:inherit}
+    .hidden{display:none !important}
+
+    .container{
+      width:min(var(--max), calc(100% - 28px));
+      margin:auto;
+    }
+
+    .header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,255,255,.95);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .header-inner{
+      min-height:78px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand{
+      font-family:'Times New Roman', Times, serif;
+      font-size:2rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      color:var(--wine);
+    }
+
+    .nav{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .nav a,
+    .nav button{
+      font-size:.95rem;
+      font-weight:500;
+      padding:8px 0;
+      position:relative;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:inherit;
+    }
+
+    .nav a::after,
+    .nav button::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:0;
+      height:2px;
+      background:var(--wine);
+      transition:.25s ease;
+    }
+
+    .nav a:hover::after,
+    .nav a.active::after,
+    .nav button:hover::after{
+      width:100%;
+    }
+
+    .page{
+      padding:30px 0 60px;
+    }
+
+    .hero{
+      margin-bottom:22px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .hero-text h1{
+      margin:0 0 10px;
+      font-family:'Times New Roman', Times, serif;
+      font-size:3rem;
+      color:var(--wine);
+      line-height:1;
+    }
+
+    .hero-text p{
+      margin:0;
+      max-width:760px;
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:13px 18px;
+      font-weight:600;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{
+      background:var(--wine);
+      color:#fff;
+    }
+    .btn-primary:hover{
+      background:var(--wine-dark);
+    }
+    .btn-soft{
+      background:#fff;
+      color:var(--ink);
+      border:1px solid var(--line);
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:420px 1fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .panel-head{
+      padding:22px 22px 0;
+    }
+
+    .panel-head h2{
+      margin:0 0 6px;
+      font-size:1.2rem;
+      color:var(--wine);
+    }
+
+    .panel-head p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.95rem;
+    }
+
+    .panel-body{
+      padding:22px;
+    }
+
+    .form-grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+    }
+
+    .field label{
+      font-size:.92rem;
+      font-weight:600;
+    }
+
+    .field input,
+    .field textarea{
+      width:100%;
+      border:1px solid #ddd;
+      border-radius:16px;
+      padding:14px 15px;
+      outline:none;
+      background:#fff;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .field textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus{
+      border-color:var(--wine);
+      box-shadow:0 0 0 4px rgba(159,29,36,.08);
+    }
+
+    .field small{
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .inline-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .form-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .status{
+      margin-top:8px;
+      min-height:24px;
+      font-size:.92rem;
+      color:var(--wine);
+      font-weight:600;
+    }
+
+    .right-col{
+      display:grid;
+      gap:22px;
+    }
+
+    .preview-wrap{
+      display:grid;
+      grid-template-columns:minmax(280px, 420px) 1fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .product-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .product-card .image-box{
+      height:340px;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .product-card .image-box img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .placeholder{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      border:2px dashed #ddd;
+      border-radius:18px;
+      color:var(--muted);
+      padding:20px;
+      line-height:1.7;
+      font-size:.95rem;
+    }
+
+    .product-card .content{
+      padding:22px;
+    }
+
+    .product-card h3{
+      margin:0 0 10px;
+      color:var(--wine);
+      font-size:1.2rem;
+      line-height:1.3;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .chip{
+      background:#f7f4ef;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:.9rem;
+      font-weight:600;
+    }
+
+    .product-card p{
+      margin:0 0 14px;
+      line-height:1.8;
+      color:#444;
+    }
+
+    .price{
+      font-size:1.15rem;
+      font-weight:700;
+    }
+
+    .preview-note{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+
+    .preview-note h3{
+      margin:0 0 10px;
+      color:var(--wine);
+    }
+
+    .preview-note p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    .list-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .count-badge{
+      background:#f7f4ef;
+      border:1px solid var(--line);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .products-list{
+      display:grid;
+      gap:8px;
+    }
+
+    .admin-item{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      padding:10px;
+      display:grid;
+      grid-template-columns:50px 1fr auto;
+      gap:12px;
+      align-items:center;
+      transition:all 0.2s ease;
+    }
+
+    .admin-item:hover{
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+      border-color:#d1d5db;
+    }
+
+    .thumb{
+      width:50px;
+      height:50px;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background:#fafafa;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      padding:4px;
+    }
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .thumb span{
+      color:var(--muted);
+      font-size:.82rem;
+      text-align:center;
+      line-height:1.4;
+    }
+
+    .item-info h4{
+      margin:0 0 4px;
+      font-size:0.95rem;
+      font-weight:600;
+      color:var(--ink);
+    }
+
+    .item-info p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.4;
+      font-size:0.85rem;
+    }
+
+    .item-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .action-btn{
+      border:none;
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:500;
+      font-size:0.85rem;
+      transition:all 0.2s ease;
+    }
+
+    .action-edit{
+      background:#000;
+      color:#fff;
+    }
+
+    .action-edit:hover{
+      background:#1a1a1a;
+    }
+
+    .action-delete{
+      background:#f3f4f6;
+      color:#374151;
+    }
+
+    .action-delete:hover{
+      background:#e5e7eb;
+    }
+
+    .empty{
+      padding:20px;
+      border:1px dashed #d7d7d7;
+      border-radius:18px;
+      text-align:center;
+      color:var(--muted);
+      background:#fff;
+      line-height:1.8;
+    }
+
+
+
+    .home-admin{
+      margin-top:26px;
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .check-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border:1px solid #ddd;
+      border-radius:16px;
+      background:#fff;
+    }
+
+    .check-row input{
+      width:18px;
+      height:18px;
+      accent-color:#000;
+    }
+
+    .home-preview-card{
+      overflow:hidden;
+      border-radius:24px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      background:#fff;
+    }
+
+    .preview-thumbs{
+      display:flex;
+      gap:10px;
+      padding:14px 18px 0;
+      flex-wrap:wrap;
+    }
+
+    .preview-thumb{
+      width:64px;
+      height:64px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .preview-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .home-news-card{
+      margin-top:22px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .home-news-card h3{
+      margin:0 0 10px;
+      color:var(--wine);
+      font-size:1.15rem;
+    }
+
+    .home-news-card p{
+      margin:0 0 18px;
+      color:#444;
+      line-height:1.8;
+    }
+
+    .mini-banner{
+      background:linear-gradient(135deg,#f7f0ea,#fff);
+      border-bottom:1px solid var(--line);
+      padding:14px 18px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .mini-badge{
+      background:#000;
+      color:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.78rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .mini-banner-text{
+      color:#555;
+      line-height:1.7;
+      font-size:.92rem;
+      flex:1;
+    }
+
+    .mini-hero{
+      min-height:420px;
+      padding:28px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      text-align:center;
+      background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+        center/cover no-repeat;
+    }
+
+    .mini-hero-box{
+      width:min(100%, 640px);
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.16);
+      backdrop-filter:blur(8px);
+      border-radius:24px;
+      padding:30px 22px;
+    }
+
+    .mini-hero-box h3{
+      margin:0 0 14px;
+      font-family:'Times New Roman', Times, serif;
+      font-size:clamp(2.2rem, 5vw, 4rem);
+      line-height:1;
+      letter-spacing:.05em;
+      color:#fff;
+    }
+
+    .mini-hero-box p{
+      margin:0 auto 22px;
+      max-width:520px;
+      line-height:1.8;
+      color:rgba(255,255,255,.92);
+    }
+
+    .mini-btns{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .mini-btn{
+      padding:12px 18px;
+      border-radius:999px;
+      font-weight:700;
+      border:1px solid transparent;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .mini-btn.primary{
+      background:var(--wine);
+      color:#fff;
+    }
+
+    .mini-btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,.45);
+      background:rgba(255,255,255,.06);
+    }
+
+    .footer{
+      padding:26px 0 40px;
+      color:#666;
+      text-align:center;
+      font-size:.95rem;
+    }
+
+    .login-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:
+        radial-gradient(circle at top, rgba(159,29,36,.08), transparent 35%),
+        var(--bg);
+    }
+
+    .login-card{
+      width:min(460px, 100%);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:34px 28px;
+    }
+
+    .login-brand{
+      text-align:center;
+      margin-bottom:18px;
+    }
+
+    .login-brand h1{
+      margin:0 0 8px;
+      font-family:'Times New Roman', Times, serif;
+      font-size:3rem;
+      color:var(--wine);
+      letter-spacing:.08em;
+    }
+
+    .login-brand p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    .login-error{
+      min-height:24px;
+      color:#b42318;
+      font-size:.92rem;
+      font-weight:600;
+      margin-top:4px;
+    }
+
+    .welcome-badge{
+      background:#f7f4ef;
+      border:1px solid var(--line);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    @media (max-width:1180px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+      .preview-wrap{
+        grid-template-columns:1fr;
+      }
+      .home-admin{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:760px){
+      .header-inner{
+        flex-direction:column;
+        justify-content:center;
+        padding:14px 0;
+      }
+
+      .nav{
+        justify-content:center;
+      }
+
+      .inline-2{
+        grid-template-columns:1fr;
+      }
+
+      .admin-item{
+        grid-template-columns:1fr;
+      }
+
+      .item-actions{
+        justify-content:flex-start;
+      }
+
+      .thumb{
+        width:100%;
+        height:220px;
+      }
+
+      .hero-text h1{
+        font-size:2.4rem;
+      }
+
+      .login-card{
+        padding:28px 22px;
+      }
+
+      .login-brand h1{
+        font-size:2.5rem;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NUEVA ESTRUCTURA DEL EDITOR DE INICIO
+       Secciones organizadas, listas dinámicas, preview carrusel
+    ═══════════════════════════════════════════════════════════ */
+
+    .home-editor-form{
+      gap:22px;
+    }
+
+    .editor-section{
+      background:#fafafa;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px 20px 22px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .editor-section-head{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding-bottom:14px;
+      border-bottom:1px dashed #d4d4d4;
+      margin-bottom:4px;
+    }
+
+    .editor-section-num{
+      flex-shrink:0;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:#000;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:1rem;
+      letter-spacing:.02em;
+    }
+
+    .editor-section-head h3{
+      margin:0 0 4px;
+      font-family:'Times New Roman', Times, serif;
+      font-size:1.2rem;
+      color:var(--wine);
+      letter-spacing:.02em;
+    }
+
+    .editor-section-head p{
+      margin:0;
+      color:#555;
+      font-size:.9rem;
+      line-height:1.55;
+    }
+
+    /* ── Listas dinámicas (imágenes hero, mensajes, testimonios) ── */
+    .dynamic-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .dynamic-list:empty{
+      display:none;
+    }
+
+    .list-row{
+      display:grid;
+      grid-template-columns:56px 1fr auto;
+      gap:10px;
+      align-items:center;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:10px 12px;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .list-row:hover{
+      border-color:#c5c5c5;
+    }
+
+    .list-row-thumb{
+      width:56px;
+      height:56px;
+      border-radius:10px;
+      background:#f3f4f6;
+      border:1px solid #e5e7eb;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#9ca3af;
+      font-size:.7rem;
+      text-align:center;
+      padding:4px;
+    }
+
+    .list-row-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .list-row-input{
+      width:100%;
+      border:1px solid #e0e0e0;
+      border-radius:10px;
+      padding:10px 12px;
+      font-size:.92rem;
+      background:#fff;
+      transition:border-color .2s ease;
+    }
+
+    .list-row-input:focus{
+      outline:none;
+      border-color:#000;
+    }
+
+    .list-row-actions{
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+
+    .row-btn{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:1px solid #e0e0e0;
+      background:#fff;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1rem;
+      color:#555;
+      transition:all .2s ease;
+      padding:0;
+      line-height:1;
+    }
+
+    .row-btn:hover{
+      background:#f3f4f6;
+      border-color:#a0a0a0;
+      color:#000;
+    }
+
+    .row-btn.danger:hover{
+      background:#fef2f2;
+      border-color:#fca5a5;
+      color:#b91c1c;
+    }
+
+    .row-btn:disabled{
+      opacity:.35;
+      cursor:not-allowed;
+    }
+
+    .btn-add-row{
+      align-self:flex-start;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 18px;
+      font-weight:600;
+      border-radius:999px;
+    }
+
+    .btn-add-row span{
+      font-size:1.2rem;
+      line-height:1;
+    }
+
+    /* ── Editor de testimonios (cards más grandes) ── */
+    .testimonials-editor .list-row{
+      grid-template-columns:1fr auto;
+      grid-template-rows:auto auto;
+      gap:10px 10px;
+      padding:14px;
+    }
+
+    .testimonial-fields{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .testimonial-fields-row{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+    }
+
+    .testimonial-fields textarea{
+      min-height:70px;
+      resize:vertical;
+      font-family:'Inter', sans-serif;
+    }
+
+    /* ── Editor de trust badges (4 ítems lado a lado) ── */
+    .trust-editor-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .trust-editor-item{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .trust-editor-item-head{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding-bottom:8px;
+      border-bottom:1px dashed #e5e7eb;
+      margin-bottom:4px;
+    }
+
+    .trust-editor-icon{
+      width:30px;
+      height:30px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f3f4f6;
+      border-radius:8px;
+    }
+
+    .trust-editor-icon svg{
+      width:18px;
+      height:18px;
+      stroke:#111;
+      stroke-width:1.5;
+      fill:none;
+    }
+
+    .trust-editor-item-name{
+      font-size:.78rem;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:#666;
+    }
+
+    .trust-editor-item input{
+      width:100%;
+      border:1px solid #e0e0e0;
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:.9rem;
+      background:#fafafa;
+    }
+
+    .trust-editor-item input:focus{
+      outline:none;
+      border-color:#000;
+      background:#fff;
+    }
+
+    .trust-editor-item label{
+      font-size:.78rem;
+      color:#666;
+      font-weight:600;
+    }
+
+    /* ── PREVIEW: panel sticky, carrusel rotando ── */
+    .preview-panel-sticky{
+      position:sticky;
+      top:96px;
+    }
+
+    .mini-announcement{
+      background:#111;
+      color:#fff;
+      height:36px;
+      overflow:hidden;
+      position:relative;
+      display:flex;
+      align-items:center;
+    }
+
+    .mini-announcement-track{
+      display:flex;
+      gap:0;
+      white-space:nowrap;
+      animation:miniMarquee 24s linear infinite;
+      font-size:.68rem;
+      font-weight:600;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .mini-announcement-track span{
+      padding:0 28px;
+      opacity:.92;
+    }
+
+    .mini-announcement-track span::before{
+      content:'·';
+      margin-right:28px;
+      opacity:.45;
+    }
+
+    @keyframes miniMarquee{
+      0%   { transform:translateX(0); }
+      100% { transform:translateX(-50%); }
+    }
+
+    .mini-announcement.is-hidden{
+      display:none;
+    }
+
+    /* mini-hero ahora soporta el carrusel */
+    .mini-hero{
+      position:relative;
+      min-height:380px;
+      padding:28px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      text-align:center;
+      overflow:hidden;
+      background:#1a1410;
+    }
+
+    .mini-hero-carousel{
+      position:absolute;
+      inset:0;
+      z-index:0;
+    }
+
+    .mini-hero-slide{
+      position:absolute;
+      inset:0;
+      background-size:cover;
+      background-position:center center;
+      opacity:0;
+      transition:opacity 1s ease;
+    }
+
+    .mini-hero-slide.is-active{
+      opacity:1;
+    }
+
+    .mini-hero.transition-slide .mini-hero-slide{
+      transition:transform 1s cubic-bezier(.55,.05,.22,.99), opacity .55s ease;
+      transform:translateX(100%);
+      opacity:1;
+    }
+
+    .mini-hero.transition-slide .mini-hero-slide.is-active{
+      transform:translateX(0);
+    }
+
+    .mini-hero.transition-slide .mini-hero-slide.is-prev{
+      transform:translateX(-100%);
+    }
+
+    .mini-hero-overlay{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.50) 0%, rgba(0,0,0,.28) 42%, rgba(0,0,0,.08) 65%, rgba(0,0,0,.34) 100%),
+        linear-gradient(180deg, rgba(0,0,0,.22) 0%, rgba(0,0,0,0) 32%, rgba(0,0,0,.26) 100%);
+    }
+
+    .mini-hero-box{
+      position:relative;
+      z-index:2;
+      width:min(100%, 480px);
+    }
+
+    .mini-hero-kicker{
+      display:inline-block;
+      font-size:.66rem;
+      font-weight:700;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.85);
+      margin-bottom:14px;
+      padding:5px 12px;
+      border:1px solid rgba(255,255,255,.3);
+      border-radius:999px;
+      backdrop-filter:blur(4px);
+      background:rgba(255,255,255,.06);
+    }
+
+    .mini-hero-dots{
+      position:absolute;
+      bottom:14px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:3;
+      display:flex;
+      gap:6px;
+    }
+
+    .mini-hero-dots span{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:rgba(255,255,255,.4);
+      transition:all .3s ease;
+    }
+
+    .mini-hero-dots span.is-active{
+      background:#fff;
+      width:22px;
+      border-radius:999px;
+    }
+
+    .mini-hero-empty{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:rgba(255,255,255,.5);
+      font-size:.85rem;
+      text-align:center;
+      padding:20px;
+      background:#1a1410;
+    }
+
+    /* Trust badges en preview */
+    .mini-trust{
+      padding:18px 14px;
+      border-top:1px solid #eaeaea;
+      border-bottom:1px solid #eaeaea;
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:8px;
+      background:#fff;
+    }
+
+    .mini-trust.is-hidden{
+      display:none;
+    }
+
+    .mini-trust-item{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:5px;
+      text-align:center;
+      padding:6px 4px;
+    }
+
+    .mini-trust-item svg{
+      width:20px;
+      height:20px;
+      stroke:#111;
+      stroke-width:1.5;
+      fill:none;
+    }
+
+    .mini-trust-label{
+      font-size:.55rem;
+      font-weight:700;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#111;
+      line-height:1.3;
+    }
+
+    .mini-trust-sub{
+      font-size:.6rem;
+      color:#777;
+      line-height:1.4;
+    }
+
+    /* Testimonios en preview */
+    .mini-testimonials{
+      padding:16px;
+      background:#f9f7f4;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .mini-testimonials.is-hidden{
+      display:none;
+    }
+
+    .mini-test-card{
+      background:#fff;
+      border:1px solid rgba(15,15,15,.08);
+      border-radius:14px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .mini-test-stars{
+      color:#111;
+      font-size:.7rem;
+      letter-spacing:1px;
+    }
+
+    .mini-test-quote{
+      font-family:'Cormorant Garamond', Georgia, serif;
+      font-size:.95rem;
+      line-height:1.55;
+      color:#1a1a1a;
+      margin:0;
+    }
+
+    .mini-test-author{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:.75rem;
+    }
+
+    .mini-test-avatar{
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:#111;
+      color:#fff;
+      font-size:.65rem;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+    }
+
+    .mini-test-name{
+      font-weight:600;
+      color:#111;
+    }
+
+    .mini-test-city{
+      color:#888;
+      font-size:.68rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width:1180px){
+      .preview-panel-sticky{
+        position:static;
+      }
+    }
+
+    @media (max-width:760px){
+      .trust-editor-grid{
+        grid-template-columns:1fr;
+      }
+      .testimonial-fields-row{
+        grid-template-columns:1fr;
+      }
+      .list-row{
+        grid-template-columns:48px 1fr auto;
+      }
+      .editor-section{
+        padding:16px;
+      }
+      .editor-section-num{
+        width:30px;
+        height:30px;
+        font-size:.9rem;
+      }
+      .mini-trust{
+        grid-template-columns:repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <h1>VUZALKA</h1>
+        <p>Acceso restringido al panel de administración.</p>
+      </div>
+
+      <form id="loginForm" class="form-grid">
+        <div class="field">
+          <label for="loginEmail">Correo</label>
+          <input type="email" id="loginEmail" placeholder="Ingresa tu correo" required>
+        </div>
+
+        <div class="field">
+          <label for="loginPass">Contraseña</label>
+          <input type="password" id="loginPass" placeholder="Ingresa tu contraseña" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+    </div>
+  </section>
+
+  <div id="adminApp" class="hidden">
+    <header class="header">
+      <div class="container header-inner">
+        <a href="index.html" class="brand" aria-label="VUZALKA inicio">
+          <img src="assets/logo-horizontal-negro.svg" alt="VUZALKA" width="240" height="51" decoding="async" />
+        </a>
+
+        <nav class="nav">
+          <a href="index.html">Inicio</a>
+          <a href="perfumes.html">Perfumes</a>
+          <a href="nosotros.html">Nosotros</a>
+          <a href="contacto.html">Contacto</a>
+          <a href="admin.html" class="active">Administrador</a>
+          <span class="welcome-badge" id="welcomeUser">Administrador</span>
+          <button type="button" id="logoutBtn">Cerrar sesión</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="container">
+
+        <section class="hero">
+          <div class="hero-text">
+            <h1>Panel de administrador</h1>
+            <p>
+              Desde aquí puedes crear, editar y eliminar perfumes. Además, más abajo encontrarás un editor especial para personalizar la pantalla de inicio, cambiar la imagen principal y publicar novedades o noticias para tus clientes.
+            </p>
+          </div>
+
+          <div class="top-actions">
+            <button class="btn btn-primary" id="btnNuevo">Nuevo producto</button>
+            <a class="btn btn-soft" href="#homeEditorSection">Editar inicio</a>
+          </div>
+        </section>
+
+        <section class="layout">
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Editor de producto</h2>
+              <p>Llena los campos y guarda. Si editas uno existente, la vista previa se actualiza al instante.</p>
+            </div>
+
+            <div class="panel-body">
+              <form id="productForm" class="form-grid">
+                <input type="hidden" id="productId">
+
+                <div class="field">
+                  <label for="nombre">Nombre del perfume</label>
+                  <input type="text" id="nombre" placeholder="Ej: AFNAN 9PM" required>
+                </div>
+
+                <div class="inline-2">
+                  <div class="field">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" placeholder="Ej: 120000" min="0" required>
+                  </div>
+
+                  <div class="field">
+                    <label for="cantidad">Cantidad disponible</label>
+                    <input type="number" id="cantidad" placeholder="Ej: 8" min="0" required>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="descripcion">Descripción</label>
+                  <textarea id="descripcion" placeholder="Describe el perfume..." required></textarea>
+                </div>
+
+<div class="field field-full">
+  <label for="caracteristicas">Características del perfume</label>
+  <textarea
+    id="caracteristicas"
+    rows="6"
+    placeholder="Escribe una característica por línea. Ejemplo:
+Salida cítrica y especiada
+Buena duración
+Ideal para la noche
+Estela moderada a alta"></textarea>
+  <small>
+    Escribe una característica por línea. Luego se mostrarán como lista en la ventana del perfume.
+  </small>
+</div>
+                
+                <div class="field">
+                  <label for="imagen">Ruta de la imagen principal</label>
+                  <input type="text" id="imagen" placeholder="Ej: img/perfumes/afnan-9pm.png" required>
+                  <small>
+                    La ruta se genera automáticamente a partir del nombre del producto.
+                    Ejemplo: <strong>AFNAN 9PM → img/perfumes/afnan-9pm.png</strong>
+                  </small>
+                </div>
+
+                <div class="field">
+                  <label for="imagenesExtra">Imágenes adicionales</label>
+                  <textarea id="imagenesExtra" placeholder="Escribe una ruta o URL por línea&#10;Ej: img/perfumes/afnan-9pm-2.png&#10;img/perfumes/afnan-9pm-3.png"></textarea>
+                  <small>
+                    Aquí puedes añadir más imágenes del mismo perfume. Escribe una por línea.
+                  </small>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Guardar producto</button>
+                  <button type="button" class="btn btn-soft" id="btnCancelarEdicion">Cancelar edición</button>
+                </div>
+
+                <div class="status" id="statusMsg"></div>
+              </form>
+            </div>
+          </div>
+
+          <div class="right-col">
+
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Vista previa</h2>
+                <p>Así se verá este producto en la página de perfumes.</p>
+              </div>
+
+              <div class="panel-body">
+                <div class="preview-wrap">
+                  <article class="product-card">
+                    <div class="image-box" id="previewImageBox">
+                      <div class="placeholder">Aquí aparecerá la imagen del perfume</div>
+                    </div>
+                    <div id="previewThumbs" class="preview-thumbs"></div>
+
+                    <div class="content">
+                      <h3 id="previewNombre">Nombre del perfume</h3>
+
+                      <div class="meta">
+                        <div class="chip" id="previewCantidad">Cantidad: 0</div>
+                      </div>
+
+                      <p id="previewDescripcion">La descripción aparecerá aquí.</p>
+
+                      <div class="price" id="previewPrecio">$0</div>
+                    </div>
+                  </article>
+
+                  <div class="preview-note">
+                    <h3>Producto seleccionado</h3>
+                    <p id="previewModeText">
+                      Estás creando un nuevo producto. Completa los campos y guarda para añadirlo al catálogo.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div class="list-head">
+                  <div>
+                    <h2>Productos guardados</h2>
+                    <p>Presiona editar para abrir el producto en el formulario.</p>
+                  </div>
+                  <div class="count-badge" id="productCount">0 productos</div>
+                </div>
+              </div>
+
+              <div class="panel-body">
+                <div class="products-list" id="productsList"></div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+
+        <section class="home-admin" id="homeEditorSection">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Editor de pantalla de inicio</h2>
+              <p>Personaliza cada parte de la pantalla de inicio (<code>index.html</code>): el carrusel de imágenes, el texto del hero, la barra de anuncios superior, las garantías y los testimonios.</p>
+            </div>
+
+            <div class="panel-body">
+              <form id="homeForm" class="form-grid home-editor-form">
+
+                <!-- ════════════════════════════════════════════════════════
+                     SECCIÓN 1 · CARRUSEL DE IMÁGENES DEL HERO (LO NUEVO)
+                ════════════════════════════════════════════════════════ -->
+                <div class="editor-section" data-editor-section="carousel">
+                  <div class="editor-section-head">
+                    <div class="editor-section-num">1</div>
+                    <div>
+                      <h3>Carrusel de imágenes principales</h3>
+                      <p>Estas imágenes se mostrarán en el inicio con desplazamiento automático. Agrega 1 o más imágenes y elige cada cuántos segundos cambian.</p>
+                    </div>
+                  </div>
+
+                  <div class="dynamic-list" id="heroImagesList" aria-live="polite">
+                    <!-- filas inyectadas por JS -->
+                  </div>
+
+                  <button type="button" class="btn btn-soft btn-add-row" id="btnAddHeroImage">
+                    <span aria-hidden="true">+</span> Añadir imagen
+                  </button>
+
+                  <div class="inline-2" style="margin-top:16px;">
+                    <div class="field">
+                      <label for="carouselIntervalSec">Tiempo entre imágenes (segundos)</label>
+                      <input type="number" id="carouselIntervalSec" min="2" max="30" step="1" placeholder="5">
+                      <small>Recomendado entre 4 y 8 segundos. Si solo hay una imagen, no rota.</small>
+                    </div>
+                    <div class="field">
+                      <label for="carouselTransition">Estilo de transición</label>
+                      <select id="carouselTransition">
+                        <option value="fade">Suave (fundido)</option>
+                        <option value="slide">Deslizar</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ════════════════════════════════════════════════════════
+                     SECCIÓN 2 · TEXTO DEL HERO
+                ════════════════════════════════════════════════════════ -->
+                <div class="editor-section" data-editor-section="text">
+                  <div class="editor-section-head">
+                    <div class="editor-section-num">2</div>
+                    <div>
+                      <h3>Texto del hero</h3>
+                      <p>La etiqueta superior, la descripción y los dos botones que aparecen sobre las imágenes del carrusel.</p>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label for="heroKicker">Etiqueta superior (eyebrow)</label>
+                    <input type="text" id="heroKicker" placeholder="Ej: COLECCIÓN DESTACADA">
+                    <small>Texto pequeño en mayúsculas que aparece arriba del logo.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="heroTitle">Texto alternativo del logo</label>
+                    <input type="text" id="heroTitle" placeholder="VUZALKA">
+                    <small>En el inicio se muestra el logo VUZALKA como imagen. Este texto es el "alt" accesible del logo.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="heroDescription">Descripción principal</label>
+                    <textarea id="heroDescription" placeholder="Elegancia, carácter y esencia en cada fragancia..." required></textarea>
+                  </div>
+
+                  <div class="inline-2">
+                    <div class="field">
+                      <label for="primaryButtonText">Texto del botón principal</label>
+                      <input type="text" id="primaryButtonText" placeholder="Explorar selección" required>
+                    </div>
+                    <div class="field">
+                      <label for="primaryButtonLink">Enlace del botón principal</label>
+                      <input type="text" id="primaryButtonLink" placeholder="perfumes.html" required>
+                    </div>
+                  </div>
+
+                  <div class="inline-2">
+                    <div class="field">
+                      <label for="secondaryButtonText">Texto del botón secundario</label>
+                      <input type="text" id="secondaryButtonText" placeholder="Ver catálogo completo" required>
+                    </div>
+                    <div class="field">
+                      <label for="secondaryButtonLink">Enlace del botón secundario</label>
+                      <input type="text" id="secondaryButtonLink" placeholder="perfumes.html" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ════════════════════════════════════════════════════════
+                     SECCIÓN 3 · BARRA DE ANUNCIOS SUPERIOR (MARQUEE)
+                ════════════════════════════════════════════════════════ -->
+                <div class="editor-section" data-editor-section="announcement">
+                  <div class="editor-section-head">
+                    <div class="editor-section-num">3</div>
+                    <div>
+                      <h3>Barra de anuncios superior</h3>
+                      <p>La cinta negra que se desplaza arriba del menú en el inicio. Agrega los mensajes que se irán mostrando uno tras otro.</p>
+                    </div>
+                  </div>
+
+                  <label class="check-row">
+                    <input type="checkbox" id="showAnnouncementBar">
+                    <span>Mostrar barra de anuncios en el inicio</span>
+                  </label>
+
+                  <div class="dynamic-list" id="announcementList" aria-live="polite" style="margin-top:14px;">
+                    <!-- filas inyectadas por JS -->
+                  </div>
+
+                  <button type="button" class="btn btn-soft btn-add-row" id="btnAddAnnouncement">
+                    <span aria-hidden="true">+</span> Añadir mensaje
+                  </button>
+                </div>
+
+                <!-- ════════════════════════════════════════════════════════
+                     SECCIÓN 4 · GARANTÍAS (TRUST BADGES, 4 ITEMS)
+                ════════════════════════════════════════════════════════ -->
+                <div class="editor-section" data-editor-section="trust">
+                  <div class="editor-section-head">
+                    <div class="editor-section-num">4</div>
+                    <div>
+                      <h3>Sección de garantías</h3>
+                      <p>Los 4 distintivos que aparecen debajo del hero (originalidad, envío, pago seguro, asesoría). Puedes editar el título y la descripción de cada uno.</p>
+                    </div>
+                  </div>
+
+                  <label class="check-row">
+                    <input type="checkbox" id="showTrustBadges">
+                    <span>Mostrar sección de garantías en el inicio</span>
+                  </label>
+
+                  <div class="trust-editor-grid" id="trustBadgesGrid" style="margin-top:14px;">
+                    <!-- 4 ítems inyectados por JS -->
+                  </div>
+                </div>
+
+                <!-- ════════════════════════════════════════════════════════
+                     SECCIÓN 5 · TESTIMONIOS
+                ════════════════════════════════════════════════════════ -->
+                <div class="editor-section" data-editor-section="testimonials">
+                  <div class="editor-section-head">
+                    <div class="editor-section-num">5</div>
+                    <div>
+                      <h3>Testimonios de clientes</h3>
+                      <p>Reseñas que aparecen al final del inicio. Edita cada testimonio o desactiva la sección.</p>
+                    </div>
+                  </div>
+
+                  <label class="check-row">
+                    <input type="checkbox" id="showTestimonials">
+                    <span>Mostrar testimonios en el inicio</span>
+                  </label>
+
+                  <div class="dynamic-list testimonials-editor" id="testimonialsList" aria-live="polite" style="margin-top:14px;">
+                    <!-- ítems inyectados por JS -->
+                  </div>
+
+                  <button type="button" class="btn btn-soft btn-add-row" id="btnAddTestimonial">
+                    <span aria-hidden="true">+</span> Añadir testimonio
+                  </button>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Guardar inicio</button>
+                  <button type="button" class="btn btn-soft" id="btnResetHome">Restablecer valores sugeridos</button>
+                </div>
+
+                <div class="status" id="homeStatusMsg"></div>
+              </form>
+            </div>
+          </div>
+
+          <div class="right-col">
+            <div class="panel preview-panel-sticky">
+              <div class="panel-head">
+                <h2>Vista previa del inicio</h2>
+                <p>Así se verá la portada antes de guardarla. El carrusel rota automáticamente como en el sitio real.</p>
+              </div>
+
+              <div class="panel-body">
+                <div class="home-preview-card">
+                  <!-- Barra de anuncios (preview) -->
+                  <div class="mini-announcement" id="miniAnnouncement">
+                    <div class="mini-announcement-track" id="miniAnnouncementTrack"></div>
+                  </div>
+
+                  <!-- Hero con carrusel (preview) -->
+                  <div class="mini-hero" id="miniHero">
+                    <div class="mini-hero-carousel" id="miniHeroCarousel">
+                      <!-- slides inyectados por JS -->
+                    </div>
+                    <div class="mini-hero-overlay"></div>
+                    <div class="mini-hero-box">
+                      <span class="mini-hero-kicker" id="miniHeroKicker">COLECCIÓN DESTACADA</span>
+                      <h3 id="miniHeroTitle">VUZALKA</h3>
+                      <p id="miniHeroDescription">Elegancia, carácter y esencia en cada fragancia.</p>
+                      <div class="mini-btns">
+                        <span class="mini-btn primary" id="miniPrimaryButton">Explorar selección</span>
+                        <span class="mini-btn secondary" id="miniSecondaryButton">Ver catálogo completo</span>
+                      </div>
+                    </div>
+                    <div class="mini-hero-dots" id="miniHeroDots"></div>
+                  </div>
+
+                  <!-- Trust badges (preview) -->
+                  <div class="mini-trust" id="miniTrust">
+                    <!-- ítems inyectados por JS -->
+                  </div>
+
+                  <!-- Testimonios (preview) -->
+                  <div class="mini-testimonials" id="miniTestimonials">
+                    <!-- ítems inyectados por JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        © 2026 VUZALKA. Panel interno de administración.
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      doc,
+      updateDoc,
+      deleteDoc,
+      orderBy,
+      query,
+      serverTimestamp,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYlGCt2LhuArZeUGmvA0jfPnLfo0iVlFU",
+      authDomain: "vuzalka-73b95.firebaseapp.com",
+      projectId: "vuzalka-73b95",
+      storageBucket: "vuzalka-73b95.firebasestorage.app",
+      messagingSenderId: "392739606646",
+      appId: "1:392739606646:web:05f22f49163281e6dc4f57"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginScreen = document.getElementById("loginScreen");
+    const adminApp = document.getElementById("adminApp");
+    const loginForm = document.getElementById("loginForm");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPass = document.getElementById("loginPass");
+    const loginError = document.getElementById("loginError");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const welcomeUser = document.getElementById("welcomeUser");
+
+    const form = document.getElementById("productForm");
+    const productIdInput = document.getElementById("productId");
+    const nombreInput = document.getElementById("nombre");
+    const precioInput = document.getElementById("precio");
+    const cantidadInput = document.getElementById("cantidad");
+    const descripcionInput = document.getElementById("descripcion");
+    const caracteristicasInput = document.getElementById("caracteristicas");
+    const imagenInput = document.getElementById("imagen");
+    const imagenesExtraInput = document.getElementById("imagenesExtra");
+    const statusMsg = document.getElementById("statusMsg");
+
+    const btnNuevo = document.getElementById("btnNuevo");
+    const btnCancelarEdicion = document.getElementById("btnCancelarEdicion");
+
+    const previewNombre = document.getElementById("previewNombre");
+    const previewPrecio = document.getElementById("previewPrecio");
+    const previewCantidad = document.getElementById("previewCantidad");
+    const previewDescripcion = document.getElementById("previewDescripcion");
+    const previewImageBox = document.getElementById("previewImageBox");
+    const previewThumbs = document.getElementById("previewThumbs");
+    const previewModeText = document.getElementById("previewModeText");
+
+    const productsList = document.getElementById("productsList");
+    const productCount = document.getElementById("productCount");
+
+    const homeForm = document.getElementById("homeForm");
+    // Texto del hero
+    const heroKickerInput = document.getElementById("heroKicker");
+    const heroTitleInput = document.getElementById("heroTitle");
+    const heroDescriptionInput = document.getElementById("heroDescription");
+    const primaryButtonTextInput = document.getElementById("primaryButtonText");
+    const primaryButtonLinkInput = document.getElementById("primaryButtonLink");
+    const secondaryButtonTextInput = document.getElementById("secondaryButtonText");
+    const secondaryButtonLinkInput = document.getElementById("secondaryButtonLink");
+    // Carrusel
+    const heroImagesListEl = document.getElementById("heroImagesList");
+    const btnAddHeroImage = document.getElementById("btnAddHeroImage");
+    const carouselIntervalInput = document.getElementById("carouselIntervalSec");
+    const carouselTransitionInput = document.getElementById("carouselTransition");
+    // Anuncios
+    const showAnnouncementBarInput = document.getElementById("showAnnouncementBar");
+    const announcementListEl = document.getElementById("announcementList");
+    const btnAddAnnouncement = document.getElementById("btnAddAnnouncement");
+    // Trust badges
+    const showTrustBadgesInput = document.getElementById("showTrustBadges");
+    const trustBadgesGridEl = document.getElementById("trustBadgesGrid");
+    // Testimonios
+    const showTestimonialsInput = document.getElementById("showTestimonials");
+    const testimonialsListEl = document.getElementById("testimonialsList");
+    const btnAddTestimonial = document.getElementById("btnAddTestimonial");
+    // Estado / acciones
+    const homeStatusMsg = document.getElementById("homeStatusMsg");
+    const btnResetHome = document.getElementById("btnResetHome");
+
+    // Preview
+    const miniHero = document.getElementById("miniHero");
+    const miniHeroCarousel = document.getElementById("miniHeroCarousel");
+    const miniHeroDots = document.getElementById("miniHeroDots");
+    const miniHeroKicker = document.getElementById("miniHeroKicker");
+    const miniHeroTitle = document.getElementById("miniHeroTitle");
+    const miniHeroDescription = document.getElementById("miniHeroDescription");
+    const miniPrimaryButton = document.getElementById("miniPrimaryButton");
+    const miniSecondaryButton = document.getElementById("miniSecondaryButton");
+    const miniAnnouncement = document.getElementById("miniAnnouncement");
+    const miniAnnouncementTrack = document.getElementById("miniAnnouncementTrack");
+    const miniTrust = document.getElementById("miniTrust");
+    const miniTestimonials = document.getElementById("miniTestimonials");
+
+    // SVG fijos para las 4 garantías (mismas formas que en index.html)
+    const TRUST_BADGE_ICONS = [
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>'
+    ];
+
+    const HOME_DEFAULTS = {
+      // Carrusel de imágenes principales (lo nuevo)
+      heroImages: [
+        "assets/hero-inicio.webp"
+      ],
+      carouselIntervalSec: 5,
+      carouselTransition: "fade",
+
+      // Texto del hero
+      heroKicker: "COLECCIÓN DESTACADA",
+      heroTitle: "VUZALKA",
+      heroDescription: "Elegancia, carácter y esencia en cada fragancia. Descubre una colección pensada para quienes desean dejar huella con su aroma.",
+      primaryButtonText: "Explorar selección",
+      primaryButtonLink: "perfumes.html",
+      secondaryButtonText: "Ver catálogo completo",
+      secondaryButtonLink: "perfumes.html",
+
+      // Barra de anuncios
+      showAnnouncementBar: true,
+      announcementMessages: [
+        "Envíos a todo Colombia",
+        "Perfumes 100% originales garantizados",
+        "Asesoría personalizada por WhatsApp",
+        "Pago seguro con Mercado Pago",
+        "Despacho en 1 a 4 días hábiles"
+      ],
+
+      // Trust badges
+      showTrustBadges: true,
+      trustBadges: [
+        { title: "100% Originales", subtitle: "Garantía de autenticidad en cada frasco" },
+        { title: "Envío Nacional", subtitle: "A todo Colombia en 1 a 4 días hábiles" },
+        { title: "Pago Seguro", subtitle: "Mercado Pago · Transferencia bancaria" },
+        { title: "Asesoría Gratis", subtitle: "Te ayudamos a elegir tu fragancia ideal" }
+      ],
+
+      // Testimonios
+      showTestimonials: true,
+      testimonials: [
+        {
+          quote: "El Khamrah llegó en perfecto estado, sellado y con factura. La atención por WhatsApp fue muy rápida, me ayudaron a elegir entre dos opciones y quedé feliz con la compra.",
+          name: "Santiago C.",
+          city: "Medellín, Antioquia",
+          product: "Lattafa Khamrah"
+        },
+        {
+          quote: "La página se ve muy profesional y el proceso de pago fue sencillo. El AFNAN 9PM huele increíble, la proyección es brutal. Totalmente recomendado.",
+          name: "Laura M.",
+          city: "Bogotá, D.C.",
+          product: "Afnan 9PM"
+        },
+        {
+          quote: "Pedí el Acqua di Giò y llegó en dos días a Cali. Empaque muy bien protegido. Lo usé en una reunión y varios me preguntaron qué estaba usando. Excelente servicio.",
+          name: "Julián P.",
+          city: "Cali, Valle del Cauca",
+          product: "Acqua di Giò EDT"
+        }
+      ]
+    };
+
+    // Estado en memoria de las listas dinámicas
+    let heroImagesState = [...HOME_DEFAULTS.heroImages];
+    let announcementMessagesState = [...HOME_DEFAULTS.announcementMessages];
+    let trustBadgesState = HOME_DEFAULTS.trustBadges.map(b => ({...b}));
+    let testimonialsState = HOME_DEFAULTS.testimonials.map(t => ({...t}));
+
+    // Carrusel de la vista previa
+    let previewCarouselTimer = null;
+    let previewCarouselIndex = 0;
+
+    let imageManuallyEdited = false;
+    let currentProducts = [];
+
+    function formatPrice(value){
+      const number = Number(value) || 0;
+      return "$" + number.toLocaleString("es-CO");
+    }
+
+    function showStatus(message){
+      statusMsg.textContent = message;
+      clearTimeout(showStatus.timer);
+      showStatus.timer = setTimeout(() => {
+        statusMsg.textContent = "";
+      }, 2500);
+    }
+
+    function showHomeStatus(message){
+      homeStatusMsg.textContent = message;
+      clearTimeout(showHomeStatus.timer);
+      showHomeStatus.timer = setTimeout(() => {
+        homeStatusMsg.textContent = "";
+      }, 2500);
+    }
+
+    function escapeHtml(text){
+      return String(text ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function slugifyProductName(text){
+      return String(text)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function buildImagePathFromName(productName){
+      const slug = slugifyProductName(productName);
+      return slug ? `img/perfumes/${slug}.png` : "";
+    }
+
+    function autoFillImagePath(){
+      if(imageManuallyEdited) return;
+      imagenInput.value = buildImagePathFromName(nombreInput.value.trim());
+    }
+
+    function parseImageLines(value){
+      return String(value || "")
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean);
+    }
+
+    function parseLinesToArray(value){
+  return String(value || "")
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean);
+}
+
+    function normalizeImageArray(product = {}){
+      const raw = product.imagenes ?? product.images ?? [];
+      if(Array.isArray(raw)) return raw.filter(Boolean);
+      if(typeof raw === "string") return parseImageLines(raw);
+      return [];
+    }
+
+    function updatePreview(){
+      const nombre = nombreInput.value.trim() || "Nombre del perfume";
+      const precio = precioInput.value.trim();
+      const cantidad = cantidadInput.value.trim();
+      const descripcion = descripcionInput.value.trim() || "La descripción aparecerá aquí.";
+      const imagen = imagenInput.value.trim();
+      const imagenesExtra = parseImageLines(imagenesExtraInput.value);
+      const todasLasImagenes = [imagen, ...imagenesExtra].filter(Boolean);
+
+      previewNombre.textContent = nombre;
+      previewPrecio.textContent = formatPrice(precio);
+      previewCantidad.textContent = "Cantidad: " + (cantidad === "" ? "0" : cantidad);
+      previewDescripcion.textContent = descripcion;
+
+      if(imagen){
+        previewImageBox.innerHTML = `
+          <img
+            src="${escapeHtml(imagen)}"
+            alt="${escapeHtml(nombre)}"
+            onerror="this.parentElement.innerHTML='<div class=&quot;placeholder&quot;>No se pudo cargar la imagen.<br>Revisa la ruta escrita.</div>'"
+          >
+        `;
+      } else {
+        previewImageBox.innerHTML = '<div class="placeholder">Aquí aparecerá la imagen del perfume</div>';
+      }
+
+      previewThumbs.innerHTML = todasLasImagenes.length > 1
+        ? todasLasImagenes.map((src, index) => `
+            <div class="preview-thumb" title="Imagen ${index + 1}">
+              <img src="${escapeHtml(src)}" alt="Imagen ${index + 1} de ${escapeHtml(nombre)}" onerror="this.parentElement.remove()">
+            </div>
+          `).join("")
+        : "";
+
+      previewModeText.textContent = productIdInput.value
+        ? "Estás editando un producto existente. Los cambios se reflejarán cuando presiones guardar."
+        : "Estás creando un nuevo producto. Completa los campos y guarda para añadirlo al catálogo.";
+    }
+
+    function clearForm(){
+      productIdInput.value = "";
+      imageManuallyEdited = false;
+      form.reset();
+      caracteristicasInput.value = "";
+      imagenesExtraInput.value = "";
+      updatePreview();
+    }
+
+    function fillForm(product){
+      productIdInput.value = product.id;
+      nombreInput.value = product.nombre || product.name || "";
+      precioInput.value = product.precio ?? product.price ?? "";
+      cantidadInput.value = product.cantidad ?? product.stock ?? "";
+      descripcionInput.value = product.descripcion || product.description || "";
+      
+      caracteristicasInput.value = Array.isArray(product.caracteristicas)
+  ? product.caracteristicas.join("\n")
+  : Array.isArray(product.features)
+    ? product.features.join("\n")
+    : "";
+      
+      imagenInput.value = product.imagen || product.image || "";
+      imagenesExtraInput.value = normalizeImageArray(product).join("\n");
+      imageManuallyEdited = false;
+      updatePreview();
+      previewModeText.textContent = "Estás editando este producto en una vista aparte dentro del panel administrador.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function validateForm(){
+      if(!nombreInput.value.trim()){
+        alert("Escribe el nombre del perfume.");
+        nombreInput.focus();
+        return false;
+      }
+      if(precioInput.value.trim() === ""){
+        alert("Escribe el precio.");
+        precioInput.focus();
+        return false;
+      }
+      if(cantidadInput.value.trim() === ""){
+        alert("Escribe la cantidad.");
+        cantidadInput.focus();
+        return false;
+      }
+      if(!descripcionInput.value.trim()){
+        alert("Escribe la descripción.");
+        descripcionInput.focus();
+        return false;
+      }
+      if(!imagenInput.value.trim()){
+        alert("Escribe la ruta de la imagen.");
+        imagenInput.focus();
+        return false;
+      }
+      return true;
+    }
+
+    async function loadProducts(){
+  const snapshot = await getDocs(collection(db, "products"));
+
+  currentProducts = snapshot.docs.map(docSnap => ({
+    id: docSnap.id,
+    ...docSnap.data()
+  }));
+
+  currentProducts.sort((a, b) => {
+    const aTime = a.createdAt?.seconds || 0;
+    const bTime = b.createdAt?.seconds || 0;
+    return bTime - aTime;
+  });
+
+  renderProducts();
+}
+
+    function renderProducts(){
+      productCount.textContent = currentProducts.length + (currentProducts.length === 1 ? " producto" : " productos");
+
+      if(currentProducts.length === 0){
+        productsList.innerHTML = `
+          <div class="empty">
+            No hay productos guardados todavía.<br>
+            Crea uno nuevo desde el formulario de la izquierda.
+          </div>
+        `;
+        return;
+      }
+
+      productsList.innerHTML = currentProducts.map(product => {
+        const nombre = product.nombre || product.name || "Producto sin nombre";
+        const precio = product.precio ?? product.price ?? 0;
+        const cantidad = product.cantidad ?? product.stock ?? 0;
+        const descripcion = product.descripcion || product.description || "";
+        const imagen = product.imagen || product.image || "";
+        const imagenes = normalizeImageArray(product);
+
+        return `
+          <article class="admin-item">
+            <div class="thumb">
+              ${
+                imagen
+                  ? `<img src="${escapeHtml(imagen)}" alt="${escapeHtml(nombre)}" onerror="this.parentElement.innerHTML='<span>Sin imagen válida</span>'">`
+                  : `<span>Sin imagen</span>`
+              }
+            </div>
+
+            <div class="item-info">
+              <h4>${escapeHtml(nombre)}</h4>
+              <p>
+                ${formatPrice(precio)} · Cantidad: ${Number(cantidad) || 0} · Imágenes: ${1 + imagenes.length}<br>
+                ${escapeHtml(descripcion)}
+              </p>
+            </div>
+
+            <div class="item-actions">
+              <button class="action-btn action-edit" data-edit-id="${product.id}">Editar</button>
+              <button class="action-btn action-delete" data-delete-id="${product.id}">Eliminar</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      productsList.querySelectorAll("[data-edit-id]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const product = currentProducts.find(p => p.id === btn.dataset.editId);
+          if(product){
+            fillForm(product);
+            showStatus("Producto cargado para edición.");
+          }
+        });
+      });
+
+      productsList.querySelectorAll("[data-delete-id]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.dataset.deleteId;
+          const product = currentProducts.find(p => p.id === id);
+          if(!product) return;
+
+          const ok = confirm(`¿Seguro que deseas eliminar "${product.nombre}"?`);
+          if(!ok) return;
+
+          try{
+            await deleteDoc(doc(db, "products", id));
+            if(productIdInput.value === id){
+              clearForm();
+            }
+            await loadProducts();
+            showStatus("Producto eliminado.");
+          }catch(error){
+            console.error(error);
+            alert("No se pudo eliminar el producto.");
+          }
+        });
+      });
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    //   EDITOR DE PANTALLA DE INICIO (rediseño completo)
+    //   - Carrusel de imágenes hero
+    //   - Texto del hero
+    //   - Barra de anuncios (marquee)
+    //   - 4 garantías editables
+    //   - Testimonios editables
+    // ════════════════════════════════════════════════════════════════
+
+    /**
+     * Construye el payload final que se guarda en Firestore.
+     * Convierte el estado en memoria de las listas dinámicas en arrays planos.
+     */
+    function getHomePayload(){
+      const cleanHeroImages = heroImagesState.map(s => String(s || "").trim()).filter(Boolean);
+      const cleanAnnouncements = announcementMessagesState.map(s => String(s || "").trim()).filter(Boolean);
+      const cleanBadges = trustBadgesState.map(b => ({
+        title: String(b.title || "").trim(),
+        subtitle: String(b.subtitle || "").trim()
+      }));
+      const cleanTestimonials = testimonialsState.map(t => ({
+        quote: String(t.quote || "").trim(),
+        name: String(t.name || "").trim(),
+        city: String(t.city || "").trim(),
+        product: String(t.product || "").trim()
+      }));
+
+      const interval = Number(carouselIntervalInput.value);
+      const safeInterval = (isFinite(interval) && interval >= 2 && interval <= 30) ? interval : HOME_DEFAULTS.carouselIntervalSec;
+
+      return {
+        // Carrusel
+        heroImages: cleanHeroImages,
+        carouselIntervalSec: safeInterval,
+        carouselTransition: carouselTransitionInput.value || "fade",
+
+        // Texto hero
+        heroKicker: heroKickerInput.value.trim(),
+        heroTitle: heroTitleInput.value.trim(),
+        heroDescription: heroDescriptionInput.value.trim(),
+        primaryButtonText: primaryButtonTextInput.value.trim(),
+        primaryButtonLink: primaryButtonLinkInput.value.trim(),
+        secondaryButtonText: secondaryButtonTextInput.value.trim(),
+        secondaryButtonLink: secondaryButtonLinkInput.value.trim(),
+
+        // Anuncios
+        showAnnouncementBar: showAnnouncementBarInput.checked,
+        announcementMessages: cleanAnnouncements,
+
+        // Garantías
+        showTrustBadges: showTrustBadgesInput.checked,
+        trustBadges: cleanBadges,
+
+        // Testimonios
+        showTestimonials: showTestimonialsInput.checked,
+        testimonials: cleanTestimonials
+      };
+    }
+
+    /**
+     * Aplica los valores recibidos (Firestore o defaults) al formulario y al estado.
+     * Compatibilidad hacia atrás: si llega 'heroImage' (singular antiguo) y no 'heroImages',
+     * lo migra a un array de 1 elemento.
+     */
+    function applyHomeFormValues(data = HOME_DEFAULTS){
+      const raw = data || {};
+
+      // ── Migración heroImage (antiguo, single) → heroImages (nuevo, array)
+      //    DEBE hacerse ANTES de mezclar con HOME_DEFAULTS, porque los
+      //    defaults ya traen un heroImages[] y enmascararían al legado.
+      let migratedHeroImages = null;
+      if(Array.isArray(raw.heroImages) && raw.heroImages.length > 0){
+        migratedHeroImages = raw.heroImages;
+      }else if(raw.heroImage){
+        // Documento antiguo: solo trae el campo single heroImage
+        migratedHeroImages = [raw.heroImage];
+      }
+      // Si no encontramos imágenes, dejamos null para que el merge use los defaults
+
+      const content = { ...HOME_DEFAULTS, ...raw };
+      if(migratedHeroImages){
+        content.heroImages = migratedHeroImages;
+      }
+      // Caso edge: heroImages vino como array vacío explícito → usar defaults
+      if(!Array.isArray(content.heroImages) || content.heroImages.length === 0){
+        content.heroImages = [...HOME_DEFAULTS.heroImages];
+      }
+
+      // ── Estado de listas dinámicas
+      heroImagesState = content.heroImages.map(s => String(s || ""));
+      announcementMessagesState = Array.isArray(content.announcementMessages) && content.announcementMessages.length
+        ? content.announcementMessages.map(s => String(s || ""))
+        : [...HOME_DEFAULTS.announcementMessages];
+
+      if(Array.isArray(content.trustBadges) && content.trustBadges.length === 4){
+        trustBadgesState = content.trustBadges.map(b => ({
+          title: String((b && b.title) || ""),
+          subtitle: String((b && b.subtitle) || "")
+        }));
+      }else{
+        trustBadgesState = HOME_DEFAULTS.trustBadges.map(b => ({...b}));
+      }
+
+      if(Array.isArray(content.testimonials) && content.testimonials.length > 0){
+        testimonialsState = content.testimonials.map(t => ({
+          quote: String((t && t.quote) || ""),
+          name: String((t && t.name) || ""),
+          city: String((t && t.city) || ""),
+          product: String((t && t.product) || "")
+        }));
+      }else{
+        testimonialsState = HOME_DEFAULTS.testimonials.map(t => ({...t}));
+      }
+
+      // ── Inputs simples
+      carouselIntervalInput.value = content.carouselIntervalSec || HOME_DEFAULTS.carouselIntervalSec;
+      carouselTransitionInput.value = content.carouselTransition || HOME_DEFAULTS.carouselTransition;
+      heroKickerInput.value = content.heroKicker || "";
+      heroTitleInput.value = content.heroTitle || "";
+      heroDescriptionInput.value = content.heroDescription || "";
+      primaryButtonTextInput.value = content.primaryButtonText || "";
+      primaryButtonLinkInput.value = content.primaryButtonLink || "";
+      secondaryButtonTextInput.value = content.secondaryButtonText || "";
+      secondaryButtonLinkInput.value = content.secondaryButtonLink || "";
+      showAnnouncementBarInput.checked = content.showAnnouncementBar !== false;
+      showTrustBadgesInput.checked = content.showTrustBadges !== false;
+      showTestimonialsInput.checked = content.showTestimonials !== false;
+
+      // ── Render de las listas dinámicas
+      renderHeroImagesList();
+      renderAnnouncementList();
+      renderTrustBadgesGrid();
+      renderTestimonialsList();
+      updateHomePreview();
+    }
+
+    // ──────────────────────────────────────────────────────
+    //   RENDER DE LISTAS DINÁMICAS
+    // ──────────────────────────────────────────────────────
+
+    /** Lista de imágenes del hero (carrusel) */
+    function renderHeroImagesList(){
+      heroImagesListEl.innerHTML = "";
+      heroImagesState.forEach((src, index) => {
+        const row = document.createElement("div");
+        row.className = "list-row";
+        row.dataset.index = String(index);
+        row.innerHTML = `
+          <div class="list-row-thumb" data-thumb>
+            ${src ? `<img src="${escapeHtml(src)}" alt="Imagen ${index+1}" onerror="this.parentElement.innerHTML='Sin imagen';this.parentElement.style.fontSize='.6rem'">` : "Sin imagen"}
+          </div>
+          <input type="text" class="list-row-input" placeholder="Ej: assets/hero-inicio.webp o https://..." value="${escapeHtml(src)}" data-hero-image-input>
+          <div class="list-row-actions">
+            <button type="button" class="row-btn" data-move-up title="Subir" ${index === 0 ? "disabled" : ""} aria-label="Subir imagen">↑</button>
+            <button type="button" class="row-btn" data-move-down title="Bajar" ${index === heroImagesState.length - 1 ? "disabled" : ""} aria-label="Bajar imagen">↓</button>
+            <button type="button" class="row-btn danger" data-remove title="Quitar" aria-label="Quitar imagen">✕</button>
+          </div>
+        `;
+        heroImagesListEl.appendChild(row);
+      });
+
+      // Listeners por fila
+      heroImagesListEl.querySelectorAll("[data-hero-image-input]").forEach(input => {
+        input.addEventListener("input", (e) => {
+          const i = Number(e.target.closest(".list-row").dataset.index);
+          heroImagesState[i] = e.target.value;
+          // Actualizar thumb en vivo
+          const thumb = e.target.closest(".list-row").querySelector("[data-thumb]");
+          if(thumb){
+            const v = e.target.value.trim();
+            thumb.innerHTML = v
+              ? `<img src="${escapeHtml(v)}" alt="" onerror="this.parentElement.innerHTML='Sin imagen';this.parentElement.style.fontSize='.6rem'">`
+              : "Sin imagen";
+          }
+          updateHomePreview();
+        });
+      });
+
+      heroImagesListEl.querySelectorAll("[data-move-up]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          if(i <= 0) return;
+          [heroImagesState[i-1], heroImagesState[i]] = [heroImagesState[i], heroImagesState[i-1]];
+          renderHeroImagesList();
+          updateHomePreview();
+        });
+      });
+
+      heroImagesListEl.querySelectorAll("[data-move-down]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          if(i >= heroImagesState.length - 1) return;
+          [heroImagesState[i+1], heroImagesState[i]] = [heroImagesState[i], heroImagesState[i+1]];
+          renderHeroImagesList();
+          updateHomePreview();
+        });
+      });
+
+      heroImagesListEl.querySelectorAll("[data-remove]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          // No permitir quedarse sin ninguna imagen
+          if(heroImagesState.length <= 1){
+            alert("Debes mantener al menos una imagen en el carrusel.");
+            return;
+          }
+          heroImagesState.splice(i, 1);
+          renderHeroImagesList();
+          updateHomePreview();
+        });
+      });
+    }
+
+    /** Lista de mensajes de la barra de anuncios */
+    function renderAnnouncementList(){
+      announcementListEl.innerHTML = "";
+      announcementMessagesState.forEach((msg, index) => {
+        const row = document.createElement("div");
+        row.className = "list-row";
+        row.dataset.index = String(index);
+        // Sin thumb en este caso → ajustamos columnas via style
+        row.style.gridTemplateColumns = "1fr auto";
+        row.innerHTML = `
+          <input type="text" class="list-row-input" placeholder="Ej: Envíos a todo Colombia" value="${escapeHtml(msg)}" data-announcement-input>
+          <div class="list-row-actions">
+            <button type="button" class="row-btn" data-move-up title="Subir" ${index === 0 ? "disabled" : ""}>↑</button>
+            <button type="button" class="row-btn" data-move-down title="Bajar" ${index === announcementMessagesState.length - 1 ? "disabled" : ""}>↓</button>
+            <button type="button" class="row-btn danger" data-remove title="Quitar">✕</button>
+          </div>
+        `;
+        announcementListEl.appendChild(row);
+      });
+
+      announcementListEl.querySelectorAll("[data-announcement-input]").forEach(input => {
+        input.addEventListener("input", (e) => {
+          const i = Number(e.target.closest(".list-row").dataset.index);
+          announcementMessagesState[i] = e.target.value;
+          updateHomePreview();
+        });
+      });
+
+      announcementListEl.querySelectorAll("[data-move-up]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          if(i <= 0) return;
+          [announcementMessagesState[i-1], announcementMessagesState[i]] = [announcementMessagesState[i], announcementMessagesState[i-1]];
+          renderAnnouncementList();
+          updateHomePreview();
+        });
+      });
+      announcementListEl.querySelectorAll("[data-move-down]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          if(i >= announcementMessagesState.length - 1) return;
+          [announcementMessagesState[i+1], announcementMessagesState[i]] = [announcementMessagesState[i], announcementMessagesState[i+1]];
+          renderAnnouncementList();
+          updateHomePreview();
+        });
+      });
+      announcementListEl.querySelectorAll("[data-remove]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          announcementMessagesState.splice(i, 1);
+          renderAnnouncementList();
+          updateHomePreview();
+        });
+      });
+    }
+
+    /** Grid de 4 garantías */
+    function renderTrustBadgesGrid(){
+      trustBadgesGridEl.innerHTML = "";
+      trustBadgesState.forEach((badge, index) => {
+        const item = document.createElement("div");
+        item.className = "trust-editor-item";
+        item.dataset.index = String(index);
+        item.innerHTML = `
+          <div class="trust-editor-item-head">
+            <div class="trust-editor-icon">${TRUST_BADGE_ICONS[index] || ""}</div>
+            <div class="trust-editor-item-name">Garantía ${index + 1}</div>
+          </div>
+          <label>Título</label>
+          <input type="text" placeholder="Ej: 100% Originales" value="${escapeHtml(badge.title)}" data-trust-title>
+          <label>Descripción corta</label>
+          <input type="text" placeholder="Ej: Garantía de autenticidad en cada frasco" value="${escapeHtml(badge.subtitle)}" data-trust-subtitle>
+        `;
+        trustBadgesGridEl.appendChild(item);
+      });
+
+      trustBadgesGridEl.querySelectorAll("[data-trust-title]").forEach(input => {
+        input.addEventListener("input", (e) => {
+          const i = Number(e.target.closest(".trust-editor-item").dataset.index);
+          trustBadgesState[i].title = e.target.value;
+          updateHomePreview();
+        });
+      });
+      trustBadgesGridEl.querySelectorAll("[data-trust-subtitle]").forEach(input => {
+        input.addEventListener("input", (e) => {
+          const i = Number(e.target.closest(".trust-editor-item").dataset.index);
+          trustBadgesState[i].subtitle = e.target.value;
+          updateHomePreview();
+        });
+      });
+    }
+
+    /** Lista de testimonios */
+    function renderTestimonialsList(){
+      testimonialsListEl.innerHTML = "";
+      testimonialsState.forEach((t, index) => {
+        const row = document.createElement("div");
+        row.className = "list-row";
+        row.dataset.index = String(index);
+        row.innerHTML = `
+          <div class="testimonial-fields">
+            <textarea class="list-row-input" placeholder="Reseña del cliente..." data-testimonial-quote>${escapeHtml(t.quote)}</textarea>
+            <div class="testimonial-fields-row">
+              <input type="text" class="list-row-input" placeholder="Nombre (ej: Laura M.)" value="${escapeHtml(t.name)}" data-testimonial-name>
+              <input type="text" class="list-row-input" placeholder="Ciudad (ej: Bogotá, D.C.)" value="${escapeHtml(t.city)}" data-testimonial-city>
+              <input type="text" class="list-row-input" placeholder="Producto comprado" value="${escapeHtml(t.product)}" data-testimonial-product>
+            </div>
+          </div>
+          <div class="list-row-actions" style="align-self:flex-start;">
+            <button type="button" class="row-btn" data-move-up title="Subir" ${index === 0 ? "disabled" : ""}>↑</button>
+            <button type="button" class="row-btn" data-move-down title="Bajar" ${index === testimonialsState.length - 1 ? "disabled" : ""}>↓</button>
+            <button type="button" class="row-btn danger" data-remove title="Quitar">✕</button>
+          </div>
+        `;
+        testimonialsListEl.appendChild(row);
+      });
+
+      const updateField = (field) => (e) => {
+        const i = Number(e.target.closest(".list-row").dataset.index);
+        testimonialsState[i][field] = e.target.value;
+        updateHomePreview();
+      };
+
+      testimonialsListEl.querySelectorAll("[data-testimonial-quote]").forEach(el => el.addEventListener("input", updateField("quote")));
+      testimonialsListEl.querySelectorAll("[data-testimonial-name]").forEach(el => el.addEventListener("input", updateField("name")));
+      testimonialsListEl.querySelectorAll("[data-testimonial-city]").forEach(el => el.addEventListener("input", updateField("city")));
+      testimonialsListEl.querySelectorAll("[data-testimonial-product]").forEach(el => el.addEventListener("input", updateField("product")));
+
+      testimonialsListEl.querySelectorAll("[data-move-up]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          if(i <= 0) return;
+          [testimonialsState[i-1], testimonialsState[i]] = [testimonialsState[i], testimonialsState[i-1]];
+          renderTestimonialsList();
+          updateHomePreview();
+        });
+      });
+      testimonialsListEl.querySelectorAll("[data-move-down]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          if(i >= testimonialsState.length - 1) return;
+          [testimonialsState[i+1], testimonialsState[i]] = [testimonialsState[i], testimonialsState[i+1]];
+          renderTestimonialsList();
+          updateHomePreview();
+        });
+      });
+      testimonialsListEl.querySelectorAll("[data-remove]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.closest(".list-row").dataset.index);
+          testimonialsState.splice(i, 1);
+          renderTestimonialsList();
+          updateHomePreview();
+        });
+      });
+    }
+
+    // ──────────────────────────────────────────────────────
+    //   BOTONES "AÑADIR" PARA LAS LISTAS DINÁMICAS
+    // ──────────────────────────────────────────────────────
+    btnAddHeroImage.addEventListener("click", () => {
+      heroImagesState.push("");
+      renderHeroImagesList();
+      // Foco al input recién creado
+      const last = heroImagesListEl.querySelector(".list-row:last-child [data-hero-image-input]");
+      if(last) last.focus();
+      updateHomePreview();
+    });
+
+    btnAddAnnouncement.addEventListener("click", () => {
+      announcementMessagesState.push("");
+      renderAnnouncementList();
+      const last = announcementListEl.querySelector(".list-row:last-child [data-announcement-input]");
+      if(last) last.focus();
+      updateHomePreview();
+    });
+
+    btnAddTestimonial.addEventListener("click", () => {
+      testimonialsState.push({ quote: "", name: "", city: "", product: "" });
+      renderTestimonialsList();
+      const last = testimonialsListEl.querySelector(".list-row:last-child [data-testimonial-quote]");
+      if(last) last.focus();
+      updateHomePreview();
+    });
+
+    // ──────────────────────────────────────────────────────
+    //   VISTA PREVIA
+    // ──────────────────────────────────────────────────────
+
+    /** Renderiza el preview entero (carrusel + texto + anuncios + trust + testimonios) */
+    function updateHomePreview(){
+      const content = getHomePayload();
+
+      // ── Texto del hero
+      miniHeroKicker.textContent = content.heroKicker || HOME_DEFAULTS.heroKicker;
+      miniHeroKicker.style.display = content.heroKicker ? "" : "none";
+      miniHeroTitle.textContent = content.heroTitle || HOME_DEFAULTS.heroTitle;
+      miniHeroDescription.textContent = content.heroDescription || HOME_DEFAULTS.heroDescription;
+      miniPrimaryButton.textContent = content.primaryButtonText || HOME_DEFAULTS.primaryButtonText;
+      miniSecondaryButton.textContent = content.secondaryButtonText || HOME_DEFAULTS.secondaryButtonText;
+
+      // ── Barra de anuncios
+      if(content.showAnnouncementBar && content.announcementMessages.length > 0){
+        miniAnnouncement.classList.remove("is-hidden");
+        // Duplicar para que el marquee no tenga corte visible
+        const items = content.announcementMessages.concat(content.announcementMessages);
+        miniAnnouncementTrack.innerHTML = items.map(m => `<span>${escapeHtml(m)}</span>`).join("");
+      }else{
+        miniAnnouncement.classList.add("is-hidden");
+      }
+
+      // ── Carrusel
+      renderPreviewCarousel(content.heroImages, content.carouselTransition);
+      restartPreviewCarousel(content.heroImages, content.carouselIntervalSec);
+
+      // ── Trust badges
+      if(content.showTrustBadges){
+        miniTrust.classList.remove("is-hidden");
+        miniTrust.innerHTML = content.trustBadges.map((b, i) => `
+          <div class="mini-trust-item">
+            ${TRUST_BADGE_ICONS[i] || ""}
+            <div class="mini-trust-label">${escapeHtml(b.title || `Garantía ${i+1}`)}</div>
+            <div class="mini-trust-sub">${escapeHtml(b.subtitle || "")}</div>
+          </div>
+        `).join("");
+      }else{
+        miniTrust.classList.add("is-hidden");
+      }
+
+      // ── Testimonios
+      if(content.showTestimonials && content.testimonials.length > 0){
+        miniTestimonials.classList.remove("is-hidden");
+        miniTestimonials.innerHTML = content.testimonials.map(t => {
+          const initials = String(t.name || "VZ").trim().split(/\s+/).map(w => w[0] || "").join("").slice(0,2).toUpperCase() || "VZ";
+          return `
+            <div class="mini-test-card">
+              <div class="mini-test-stars">★ ★ ★ ★ ★</div>
+              <blockquote class="mini-test-quote">${escapeHtml(t.quote || "Reseña del cliente...")}</blockquote>
+              <div class="mini-test-author">
+                <div class="mini-test-avatar">${escapeHtml(initials)}</div>
+                <div>
+                  <div class="mini-test-name">${escapeHtml(t.name || "Cliente")}</div>
+                  <div class="mini-test-city">${escapeHtml(t.city || "")}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }else{
+        miniTestimonials.classList.add("is-hidden");
+      }
+    }
+
+    /** Construye los slides del carrusel del preview */
+    function renderPreviewCarousel(images, transition){
+      const valid = (images || []).filter(s => String(s || "").trim());
+      miniHero.classList.toggle("transition-slide", transition === "slide");
+
+      if(valid.length === 0){
+        miniHeroCarousel.innerHTML = `<div class="mini-hero-empty">Añade al menos una imagen al carrusel para verla aquí</div>`;
+        miniHeroDots.innerHTML = "";
+        return;
+      }
+
+      miniHeroCarousel.innerHTML = valid.map((src, i) => `
+        <div class="mini-hero-slide${i === 0 ? " is-active" : ""}" style="background-image:url('${String(src).replace(/'/g, "\\'")}');"></div>
+      `).join("");
+
+      if(valid.length > 1){
+        miniHeroDots.innerHTML = valid.map((_, i) => `<span${i === 0 ? " class=\"is-active\"" : ""}></span>`).join("");
+      }else{
+        miniHeroDots.innerHTML = "";
+      }
+      previewCarouselIndex = 0;
+    }
+
+    /** Inicia / reinicia el timer de rotación del preview */
+    function restartPreviewCarousel(images, intervalSec){
+      if(previewCarouselTimer){
+        clearInterval(previewCarouselTimer);
+        previewCarouselTimer = null;
+      }
+      const valid = (images || []).filter(s => String(s || "").trim());
+      if(valid.length <= 1) return;
+
+      const ms = Math.max(2, Number(intervalSec) || 5) * 1000;
+      previewCarouselTimer = setInterval(() => {
+        const slides = miniHeroCarousel.querySelectorAll(".mini-hero-slide");
+        const dots = miniHeroDots.querySelectorAll("span");
+        if(!slides.length) return;
+        const prevIndex = previewCarouselIndex;
+        previewCarouselIndex = (previewCarouselIndex + 1) % slides.length;
+        slides.forEach((s, i) => {
+          s.classList.toggle("is-active", i === previewCarouselIndex);
+          s.classList.toggle("is-prev", i === prevIndex && i !== previewCarouselIndex);
+        });
+        dots.forEach((d, i) => d.classList.toggle("is-active", i === previewCarouselIndex));
+      }, ms);
+    }
+
+    // ──────────────────────────────────────────────────────
+    //   VALIDACIÓN, CARGA Y GUARDADO
+    // ──────────────────────────────────────────────────────
+    function validateHomeForm(){
+      const cleanImages = heroImagesState.map(s => String(s || "").trim()).filter(Boolean);
+      if(cleanImages.length === 0){
+        alert("Añade al menos una imagen al carrusel del inicio.");
+        const firstInput = heroImagesListEl.querySelector("[data-hero-image-input]");
+        if(firstInput) firstInput.focus();
+        return false;
+      }
+      if(!heroDescriptionInput.value.trim()){
+        alert("Escribe la descripción principal del hero.");
+        heroDescriptionInput.focus();
+        return false;
+      }
+      if(!primaryButtonTextInput.value.trim() || !primaryButtonLinkInput.value.trim()){
+        alert("Completa el botón principal.");
+        primaryButtonTextInput.focus();
+        return false;
+      }
+      if(!secondaryButtonTextInput.value.trim() || !secondaryButtonLinkInput.value.trim()){
+        alert("Completa el botón secundario.");
+        secondaryButtonTextInput.focus();
+        return false;
+      }
+      if(showAnnouncementBarInput.checked){
+        const cleanAnnouncements = announcementMessagesState.map(s => String(s || "").trim()).filter(Boolean);
+        if(cleanAnnouncements.length === 0){
+          alert("Añade al menos un mensaje a la barra de anuncios o desactívala.");
+          return false;
+        }
+      }
+      return true;
+    }
+
+    async function loadHomeContent(){
+      try{
+        const snapshot = await getDoc(doc(db, "siteContent", "home"));
+        if(snapshot.exists()){
+          applyHomeFormValues(snapshot.data());
+        }else{
+          applyHomeFormValues(HOME_DEFAULTS);
+        }
+      }catch(error){
+        console.error(error);
+        applyHomeFormValues(HOME_DEFAULTS);
+        showHomeStatus("No se pudo leer la configuración actual del inicio.");
+      }
+    }
+
+    homeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if(!validateHomeForm()) return;
+
+      try{
+        await setDoc(doc(db, "siteContent", "home"), {
+          ...getHomePayload(),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        showHomeStatus("Pantalla de inicio guardada correctamente.");
+      }catch(error){
+        console.error(error);
+        alert("No se pudo guardar la configuración del inicio. Revisa tu sesión y las reglas de Firestore.");
+      }
+    });
+
+    btnResetHome.addEventListener("click", () => {
+      if(!confirm("¿Restablecer todos los valores del inicio a la versión sugerida? Se perderán los cambios sin guardar.")) return;
+      applyHomeFormValues(HOME_DEFAULTS);
+      showHomeStatus("Se cargaron los valores sugeridos. Presiona guardar si quieres publicarlos.");
+    });
+
+    // Listeners para inputs simples (no listas dinámicas)
+    [
+      carouselIntervalInput,
+      carouselTransitionInput,
+      heroKickerInput,
+      heroTitleInput,
+      heroDescriptionInput,
+      primaryButtonTextInput,
+      primaryButtonLinkInput,
+      secondaryButtonTextInput,
+      secondaryButtonLinkInput,
+      showAnnouncementBarInput,
+      showTrustBadgesInput,
+      showTestimonialsInput
+    ].forEach(element => {
+      const eventName = element.type === "checkbox" ? "change" : "input";
+      element.addEventListener(eventName, updateHomePreview);
+    });
+
+    loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = loginEmail.value.trim();
+  const password = loginPass.value.trim();
+
+  loginError.textContent = "Ingresando...";
+
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+    loginError.textContent = "";
+  }catch(error){
+    console.error("LOGIN ERROR:", error);
+
+    if(error.code === "auth/invalid-credential"){
+      loginError.textContent = "Correo o contraseña incorrectos.";
+    }else if(error.code === "auth/user-not-found"){
+      loginError.textContent = "Ese usuario no existe.";
+    }else if(error.code === "auth/wrong-password"){
+      loginError.textContent = "Contraseña incorrecta.";
+    }else if(error.code === "auth/invalid-email"){
+      loginError.textContent = "El correo no es válido.";
+    }else if(error.code === "auth/network-request-failed"){
+      loginError.textContent = "Error de conexión. Revisa internet.";
+    }else{
+      loginError.textContent = "No se pudo iniciar sesión: " + (error.code || error.message);
+    }
+  }
+});
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+  if(user){
+    loginScreen.classList.add("hidden");
+    adminApp.classList.remove("hidden");
+    welcomeUser.textContent = user.email || "Administrador";
+
+    try{
+      await loadProducts();
+      await loadHomeContent();
+      updatePreview();
+    }catch(error){
+      console.error("Error cargando el panel:", error);
+      alert("Se inició sesión, pero hubo un error cargando los datos del panel. Revisa Firestore y la consola.");
+    }
+  }else{
+    adminApp.classList.add("hidden");
+    loginScreen.classList.remove("hidden");
+    loginForm.reset();
+    loginError.textContent = "";
+  }
+});
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if(!validateForm()) return;
+
+      const extraImages = parseImageLines(imagenesExtraInput.value);
+      const caracteristicasList = parseLinesToArray(caracteristicasInput.value);
+      
+      const payload = {
+        nombre: nombreInput.value.trim(),
+        precio: Number(precioInput.value),
+        cantidad: Number(cantidadInput.value),
+        descripcion: descripcionInput.value.trim(),
+        caracteristicas: caracteristicasList,
+        imagen: imagenInput.value.trim(),
+        imagenes: extraImages,
+
+        name: nombreInput.value.trim(),
+        price: Number(precioInput.value),
+        stock: Number(cantidadInput.value),
+        description: descripcionInput.value.trim(),
+        features: caracteristicasList,
+        image: imagenInput.value.trim(),
+        images: extraImages,
+
+        active: true
+      };
+      try{
+        if(productIdInput.value){
+          await updateDoc(doc(db, "products", productIdInput.value), payload);
+          showStatus("Producto actualizado correctamente.");
+        }else{
+          await addDoc(collection(db, "products"), {
+            ...payload,
+            createdAt: serverTimestamp()
+          });
+          showStatus("Producto agregado correctamente.");
+        }
+
+        clearForm();
+        await loadProducts();
+      }catch(error){
+        console.error(error);
+        alert("No se pudo guardar el producto. Revisa tu sesión y las reglas de Firestore.");
+      }
+    });
+
+    btnNuevo.addEventListener("click", () => {
+      clearForm();
+      showStatus("Formulario listo para un nuevo producto.");
+    });
+
+    btnCancelarEdicion.addEventListener("click", () => {
+      clearForm();
+      showStatus("Edición cancelada.");
+    });
+
+    nombreInput.addEventListener("input", () => {
+      imageManuallyEdited = false;
+      autoFillImagePath();
+      updatePreview();
+    });
+
+    precioInput.addEventListener("input", updatePreview);
+    cantidadInput.addEventListener("input", updatePreview);
+    descripcionInput.addEventListener("input", updatePreview);
+
+    imagenInput.addEventListener("input", () => {
+      imageManuallyEdited = true;
+      updatePreview();
+    });
+    imagenesExtraInput.addEventListener("input", updatePreview);
+
+    applyHomeFormValues(HOME_DEFAULTS);
+    updatePreview();
+  </script>
+</body>
+</html>
