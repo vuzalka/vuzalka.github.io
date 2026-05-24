@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VUZALKA | Contacto</title>
+  <meta name="description" content="Contacta a VUZALKA por WhatsApp, correo o formulario. Atención personalizada y soporte para elegir tu perfume ideal." />
+  <link rel="icon" type="image/ico" href="assets/logo.ico" />
+  <link rel="shortcut icon" href="assets/logo.ico" />
+  <link rel="apple-touch-icon" href="assets/logo.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- EmailJS SDK — envío de correo sin servidor, plan gratuito 200/mes -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    /* ── Estilos del formulario de contacto mejorado ── */
+    .contact-field-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .contact-field-err {
+      font-size: .78rem;
+      font-weight: 600;
+      color: #b42318;
+      display: none;
+      padding-left: 4px;
+    }
+
+    .contact-field-wrap.has-error .input,
+    .contact-field-wrap.has-error .textarea {
+      border-color: #fca5a5;
+      background: #fff5f5;
+    }
+
+    .contact-field-wrap.has-error .contact-field-err {
+      display: block;
+    }
+
+    .contact-submit-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      transition: opacity .2s ease;
+    }
+
+    .contact-submit-btn:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .btn-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Estado de éxito */
+    .contact-success {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      padding: 28px 16px;
+      animation: fadeUp .55s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .contact-success svg {
+      width: 52px;
+      height: 52px;
+      stroke: #16a34a;
+    }
+
+    .contact-success h4 {
+      margin: 0;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.6rem;
+      color: #111;
+    }
+
+    .contact-success p {
+      margin: 0;
+      color: #555;
+      line-height: 1.65;
+      max-width: 340px;
+    }
+
+    /* Aviso de configuración pendiente (se oculta cuando EmailJS está activo) */
+    .emailjs-notice {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: .85rem;
+      color: #92400e;
+      line-height: 1.55;
+      margin-bottom: 4px;
+    }
+
+    .emailjs-notice strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .emailjs-notice code {
+      background: rgba(0,0,0,.07);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .82rem;
+    }
+  </style>
+</head>
+<body data-page="contact">
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+
+  <header class="site-header solid" id="siteHeader">
+    <div class="header-bar">
+      <div class="header-side">
+        <button class="icon-btn" type="button" data-menu-toggle><span class="icon" data-icon="menu"></span><span>Menú</span></button>
+        <button class="icon-btn" type="button" data-search-toggle><span class="icon" data-icon="search"></span><span>Buscar</span></button>
+      </div>
+      <a class="site-logo serif" href="index.html" aria-label="VUZALKA inicio">
+        <img src="assets/logo-horizontal-negro.svg" alt="VUZALKA" width="240" height="51" decoding="async" />
+      </a>
+      <div class="header-side right">
+        <a class="header-text-link" href="https://wa.me/573026451420" target="_blank" rel="noopener">Llámanos</a>
+        <button class="icon-only" type="button" data-favorites-toggle aria-label="Favoritos"><span data-icon="heart"></span><span class="header-badge" data-favorite-count hidden>0</span></button>
+        <button class="icon-only" type="button" data-cart-toggle aria-label="Carrito"><span data-icon="bag"></span><span class="header-badge" data-cart-count hidden>0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="mega-menu" id="megaMenu"><button class="menu-close" type="button" data-close-panel aria-label="Cerrar menú">✕</button><div class="menu-grid"><nav class="menu-nav"><a href="index.html">Inicio</a><a href="perfumes.html">Perfumes</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a><a href="admin.html">Administrador</a></nav><div class="menu-panel-card">
+        <h3>Lujo Silencioso</h3>
+        <p>VUZALKA reúne perfumes originales con una curaduría clara, elegante y cercana. Una experiencia pensada para elegir con confianza, descubrir aromas con intención y encontrar una fragancia que hable por ti sin necesidad de exceso.</p>
+      </div></div></section>
+  <section class="search-panel" id="searchPanel"><button class="search-close" type="button" data-close-panel aria-label="Cerrar búsqueda">✕</button><div class="search-grid"><div class="search-panel-card"><h3>Buscar perfumes</h3><p>Encuentra por nombre, marca o estilo.</p><div class="search-form"><input class="search-input" id="globalSearchInput" type="search" placeholder="Ej: Khamrah, fresco, noche" autocomplete="off" /></div><div class="search-results" id="searchResults"></div></div><div class="menu-panel-card"><h3>Atención directa</h3><p>La web ahora es más visual, pero seguimos priorizando el trato humano y cercano.</p></div></div></section>
+  <aside class="side-drawer" id="favoritesDrawer"><div class="drawer-card"><button class="drawer-close" type="button" data-close-panel aria-label="Cerrar favoritos">✕</button><h3>Favoritos</h3><p>Guarda aquí los perfumes que quieras comparar o revisar después.</p><div class="favorite-list" id="favoriteList"></div></div></aside>
+  <aside class="side-drawer" id="cartDrawer"><div class="drawer-card"><button class="drawer-close" type="button" data-close-panel aria-label="Cerrar carrito">✕</button><h3>Carrito</h3><p>Tu selección se guarda localmente. Finaliza por Mercado Pago o recibe asesoría por WhatsApp.</p><div class="cart-list" id="cartList"></div><div class="drawer-footer"><div class="cart-total-row"><span>Total</span><span id="cartTotal">$0</span></div><button class="dark-btn checkout-mp-btn" id="checkoutMercadoPago" type="button">Finalizar pago</button>
+        <a class="light-btn checkout-whatsapp-link" id="checkoutWhatsapp" href="https://wa.me/573026451420" target="_blank" rel="noopener">Continuar por WhatsApp</a></div></div></aside>
+
+  <main class="static-page">
+    <section class="container">
+      <div class="header-copy" style="max-width:760px;display:grid;gap:14px;margin-bottom:26px;">
+        <div class="eyebrow">Contacto</div>
+        <h1 class="section-title">Atención personalizada, rápida y clara</h1>
+        <p class="section-copy">Escríbenos si necesitas ayuda para elegir perfume, confirmar disponibilidad, revisar medios de pago o coordinar tu pedido.</p>
+      </div>
+
+      <div class="contact-grid">
+        <article class="contact-card">
+          <h3>Información</h3>
+          <div class="contact-list">
+            <div class="contact-item"><strong>WhatsApp</strong><span>+57 302 645 1420</span></div>
+            <div class="contact-item"><strong>Correo</strong><span>vuzalkaoficial@gmail.com</span></div>
+            <div class="contact-item"><strong>Instagram</strong><span>@vuzalkaoficial</span></div>
+            <div class="contact-item"><strong>Horario</strong><span>Lunes a sábado · 9:00 a.m. a 6:00 p.m.</span></div>
+          </div>
+        </article>
+
+        <article class="contact-card">
+          <h3>Envíanos un mensaje</h3>
+          <form class="form-grid" id="contactForm" novalidate>
+            <div class="contact-field-wrap">
+              <input class="input" type="text" id="contactName" name="from_name" placeholder="Tu nombre" aria-label="Tu nombre" required autocomplete="name" />
+              <span class="contact-field-err" id="errName">Escribe tu nombre</span>
+            </div>
+            <div class="contact-field-wrap">
+              <input class="input" type="email" id="contactEmail" name="reply_to" placeholder="Tu correo" aria-label="Tu correo" required autocomplete="email" />
+              <span class="contact-field-err" id="errEmail">Ingresa un correo válido</span>
+            </div>
+            <div class="contact-field-wrap">
+              <textarea class="textarea" id="contactMessage" name="message" placeholder="Cuéntanos qué perfume buscas o cómo podemos ayudarte" aria-label="Mensaje" required rows="5"></textarea>
+              <span class="contact-field-err" id="errMsg">Escribe tu mensaje</span>
+            </div>
+            <button class="dark-btn contact-submit-btn" type="submit" id="contactSubmitBtn">
+              <span class="btn-label">Enviar mensaje</span>
+              <span class="btn-spinner" aria-hidden="true" hidden></span>
+            </button>
+          </form>
+
+          <!-- Estado de éxito (oculto hasta que se envía) -->
+          <div class="contact-success" id="contactSuccess" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+            <h4>¡Mensaje recibido!</h4>
+            <p>Te enviamos una confirmación a tu correo. También te abriremos WhatsApp para atenderte más rápido.</p>
+            <button class="dark-btn" id="btnOpenWhatsapp" type="button">
+              Abrir WhatsApp ahora
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <div>
+        <h3 class="footer-brand-title serif">VUZALKA</h3>
+        <p class="footer-brand-copy">Perfumes seleccionados con una experiencia de compra más limpia, elegante y enfocada en lo esencial.</p>
+        <form class="footer-newsletter" id="footerNewsletterForm"><input class="input" type="email" placeholder="Tu correo electrónico" aria-label="Tu correo" /><button class="dark-btn" type="submit">Únete</button></form>
+        <div class="footer-social" aria-label="Redes sociales VUZALKA">
+          <a href="https://www.instagram.com/vuzalkaoficial/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="assets/social/instagram.svg" alt="" />
+          </a>
+          <a href="https://www.facebook.com/share/1CUujbXXKN/" target="_blank" rel="noopener" aria-label="Facebook">
+            <img src="assets/social/facebook.svg" alt="" />
+          </a>
+          <a href="https://x.com/vuzalkaoficial" target="_blank" rel="noopener" aria-label="X">
+            <img src="assets/social/twitter.svg" alt="" />
+          </a>
+          <a href="https://www.tiktok.com/@vuzalkaoficial" target="_blank" rel="noopener" aria-label="TikTok">
+            <img src="assets/social/tiktok.svg" alt="" />
+          </a>
+          <a href="https://wa.me/573026451420" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <img src="assets/social/whatsapp.svg" alt="" />
+          </a>
+          <span class="social-icon is-disabled" aria-label="Spotify pendiente por vincular" title="Spotify pendiente por vincular">
+            <img src="assets/social/spotify.svg" alt="" />
+          </span>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Sobre nosotros</h4><a href="nosotros.html">Nuestra esencia</a><a href="nosotros.html">Curaduría</a><a href="admin.html">Administrador</a></div>
+      <div class="footer-col"><h4>Categorías</h4><a href="perfumes.html">Ver todos</a><a href="perfumes.html">Árabes</a><a href="perfumes.html">Frescos</a><a href="perfumes.html">De noche</a></div>
+      <div class="footer-col"><h4>Ayuda &amp; contacto</h4><p>WhatsApp: +57 302 645 1420<br />Correo: vuzalkaoficial@gmail.com<br />Lunes a sábado · 9:00 a.m. a 6:00 p.m.</p></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span data-current-year></span> VUZALKA. Todos los derechos reservados.</span><span>Contacto claro · soporte real · respuesta rápida</span></div>
+  </footer>
+
+  <div class="toast-stack" id="toastStack"></div>
+  <script type="module" src="app.js"></script>
+
+  <script>
+    /* ================================================================
+       FORMULARIO DE CONTACTO VUZALKA
+       Envía simultáneamente a:
+         • WhatsApp  → wa.me/573026451420  (abre chat con mensaje listo)
+         • Gmail     → vuzalkaoficial@gmail.com  (vía EmailJS, gratis)
+
+       ── CONFIGURACIÓN REQUERIDA (solo 1 vez) ──
+       1. Crea cuenta en https://www.emailjs.com  (plan gratuito = 200 emails/mes)
+       2. En EmailJS:
+          a. Add Service → Gmail → conecta vuzalkaoficial@gmail.com → copia el SERVICE_ID
+          b. Email Templates → crea una plantilla con estas variables:
+               Asunto:  Nuevo mensaje de contacto VUZALKA — {{from_name}}
+               Cuerpo:
+                 Nombre:  {{from_name}}
+                 Correo:  {{reply_to}}
+                 Mensaje: {{message}}
+             → copia el TEMPLATE_ID
+          c. Account → copia tu PUBLIC_KEY
+       3. Reemplaza los 3 valores de abajo y sube el archivo.
+    ================================================================ */
+
+    const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY_AQUI';   // ← reemplaza
+    const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID_AQUI';   // ← reemplaza
+    const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID_AQUI';  // ← reemplaza
+
+    const WHATSAPP_NUMBER = '573026451420';
+
+    // ── Detección de si EmailJS está configurado ──────────────────
+    const emailjsConfigured = (
+      EMAILJS_PUBLIC_KEY  !== 'TU_PUBLIC_KEY_AQUI' &&
+      EMAILJS_SERVICE_ID  !== 'TU_SERVICE_ID_AQUI' &&
+      EMAILJS_TEMPLATE_ID !== 'TU_TEMPLATE_ID_AQUI'
+    );
+
+    // Inicializa EmailJS solo si está configurado
+    if(emailjsConfigured && window.emailjs){
+      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    }
+
+    // Mostrar aviso de configuración pendiente en el formulario
+    const contactForm = document.getElementById('contactForm');
+    if(!emailjsConfigured && contactForm){
+      const notice = document.createElement('div');
+      notice.className = 'emailjs-notice';
+      notice.innerHTML = `
+        <strong>⚙️ Paso pendiente: conecta tu correo (solo tú ves este aviso)</strong>
+        Entra a <a href="https://www.emailjs.com" target="_blank" rel="noopener">emailjs.com</a>,
+        crea una cuenta gratis y reemplaza las 3 claves al final de <code>contacto.html</code>
+        (<code>EMAILJS_PUBLIC_KEY</code>, <code>EMAILJS_SERVICE_ID</code>, <code>EMAILJS_TEMPLATE_ID</code>).
+        Mientras tanto, el formulario sigue funcionando y redirige a WhatsApp.
+      `;
+      contactForm.insertAdjacentElement('beforebegin', notice);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────
+    function escHtml(str){
+      return String(str || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+    }
+
+    function buildWhatsAppUrl(name, email, message){
+      const text = encodeURIComponent(
+        `Hola VUZALKA 👋\n\n` +
+        `*Nombre:* ${name}\n` +
+        `*Correo:* ${email}\n\n` +
+        `*Mensaje:*\n${message}`
+      );
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+    }
+
+    // ── Validación del formulario ─────────────────────────────────
+    function validateField(input, errId, checkFn){
+      const wrap = input.closest('.contact-field-wrap');
+      const valid = checkFn(input.value.trim());
+      if(wrap){
+        wrap.classList.toggle('has-error', !valid);
+      }
+      return valid;
+    }
+
+    function isEmail(v){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    // ── Limpia errores en tiempo real ─────────────────────────────
+    ['contactName','contactEmail','contactMessage'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.addEventListener('input', () => {
+        const wrap = el.closest('.contact-field-wrap');
+        if(wrap) wrap.classList.remove('has-error');
+      });
+    });
+
+    // ── Submit ────────────────────────────────────────────────────
+    if(contactForm){
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nameEl    = document.getElementById('contactName');
+        const emailEl   = document.getElementById('contactEmail');
+        const messageEl = document.getElementById('contactMessage');
+        const submitBtn = document.getElementById('contactSubmitBtn');
+        const btnLabel  = submitBtn && submitBtn.querySelector('.btn-label');
+        const btnSpin   = submitBtn && submitBtn.querySelector('.btn-spinner');
+        const successEl = document.getElementById('contactSuccess');
+        const whatsBtn  = document.getElementById('btnOpenWhatsapp');
+
+        // Validar campos
+        const okName    = validateField(nameEl,    'errName',  v => v.length >= 2);
+        const okEmail   = validateField(emailEl,   'errEmail', v => isEmail(v));
+        const okMessage = validateField(messageEl, 'errMsg',   v => v.length >= 5);
+        if(!okName || !okEmail || !okMessage) return;
+
+        const name    = nameEl.value.trim();
+        const email   = emailEl.value.trim();
+        const message = messageEl.value.trim();
+
+        // Construir URL de WhatsApp (se abrirá después del envío)
+        const waUrl = buildWhatsAppUrl(name, email, message);
+
+        // Estado de carga
+        if(submitBtn) submitBtn.disabled = true;
+        if(btnLabel)  btnLabel.textContent = 'Enviando…';
+        if(btnSpin)   btnSpin.hidden = false;
+
+        // ── 1. Enviar email vía EmailJS ───────────────────────────
+        let emailSent = false;
+        if(emailjsConfigured && window.emailjs){
+          try{
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+              from_name: name,
+              reply_to:  email,
+              message:   message,
+              to_email:  'vuzalkaoficial@gmail.com'
+            });
+            emailSent = true;
+          }catch(err){
+            console.warn('EmailJS no pudo enviar el correo:', err);
+            // No bloqueamos el flujo: WhatsApp sigue funcionando
+          }
+        }
+
+        // ── 2. Abrir WhatsApp (pequeño delay para que el usuario vea el éxito) ──
+        // Mostramos el estado de éxito primero
+        if(submitBtn) submitBtn.disabled = false;
+        if(btnSpin)   btnSpin.hidden = true;
+        if(btnLabel)  btnLabel.textContent = 'Enviar mensaje';
+
+        // Ocultar formulario, mostrar éxito
+        contactForm.hidden = true;
+        if(successEl) successEl.hidden = false;
+
+        // Botón "Abrir WhatsApp" en la pantalla de éxito
+        if(whatsBtn){
+          whatsBtn.addEventListener('click', () => window.open(waUrl, '_blank', 'noopener'));
+          // También abrirlo automáticamente en 1.8s
+          setTimeout(() => window.open(waUrl, '_blank', 'noopener'), 1800);
+        }
+
+        // Resetear el formulario para si el usuario vuelve
+        contactForm.reset();
+      });
+    }
+  </script>
+</body>
+</html>
